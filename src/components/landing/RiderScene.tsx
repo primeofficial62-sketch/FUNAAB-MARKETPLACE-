@@ -1,0 +1,168 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
+import { BookOpen, Check, Package, ShoppingBag, Smartphone } from "lucide-react";
+
+const D = 9;
+
+function Wheel({ cx, reduce }: { cx: number; reduce: boolean }) {
+  return (
+    <g transform={`translate(${cx} 0)`}>
+      <circle r="13" fill="#052e22" />
+      <motion.g
+        animate={reduce ? undefined : { rotate: 360 }}
+        transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
+        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+      >
+        <circle r="8" fill="none" stroke="#a7f3d0" strokeWidth="2" strokeDasharray="4 5" />
+        <line x1="-8" y1="0" x2="8" y2="0" stroke="#a7f3d0" strokeWidth="2" />
+      </motion.g>
+      <circle r="3" fill="#d1fae5" />
+    </g>
+  );
+}
+
+const FLOATERS = [
+  { Icon: ShoppingBag, cls: "left-[3%] top-[10%]", d: 4.2 },
+  { Icon: Smartphone, cls: "left-[38%] top-[0%]", d: 5.1 },
+  { Icon: BookOpen, cls: "left-[5%] top-[44%]", d: 4.7 },
+  { Icon: Package, cls: "right-[1%] top-[46%]", d: 5.5 },
+];
+
+export default function RiderScene() {
+  const reduce = !!useReducedMotion();
+
+  return (
+    <div className="relative mx-auto aspect-[10/7] w-full max-w-xl">
+      {FLOATERS.map(({ Icon, cls, d }, i) => (
+        <motion.div
+          key={i}
+          className={`glass absolute z-10 flex h-11 w-11 items-center justify-center rounded-2xl ${cls}`}
+          animate={reduce ? undefined : { y: [0, -10, 0], rotate: [-4, 4, -4] }}
+          transition={{ duration: d, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Icon className="h-5 w-5 text-emerald-700" />
+        </motion.div>
+      ))}
+
+      <motion.div
+        className="glass absolute right-[3%] top-[8%] z-20 flex items-center gap-2 rounded-2xl px-3 py-2"
+        initial={{ opacity: reduce ? 1 : 0 }}
+        animate={reduce ? undefined : { opacity: [0, 0, 1, 1, 0], y: [10, 10, 0, 0, -6] }}
+        transition={{ duration: D, repeat: Infinity, times: [0, 0.52, 0.58, 0.8, 0.86] }}
+      >
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600">
+          <Check className="h-4 w-4 text-white" strokeWidth={3} />
+        </span>
+        <span className="text-sm font-bold text-emerald-900">Order delivered</span>
+      </motion.div>
+
+      <svg
+        viewBox="0 0 400 280"
+        className="h-full w-full"
+        role="img"
+        aria-label="A delivery rider on a scooter delivering a package"
+      >
+        <defs>
+          <linearGradient id="bgA" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#d1fae5" />
+            <stop offset="1" stopColor="#ffffff" />
+          </linearGradient>
+          <linearGradient id="bldA" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#6ee7b7" />
+            <stop offset="1" stopColor="#10b981" />
+          </linearGradient>
+          <linearGradient id="bldB" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#a7f3d0" />
+            <stop offset="1" stopColor="#34d399" />
+          </linearGradient>
+        </defs>
+
+        <rect width="400" height="280" rx="28" fill="url(#bgA)" />
+        <circle cx="330" cy="60" r="34" fill="#bbf7d0" opacity="0.7" />
+
+        <g>
+          <rect x="18" y="130" width="46" height="102" rx="6" fill="url(#bldB)" />
+          <rect x="70" y="100" width="54" height="132" rx="6" fill="url(#bldA)" />
+          <rect x="130" y="144" width="40" height="88" rx="6" fill="url(#bldB)" />
+          <rect x="176" y="116" width="50" height="116" rx="6" fill="url(#bldA)" />
+          <rect x="232" y="150" width="36" height="82" rx="6" fill="url(#bldB)" />
+          {[
+            [80, 114], [100, 114], [80, 138], [100, 138], [80, 162], [100, 162],
+            [186, 130], [206, 130], [186, 154], [206, 154], [28, 144], [28, 168],
+          ].map(([x, y], i) => (
+            <rect key={i} x={x} y={y} width="10" height="12" rx="2" fill="#ecfdf5" opacity="0.9" />
+          ))}
+        </g>
+
+        <g>
+          <rect x="278" y="170" width="86" height="62" rx="6" fill="#ffffff" stroke="#6ee7b7" strokeWidth="2" />
+          <path d="M270 172 L321 136 L372 172 Z" fill="#059669" />
+          <rect x="310" y="196" width="22" height="36" rx="4" fill="#10b981" />
+          <rect x="288" y="184" width="14" height="14" rx="3" fill="#d1fae5" />
+        </g>
+
+        <rect x="0" y="232" width="400" height="48" fill="#064e3b" />
+        <rect x="0" y="232" width="400" height="5" fill="#34d399" />
+        <motion.line
+          x1="0" y1="258" x2="400" y2="258"
+          stroke="#a7f3d0" strokeWidth="3" strokeDasharray="14 12"
+          animate={reduce ? undefined : { strokeDashoffset: [0, -52] }}
+          transition={{ duration: 1.1, repeat: Infinity, ease: "linear" }}
+        />
+
+        <g transform="translate(300 222)">
+          <motion.g
+            style={{ transformBox: "fill-box", transformOrigin: "center bottom" }}
+            initial={{ scale: reduce ? 1 : 0 }}
+            animate={reduce ? undefined : { scale: [0, 0, 1.25, 1, 1, 0], y: [0, 0, -16, 0, 0, 0] }}
+            transition={{ duration: D, repeat: Infinity, times: [0, 0.5, 0.56, 0.6, 0.8, 0.83] }}
+          >
+            <rect x="-11" y="-20" width="22" height="20" rx="3" fill="#22c55e" />
+            <rect x="-2" y="-20" width="4" height="20" fill="#ecfdf5" />
+          </motion.g>
+        </g>
+
+        <motion.g
+          initial={{ x: reduce ? 150 : -110 }}
+          animate={reduce ? undefined : { x: [-110, 215, 215, 440] }}
+          transition={{ duration: D, repeat: Infinity, times: [0, 0.5, 0.78, 1], ease: "easeInOut" }}
+        >
+          <g transform="translate(0 219)">
+            <ellipse cx="29" cy="14" rx="46" ry="5" fill="#022c22" opacity="0.25" />
+
+            {!reduce &&
+              [0, 1, 2].map((i) => (
+                <motion.circle
+                  key={i}
+                  cx={-16 - i * 9}
+                  cy={4}
+                  r="4"
+                  fill="#d1fae5"
+                  animate={{ opacity: [0.7, 0], scale: [0.6, 1.8], x: [0, -14] }}
+                  transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.25, ease: "easeOut" }}
+                />
+              ))}
+
+            <rect x="-18" y="-74" width="32" height="30" rx="6" fill="#22c55e" />
+            <rect x="-18" y="-62" width="32" height="5" fill="#ecfdf5" opacity="0.9" />
+
+            <rect x="-4" y="-24" width="28" height="15" rx="7" fill="#059669" />
+            <rect x="8" y="-11" width="42" height="6" rx="3" fill="#047857" />
+            <line x1="50" y1="-8" x2="46" y2="-48" stroke="#065f46" strokeWidth="5" strokeLinecap="round" />
+            <line x1="40" y1="-50" x2="55" y2="-50" stroke="#065f46" strokeWidth="5" strokeLinecap="round" />
+
+            <path d="M20 -26 L38 -28 L42 -10" fill="none" stroke="#064e3b" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M18 -28 L22 -58" stroke="#10b981" strokeWidth="13" strokeLinecap="round" />
+            <path d="M25 -54 L47 -49" stroke="#10b981" strokeWidth="5" strokeLinecap="round" />
+            <circle cx="27" cy="-71" r="9" fill="#fcd9b6" />
+            <path d="M17 -72 A10 10 0 0 1 37 -72 Z" fill="#065f46" />
+
+            <Wheel cx={0} reduce={reduce} />
+            <Wheel cx={58} reduce={reduce} />
+          </g>
+        </motion.g>
+      </svg>
+    </div>
+  );
+}
