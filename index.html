@@ -6,14 +6,19 @@
 <meta name="theme-color" content="#047857" />
 <title>FUNAAB Marketplace | Everything You Need, Delivered to You</title>
 <meta name="description" content="Discover products, connect with trusted vendors, and shop from your university community." />
+<meta property="og:title" content="FUNAAB Marketplace" />
+<meta property="og:description" content="Everything You Need, Delivered to You." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23047857'/%3E%3Cpath d='M20 24h24l-2 22H22z' fill='none' stroke='white' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M26 24a6 6 0 0 1 12 0' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <style>
   html { scroll-behavior: smooth; }
   body { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; color: #022c22; background: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a:focus-visible, button:focus-visible { outline: 3px solid #34d399; outline-offset: 3px; border-radius: 9999px; }
 
   /* ---------- Design tokens: deep green + white only ---------- */
   .bg-brand { background-image: linear-gradient(135deg, #059669, #064e3b); }
@@ -21,19 +26,22 @@
   .text-brand { color: #047857; }
   .card { background: #fff; border: 1px solid #d1fae5; border-radius: 1.25rem; box-shadow: 0 1px 2px rgba(6,95,70,.04), 0 12px 30px -14px rgba(6,95,70,.22); }
   .glass { background: rgba(255,255,255,.58); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.7); box-shadow: 0 10px 30px -10px rgba(6,95,70,.3); }
-  .btn-primary { display: inline-flex; align-items: center; gap: .5rem; border-radius: 9999px; background: #059669; color: #fff; font-weight: 600; padding: .9rem 1.5rem; box-shadow: 0 10px 24px -8px rgba(5,150,105,.45); transition: transform .15s, background .2s; }
+  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 9999px; background: #059669; color: #fff; font-weight: 600; padding: .9rem 1.5rem; box-shadow: 0 10px 24px -8px rgba(5,150,105,.45); transition: transform .15s, background .2s; }
   .btn-primary:hover { background: #047857; } .btn-primary:active { transform: scale(.95); }
-  .btn-ghost { display: inline-flex; align-items: center; gap: .5rem; border-radius: 9999px; background: #fff; color: #065f46; font-weight: 600; padding: .9rem 1.5rem; border: 1px solid #a7f3d0; transition: transform .15s, background .2s; }
+  .btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 9999px; background: #fff; color: #065f46; font-weight: 600; padding: .9rem 1.5rem; border: 1px solid #a7f3d0; transition: transform .15s, background .2s; }
   .btn-ghost:hover { background: #ecfdf5; } .btn-ghost:active { transform: scale(.95); }
+  .btn-sm { padding: .55rem 1.1rem; font-size: .875rem; }
   .eyebrow { display: inline-block; border-radius: 9999px; border: 1px solid #a7f3d0; background: #ecfdf5; color: #047857; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .3rem .8rem; }
 
   /* ---------- Scroll reveal ---------- */
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease-out, transform .6s ease-out; transition-delay: var(--d, 0s); }
   .reveal.in { opacity: 1; transform: none; }
+  .reveal.done { transition-delay: 0s; } /* so hover effects are not delayed after the reveal finished */
 
-  /* ---------- Splash ---------- */
-  #splash { position: fixed; inset: 0; z-index: 100; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity .5s ease, transform .5s ease; }
-  #splash.hide { opacity: 0; transform: scale(1.04); pointer-events: none; }
+  /* ---------- Splash (CSS-only fallback also hides it, even if JS fails) ---------- */
+  #splash { position: fixed; inset: 0; z-index: 100; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity .5s ease, transform .5s ease; animation: splashOut .5s ease 2.2s forwards; }
+  #splash.hide { opacity: 0; transform: scale(1.04); visibility: hidden; pointer-events: none; transition: opacity .5s ease, transform .5s ease, visibility 0s .5s; }
+  @keyframes splashOut { to { opacity: 0; transform: scale(1.04); visibility: hidden; pointer-events: none; } }
   .ripple { position: absolute; width: 7rem; height: 7rem; border-radius: 9999px; border: 2px solid #047857; animation: ripple 1.5s ease-out infinite; opacity: 0; }
   @keyframes ripple { 0% { transform: scale(.6); opacity: .6; } 100% { transform: scale(2.6); opacity: 0; } }
   .logo-pop { animation: logoPop .7s cubic-bezier(.2,1.4,.4,1) both; }
@@ -67,8 +75,8 @@
   .idle { animation: idle var(--t, 2.8s) ease-in-out infinite; }
   @keyframes idle { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
-  /* ---------- Categories 3D tilt ---------- */
-  .tilt { transition: transform .25s ease; }
+  /* ---------- Categories 3D tilt (declared after .reveal so hover wins) ---------- */
+  .tilt { transition: transform .25s ease, opacity .6s ease-out; }
   .tilt:hover, .tilt:active { transform: perspective(700px) translateY(-6px) rotateX(8deg) rotateY(-6deg); }
 
   /* ---------- Stores strip (always runs) ---------- */
@@ -76,10 +84,6 @@
   @keyframes marquee { to { transform: translateX(-50%); } }
   .pulse-badge { animation: pulseBadge 1.8s ease-in-out infinite; }
   @keyframes pulseBadge { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
-
-  /* ---------- CTA rider (always runs) ---------- */
-  .cta-rider { animation: ctaRide 6s linear infinite; }
-  @keyframes ctaRide { from { left: -10%; } to { left: 108%; } }
 
   /* ---------- Trust shield draw ---------- */
   .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
@@ -94,16 +98,25 @@
     .word { transform: none; animation: none; }
     .hero-fade { opacity: 1; animation: none; }
     .reveal { opacity: 1; transform: none; transition: none; }
-    .draw { stroke-dashoffset: 0; animation: none; }
+    .draw, .draw.in { stroke-dashoffset: 0; animation: none; }
     .logo-pop, .fade-up { animation: none; }
     #splash { display: none; }
   }
 </style>
+<noscript>
+  <style>
+    #splash { display: none; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .word { transform: none !important; animation: none !important; }
+    .hero-fade { opacity: 1 !important; animation: none !important; }
+    .draw { stroke-dashoffset: 0 !important; animation: none !important; }
+  </style>
+</noscript>
 </head>
 <body>
 
 <!-- ============ SPLASH ============ -->
-<div id="splash">
+<div id="splash" aria-hidden="true">
   <div class="relative flex h-28 w-28 items-center justify-center">
     <span class="ripple" style="animation-delay:.2s"></span>
     <span class="ripple" style="animation-delay:.55s"></span>
@@ -118,7 +131,7 @@
 <main>
 
 <!-- ============ HERO ============ -->
-<section class="bg-brand-soft relative isolate flex min-h-screen items-center overflow-hidden">
+<section id="top" class="bg-brand-soft relative isolate flex min-h-screen items-center overflow-hidden">
   <div class="absolute -left-24 -top-24 -z-10 h-72 w-72 rounded-full bg-emerald-200/50 blur-3xl"></div>
   <div class="absolute -bottom-24 -right-24 -z-10 h-80 w-80 rounded-full bg-emerald-300/30 blur-3xl"></div>
 
@@ -133,9 +146,21 @@
         <span class="word-wrap"><span class="word" style="--i:0">Everything</span></span><span class="word-wrap"><span class="word" style="--i:1">You</span></span><span class="word-wrap"><span class="word" style="--i:2">Need,</span></span><span class="word-wrap"><span class="word text-brand" style="--i:3">Delivered</span></span><span class="word-wrap"><span class="word" style="--i:4">to</span></span><span class="word-wrap"><span class="word" style="--i:5">You.</span></span>
       </h1>
 
-      <p class="hero-fade mt-5 max-w-md text-base text-emerald-900/75 sm:text-lg" style="--d:2.3s">Discover products, connect with trusted vendors, and shop from your university community.</p>
+      <p class="hero-fade mt-5 max-w-md text-base text-emerald-900/75 sm:text-lg" style="--d:2.2s">Discover products, connect with trusted vendors, and shop from your university community.</p>
 
-      <div class="hero-fade mt-8 grid gap-3 sm:grid-cols-3" style="--d:2.5s">
+      <div class="hero-fade mt-8 flex flex-wrap gap-3" style="--d:2.35s">
+        <a href="https://marketplace-one-plum-70.vercel.app/auth?type=customer&mode=signup" class="btn-primary">Start Shopping <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
+        <a href="https://marketplace-one-plum-70.vercel.app/auth?type=vendor&mode=signup" class="btn-ghost"><i data-lucide="store" class="h-4 w-4"></i> Become a Vendor</a>
+      </div>
+
+      <p class="hero-fade mt-4 text-sm text-emerald-900/70" style="--d:2.45s">
+        Already have an account?
+        <a href="https://marketplace-one-plum-70.vercel.app/auth?type=customer&mode=login" class="font-semibold text-emerald-700 underline underline-offset-4">Log in</a>
+        or
+        <a href="https://marketplace-one-plum-70.vercel.app/auth?type=vendor&mode=login" class="font-semibold text-emerald-700 underline underline-offset-4">Vendor log in</a>
+      </p>
+
+      <div class="hero-fade mt-8 grid gap-3 sm:grid-cols-3" style="--d:2.6s">
         <div class="card flex items-center gap-3 p-4">
           <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-800"><i data-lucide="shield-check" class="h-5 w-5"></i></span>
           <span class="text-sm font-semibold text-emerald-950">Verified vendors</span>
@@ -278,7 +303,7 @@
     <div id="hiw" class="relative pb-6 pl-16">
       <div class="absolute bottom-0 left-5 top-0 w-1 rounded bg-emerald-100"></div>
       <div id="hiwLine" class="absolute left-5 top-0 w-1 rounded" style="height:0;background:linear-gradient(180deg,#059669,#064e3b)"></div>
-      <div id="hiwRider" class="absolute left-0 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-800 text-white shadow-lg shadow-emerald-900/30" style="top:0;transform:translateY(-50%)"><i data-lucide="bike" class="h-5 w-5"></i></div>
+      <div id="hiwRider" class="absolute z-10 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-800 text-white shadow-lg shadow-emerald-900/30" style="left:.125rem;top:0;transform:translateY(-50%)"><i data-lucide="bike" class="h-5 w-5"></i></div>
       <ol class="space-y-8" id="steps"></ol>
     </div>
   </div>
@@ -299,8 +324,9 @@
       </span>
       <span class="bg-brand flex h-14 w-14 items-center justify-center rounded-2xl text-white"><i data-lucide="graduation-cap" class="h-7 w-7"></i></span>
       <h3 class="mt-4 text-xl font-extrabold text-emerald-950">FUNAAB</h3>
-      <p class="mt-1 flex items-center gap-1 text-sm text-emerald-800/70"><i data-lucide="map-pin" class="h-4 w-4"></i> Federal University of Agriculture, Abeokuta</p>
+      <p class="mt-1 flex items-center gap-1 text-sm text-emerald-800/70"><i data-lucide="map-pin" class="h-4 w-4 shrink-0"></i> Federal University of Agriculture, Abeokuta</p>
       <p class="mt-4 text-sm text-emerald-900/70">Shop from approved campus vendors and get your orders delivered or ready for pickup.</p>
+      <a href="https://marketplace-one-plum-70.vercel.app/auth?type=customer&mode=signup" class="btn-primary btn-sm mt-5">Join FUNAAB Marketplace</a>
     </div>
     <div id="uniOthers" class="contents"></div>
   </div>
@@ -323,29 +349,9 @@
     </div>
 
     <div class="grid gap-4 md:grid-cols-3">
-      <div class="card reveal p-6 text-center"><i data-lucide="shield-check" class="mx-auto h-6 w-6 text-emerald-800"></i><p class="text-brand mt-3 text-4xl font-extrabold"><span data-count="100">0</span>%</p><p class="mt-2 text-sm text-emerald-900/70">of vendors are reviewed and approved before they sell</p></div>
-      <div class="card reveal p-6 text-center" style="--d:.1s"><i data-lucide="star" class="mx-auto h-6 w-6 text-emerald-800"></i><p class="text-brand mt-3 text-4xl font-extrabold"><span data-count="100">0</span>%</p><p class="mt-2 text-sm text-emerald-900/70">of reviews come from verified purchases</p></div>
+      <div class="card reveal p-6 text-center"><i data-lucide="shield-check" class="mx-auto h-6 w-6 text-emerald-800"></i><p class="text-brand mt-3 text-4xl font-extrabold"><span data-count="100">100</span>%</p><p class="mt-2 text-sm text-emerald-900/70">of vendors are reviewed and approved before they sell</p></div>
+      <div class="card reveal p-6 text-center" style="--d:.1s"><i data-lucide="star" class="mx-auto h-6 w-6 text-emerald-800"></i><p class="text-brand mt-3 text-4xl font-extrabold"><span data-count="100">100</span>%</p><p class="mt-2 text-sm text-emerald-900/70">of reviews come from verified purchases</p></div>
       <div class="card reveal p-6 text-center" style="--d:.2s"><i data-lucide="flag" class="mx-auto h-6 w-6 text-emerald-800"></i><p class="text-brand mt-3 text-4xl font-extrabold">1 tap</p><p class="mt-2 text-sm text-emerald-900/70">to report a listing, vendor or order problem</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FINAL CTA ============ -->
-<section class="px-5 py-20">
-  <div class="bg-brand relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] px-6 py-16 text-center">
-    <div class="absolute -left-10 -top-10 h-48 w-48 rounded-full bg-white/10 blur-2xl"></div>
-    <div class="absolute -bottom-12 -right-12 h-56 w-56 rounded-full bg-emerald-300/20 blur-2xl"></div>
-    <div class="glass reveal relative mx-auto max-w-xl rounded-3xl px-6 py-10">
-      <span class="bob absolute -top-6 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-2xl bg-white text-emerald-800 shadow-lg"><i data-lucide="shopping-cart" class="h-6 w-6"></i></span>
-      <h2 class="text-3xl font-extrabold tracking-tight text-emerald-950">Ready to get started?</h2>
-      <p class="mt-3 text-emerald-900/75">Shop from your campus community or start selling today.</p>
-      <div class="mt-6 flex flex-wrap justify-center gap-3">
-        <a href="https://marketplace-one-plum-70.vercel.app/auth?type=customer&mode=signup" class="btn-primary">Start Shopping <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
-        <a href="https://marketplace-one-plum-70.vercel.app/auth?type=vendor&mode=signup" class="btn-ghost"><i data-lucide="store" class="h-4 w-4"></i> Become a Vendor</a>
-      </div>
-    <div class="relative mt-10 h-10 overflow-hidden">
-      <div class="absolute inset-x-0 bottom-0 h-px bg-white/30"></div>
-      <div class="cta-rider absolute bottom-1 flex h-9 w-9 items-center justify-center rounded-full bg-white text-emerald-800"><i data-lucide="bike" class="h-5 w-5"></i></div>
     </div>
   </div>
 </section>
@@ -360,120 +366,156 @@
       <p class="text-xl font-extrabold">FUNAAB Marketplace</p>
       <p class="mt-2 max-w-xs text-sm text-emerald-100/70">Everything You Need, Delivered to You.</p>
       <div class="mt-5 flex flex-wrap gap-2">
-        <!-- TODO: replace # with real social links -->
+        <!-- TODO: replace each # with your real social link -->
         <a href="#" class="rounded-full border border-emerald-700 px-4 py-1.5 text-sm text-emerald-100 hover:bg-emerald-800">Instagram</a>
         <a href="#" class="rounded-full border border-emerald-700 px-4 py-1.5 text-sm text-emerald-100 hover:bg-emerald-800">X</a>
         <a href="#" class="rounded-full border border-emerald-700 px-4 py-1.5 text-sm text-emerald-100 hover:bg-emerald-800">WhatsApp</a>
       </div>
     </div>
-    <div><p class="text-sm font-bold uppercase tracking-wider text-emerald-400">Company</p><ul class="mt-3 space-y-2 text-sm text-emerald-100/80"><li><a href="#" class="hover:text-white">About Us</a></li><li><a href="#" class="hover:text-white">Contact</a></li><li><a href="#" class="hover:text-white">Help Centre</a></li></ul></div>
-    <div><p class="text-sm font-bold uppercase tracking-wider text-emerald-400">Legal</p><ul class="mt-3 space-y-2 text-sm text-emerald-100/80"><li><a href="#" class="hover:text-white">Terms and Conditions</a></li><li><a href="#" class="hover:text-white">Privacy Policy</a></li></ul></div>
-    <div><p class="text-sm font-bold uppercase tracking-wider text-emerald-400">Community</p><ul class="mt-3 space-y-2 text-sm text-emerald-100/80"><li><a href="#" class="hover:text-white">Vendor Guidelines</a></li><li><a href="#" class="hover:text-white">Community Guidelines</a></li></ul></div>
+    <div>
+      <p class="text-sm font-bold uppercase tracking-wider text-emerald-400">Company</p>
+      <ul class="mt-3 space-y-2 text-sm text-emerald-100/80">
+        <li><a href="https://marketplace-one-plum-70.vercel.app/about" class="hover:text-white">About Us</a></li>
+        <li><a href="https://marketplace-one-plum-70.vercel.app/contact" class="hover:text-white">Contact</a></li>
+        <li><a href="https://marketplace-one-plum-70.vercel.app/help" class="hover:text-white">Help Centre</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="text-sm font-bold uppercase tracking-wider text-emerald-400">Legal</p>
+      <ul class="mt-3 space-y-2 text-sm text-emerald-100/80">
+        <li><a href="https://marketplace-one-plum-70.vercel.app/terms" class="hover:text-white">Terms and Conditions</a></li>
+        <li><a href="https://marketplace-one-plum-70.vercel.app/privacy" class="hover:text-white">Privacy Policy</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="text-sm font-bold uppercase tracking-wider text-emerald-400">Community</p>
+      <ul class="mt-3 space-y-2 text-sm text-emerald-100/80">
+        <li><a href="https://marketplace-one-plum-70.vercel.app/vendor-guidelines" class="hover:text-white">Vendor Guidelines</a></li>
+        <li><a href="https://marketplace-one-plum-70.vercel.app/community-guidelines" class="hover:text-white">Community Guidelines</a></li>
+        <li><a href="https://marketplace-one-plum-70.vercel.app/auth?type=vendor&mode=login" class="hover:text-white">Vendor Log in</a></li>
+      </ul>
+    </div>
   </div>
-  <div class="border-t border-emerald-900 py-5 text-center text-xs text-emerald-100/60">© <span id="yr"></span> FUNAAB Marketplace. All rights reserved.</div>
+  <div class="border-t border-emerald-900 py-5 text-center text-xs text-emerald-100/60">© <span id="yr">2026</span> FUNAAB Marketplace. All rights reserved.</div>
 </footer>
 
 <script>
+  // ---------- Splash: hide first so nothing below can ever block the page ----------
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setTimeout(function () {
+    var s = document.getElementById('splash');
+    if (s) s.classList.add('hide');
+  }, reduce ? 0 : 1800);
+
   // ---------- Data (SAMPLE: replace with database data later) ----------
-  const CATEGORIES = [
+  var SIGNUP = 'https://marketplace-one-plum-70.vercel.app/auth?type=customer&mode=signup';
+  var CATEGORIES = [
     ['Food & Snacks','utensils'],['Fashion & Clothing','shirt'],['Electronics & Gadgets','smartphone'],
     ['Books & Education','book-open'],['Beauty & Personal Care','sparkles'],['Groceries','shopping-basket'],
     ['Home & Household','armchair'],['Printing & Design','printer'],['Laundry & Cleaning','droplets'],
     ['Other Products & Services','layout-grid']
   ];
-  const STORES = [
+  var STORES = [
     ['Kitchen','Sample Kitchen','Food & Snacks'],['Gadgets','Sample Gadgets','Electronics'],
     ['Books','Sample Books','Books & Education'],['Print Hub','Sample Print Hub','Printing & Design'],
     ['Beauty Bar','Sample Beauty Bar','Beauty & Care'],['Fresh Mart','Sample Fresh Mart','Groceries']
   ];
-  const STEPS = [
+  var STEPS = [
     ['Browse','Search products and stores from your university community.','search'],
     ['Order','Add to your cart and check out securely.','shopping-cart'],
     ['Vendor prepares','Your vendor confirms and gets your order ready.','store'],
     ['Rider delivers','Pick up or get it delivered to you.','bike']
   ];
-  const OTHER_UNIS = ['University of Ibadan','University of Lagos','Obafemi Awolowo University','University of Benin'];
+  var OTHER_UNIS = ['University of Ibadan','University of Lagos','Obafemi Awolowo University','University of Benin'];
 
   // ---------- Render ----------
-  document.getElementById('catGrid').innerHTML = CATEGORIES.map(([name, icon], i) => `
-    <a href="#" class="tilt card reveal flex h-full flex-col items-center gap-3 p-5 text-center" style="--d:${(i % 5) * 0.06}s">
-      <span class="idle flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-800" style="--t:${2.6 + (i % 3) * 0.4}s"><i data-lucide="${icon}" class="h-7 w-7"></i></span>
-      <span class="text-sm font-semibold text-emerald-950">${name}</span>
-    </a>`).join('');
+  document.getElementById('catGrid').innerHTML = CATEGORIES.map(function (c, i) {
+    return '<a href="' + SIGNUP + '" class="tilt card reveal flex h-full flex-col items-center gap-3 p-5 text-center" style="--d:' + ((i % 5) * 0.06) + 's">' +
+      '<span class="idle flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-800" style="--t:' + (2.6 + (i % 3) * 0.4) + 's"><i data-lucide="' + c[1] + '" class="h-7 w-7"></i></span>' +
+      '<span class="text-sm font-semibold text-emerald-950">' + c[0].replace('&', '&amp;') + '</span></a>';
+  }).join('');
 
-  const storeCard = ([ini, name, type]) => `
-    <div class="card mr-4 flex w-64 shrink-0 items-center gap-3 p-4">
-      <span class="bg-brand flex h-12 w-12 items-center justify-center rounded-full text-lg font-extrabold text-white">${ini.charAt(0)}</span>
-      <div class="min-w-0">
-        <p class="truncate font-bold text-emerald-950">${name}</p>
-        <p class="text-xs text-emerald-800/70">${type}</p>
-        <span class="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-emerald-800"><span class="pulse-badge inline-flex"><i data-lucide="badge-check" class="h-4 w-4 text-emerald-700"></i></span>Verified</span>
-      </div>
-    </div>`;
-  document.getElementById('storeTrack').innerHTML = [...STORES, ...STORES].map(storeCard).join('');
+  function storeCard(s) {
+    return '<div class="card mr-4 flex w-64 shrink-0 items-center gap-3 p-4">' +
+      '<span class="bg-brand flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-lg font-extrabold text-white">' + s[0].charAt(0) + '</span>' +
+      '<div class="min-w-0"><p class="truncate font-bold text-emerald-950">' + s[1] + '</p>' +
+      '<p class="text-xs text-emerald-800/70">' + s[2].replace('&', '&amp;') + '</p>' +
+      '<span class="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-emerald-800"><span class="pulse-badge inline-flex"><i data-lucide="badge-check" class="h-4 w-4 text-emerald-700"></i></span>Verified</span></div></div>';
+  }
+  document.getElementById('storeTrack').innerHTML = STORES.concat(STORES).map(storeCard).join('');
 
-  document.getElementById('steps').innerHTML = STEPS.map(([title, text, icon], i) => `
-    <li class="card reveal flex items-start gap-4 p-5">
-      <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-800"><i data-lucide="${icon}" class="h-6 w-6"></i></span>
-      <div><p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Step ${i + 1}</p><h3 class="text-lg font-bold text-emerald-950">${title}</h3><p class="mt-1 text-sm text-emerald-900/70">${text}</p></div>
-    </li>`).join('');
+  document.getElementById('steps').innerHTML = STEPS.map(function (s, i) {
+    return '<li class="card reveal flex items-start gap-4 p-5">' +
+      '<span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-800"><i data-lucide="' + s[2] + '" class="h-6 w-6"></i></span>' +
+      '<div><p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Step ' + (i + 1) + '</p><h3 class="text-lg font-bold text-emerald-950">' + s[0] + '</h3><p class="mt-1 text-sm text-emerald-900/70">' + s[1] + '</p></div></li>';
+  }).join('');
 
-  document.getElementById('uniOthers').innerHTML = OTHER_UNIS.map((u, i) => `
-    <div class="card reveal flex items-center justify-between gap-3 p-5" style="--d:${0.1 + i * 0.08}s;opacity:.6;filter:grayscale(1)">
-      <span class="font-semibold text-emerald-950">${u}</span>
-      <span class="shrink-0 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">Coming soon</span>
-    </div>`).join('');
+  document.getElementById('uniOthers').innerHTML = OTHER_UNIS.map(function (u, i) {
+    return '<div class="card reveal flex items-center justify-between gap-3 p-5" style="--d:' + (0.1 + i * 0.08) + 's;filter:grayscale(1)">' +
+      '<span class="font-semibold text-emerald-950" style="opacity:.6">' + u + '</span>' +
+      '<span class="shrink-0 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">Coming soon</span></div>';
+  }).join('');
 
   document.getElementById('yr').textContent = new Date().getFullYear();
-  lucide.createIcons();
 
-  // ---------- Motion ----------
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Icons: if the icon library fails to load, the page still works
+  function icons() { try { if (window.lucide) lucide.createIcons(); } catch (e) { console.warn('Icons failed to load', e); } }
+  icons();
 
-  // Splash: hide after intro
-  setTimeout(() => document.getElementById('splash').classList.add('hide'), reduce ? 0 : 1800);
+  // ---------- Reveal on scroll ----------
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          setTimeout(function () { e.target.classList.add('done'); }, 1000);
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('in', 'done'); });
+  }
 
-  // Reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  // ---------- Shield draw on view ----------
+  var shield = document.getElementById('shield');
+  function drawShield() { shield.querySelectorAll('.draw').forEach(function (p) { p.classList.add('in'); }); }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries, o) {
+      entries.forEach(function (e) { if (e.isIntersecting) { drawShield(); o.disconnect(); } });
+    }, { threshold: 0.4 }).observe(shield);
+  } else { drawShield(); }
 
-  // Shield draw on view
-  const shield = document.getElementById('shield');
-  new IntersectionObserver((entries, o) => {
-    entries.forEach(e => { if (e.isIntersecting) { shield.querySelectorAll('.draw').forEach(p => p.classList.add('in')); o.disconnect(); } });
-  }, { threshold: 0.4 }).observe(shield);
-
-  // Counters count up on view
-  document.querySelectorAll('[data-count]').forEach(el => {
-    const to = +el.dataset.count;
-    if (reduce) { el.textContent = to; return; }
-    new IntersectionObserver((entries, o) => {
-      entries.forEach(e => {
+  // ---------- Counters count up on view ----------
+  document.querySelectorAll('[data-count]').forEach(function (el) {
+    var to = +el.dataset.count;
+    if (reduce || !('IntersectionObserver' in window)) { el.textContent = to; return; }
+    new IntersectionObserver(function (entries, o) {
+      entries.forEach(function (e) {
         if (!e.isIntersecting) return;
-        const start = performance.now(), dur = 1800;
-        const tick = t => {
-          const p = Math.min((t - start) / dur, 1);
+        var start = performance.now(), dur = 1800;
+        (function tick(t) {
+          var p = Math.min((t - start) / dur, 1);
           el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
           if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
+        })(start);
         o.disconnect();
       });
     }, { threshold: 0.6 }).observe(el);
   });
 
-  // How it works: line fills and rider travels as you scroll
-  const hiw = document.getElementById('hiw');
-  const line = document.getElementById('hiwLine');
-  const hiwRider = document.getElementById('hiwRider');
+  // ---------- How it works: line fills and rider travels as you scroll ----------
+  var hiw = document.getElementById('hiw');
+  var line = document.getElementById('hiwLine');
+  var hiwRider = document.getElementById('hiwRider');
   function updateHiw() {
-    const r = hiw.getBoundingClientRect();
-    const vh = innerHeight;
-    const start = vh * 0.75;
-    const span = r.height + vh * 0.15;
-    const p = Math.max(0, Math.min(1, (start - r.top) / span));
+    var r = hiw.getBoundingClientRect();
+    var vh = innerHeight;
+    var start = vh * 0.75;
+    var span = r.height + vh * 0.15;
+    var p = Math.max(0, Math.min(1, (start - r.top) / span));
     line.style.height = (p * 100) + '%';
     hiwRider.style.top = (p * 100) + '%';
   }
