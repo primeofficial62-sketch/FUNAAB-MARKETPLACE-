@@ -1,6 +1,8 @@
 export const ROUTES = {
+  auth: "/auth",
+  startShopping: "/auth?type=customer&mode=signup",
+  becomeVendor: "/auth?type=vendor&mode=signup",
   explore: "/explore",
-  becomeVendor: "/become-a-vendor",
   category: (slug: string) => `/explore?category=${slug}`,
   universities: "/universities",
   about: "/about",
