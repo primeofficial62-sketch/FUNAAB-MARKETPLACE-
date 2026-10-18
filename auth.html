@@ -249,20 +249,21 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
-  /* ============ CONFIG: fill these in ============ */
-  var SUPABASE_URL='YOUR_SUPABASE_URL';
-  var SUPABASE_ANON_KEY='YOUR_SUPABASE_ANON_KEY';
+  /* ============ CONFIG ============ */
+  var SUPABASE_URL='https://ikyqahzhtckpelzkmgyh.supabase.co';
+  var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlreXFhaHpodGNrcGVsemttZ3loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjI1MzUsImV4cCI6MjEwNDUzODUzNX0.keL7ynC_-ViGceD1tMvBsDMd9ejg5IzIPydyWiNZZvk';
   // Where this account type lands after signing in (change when that page exists)
   var ROUTES={customer:'index.html',vendor:'index.html'};
-  /* ================================================ */
+  /* ================================== */
 
-  var ROLE=(new URLSearchParams(location.search).get('role')==='vendor')?'vendor':'customer';
+  var params=new URLSearchParams(location.search);
+  var ROLE=(params.get('role')==='vendor')?'vendor':'customer';
   var configured=SUPABASE_URL.indexOf('YOUR_')!==0 && SUPABASE_ANON_KEY.indexOf('YOUR_')!==0;
   var sb=(configured&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 
   var $=function(id){return document.getElementById(id)};
   var form=$('form'),note=$('note'),pw=$('password'),submitBtn=$('submit'),googleBtn=$('googleBtn');
-  var mode=new URLSearchParams(location.search).get('mode');
+  var mode=params.get('mode');
   mode=(mode==='signin'||mode==='update')?mode:'signup';
 
   var COPY={"customer": {"signin": ["Welcome back", "Sign in to keep shopping from your campus.", "Sign in"], "signup": ["Create your account", "Shop from trusted vendors in your university community.", "Create account"], "reset": ["Reset your password", "Enter your email and we will send you a reset link.", "Send reset link"], "update": ["Set a new password", "Choose a new password for your account.", "Update password"]}, "vendor": {"signin": ["Vendor sign in", "Manage your store and orders.", "Sign in"], "signup": ["Open your store", "Apply to sell on campus. Every vendor is reviewed before going live.", "Apply as vendor"], "reset": ["Reset your password", "Enter your email and we will send you a reset link.", "Send reset link"], "update": ["Set a new password", "Choose a new password for your account.", "Update password"]}};
@@ -306,8 +307,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
     pw.placeholder=(mode==='signin')?'Enter your password':'Create a password';
     if(mode==='signin')pw.removeAttribute('minlength');else pw.setAttribute('minlength','8');
 
+    // FIX: keep location.hash so Supabase can still read the OAuth / recovery tokens
     if(authMode&&window.history&&history.replaceState){
-      history.replaceState(null,'','?role='+ROLE+'&mode='+mode);
+      history.replaceState(null,'','?role='+ROLE+'&mode='+mode+location.hash);
     }
   }
 
