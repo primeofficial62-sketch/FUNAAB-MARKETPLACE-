@@ -17,7 +17,7 @@ export default function FinalCta() {
           <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950">Ready to get started?</h2>
           <p className="mt-3 text-emerald-900/75">Shop from your campus community or start selling today.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href={ROUTES.explore} className="btn-primary">
+            <Link href={ROUTES.startShopping} className="btn-primary">
               Start Shopping <ArrowRight className="h-4 w-4" />
             </Link>
             <Link href={ROUTES.becomeVendor} className="btn-ghost">
