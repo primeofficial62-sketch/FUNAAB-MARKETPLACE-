@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Shopper sign in or sign up — FUNAAB Marketplace</title>
-<meta name="description" content="Sign in or create your FUNAAB Marketplace shopper account.">
+<title>Vendor sign in or sign up — FUNAAB Marketplace</title>
+<meta name="description" content="Sign in or apply to open your store on FUNAAB Marketplace.">
 <meta name="theme-color" content="#022c21">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -148,12 +148,12 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
       <a class="back" href="index.html">Back to home</a>
     </div>
     <div class="aside-mid">
-      <h2>Everything you need, delivered to you.</h2>
-      <p>Sign in to order from trusted vendors in your university community.</p>
+      <h2>Sell to your whole campus.</h2>
+      <p>Open a store and reach shoppers already on FUNAAB Marketplace.</p>
       <ul class="points">
-        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Food, fashion, gadgets, books and more</li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Every vendor is reviewed before they sell</li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Get your order by delivery or pickup</li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Apply once, get reviewed, then go live</li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Ratings come from customers who actually bought</li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Reach shoppers across your university community</li>
       </ul>
     </div>
   </aside>
@@ -184,8 +184,29 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
           <input class="input" id="fullName" name="fullName" type="text" autocomplete="name" placeholder="Your full name" required>
         </div>
         <div class="field" data-modes="signup">
-          <label for="phone">Phone number <span class="opt">(optional)</span></label>
-          <input class="input" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0803 000 0000">
+          <label for="storeName">Store name</label>
+          <input class="input" id="storeName" name="storeName" type="text" autocomplete="organization" placeholder="e.g. Mama Put Kitchen" required>
+        </div>
+
+        <div class="field" data-modes="signup">
+          <label for="storeCategory">What do you sell?</label>
+          <select class="input" id="storeCategory" name="storeCategory" required>
+            <option value="" selected disabled>Choose a category</option>
+            <option>Food and Snacks</option>
+            <option>Fashion and Clothing</option>
+            <option>Electronics and Gadgets</option>
+            <option>Books and Educational Materials</option>
+            <option>Beauty and Personal Care</option>
+            <option>Groceries</option>
+            <option>Home and Household Essentials</option>
+            <option>Printing and Design</option>
+            <option>Laundry and Cleaning</option>
+            <option>Other Products and Services</option>
+          </select>
+        </div>
+        <div class="field" data-modes="signup">
+          <label for="phone">Phone number</label>
+          <input class="input" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0803 000 0000" required>
         </div>
 
         <div class="field" data-modes="signin signup reset">
@@ -205,6 +226,10 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
         <div class="row" data-modes="signin">
           <button type="button" class="link" id="forgot">Forgot password?</button>
         </div>
+        <div class="info" data-modes="signup">
+          <svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>
+          <span>Vendors are reviewed before they can sell. We will email you once your store is approved.</span>
+        </div>
         <label class="check" data-modes="signup">
           <input type="checkbox" id="terms" required>
           <span>I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>.</span>
@@ -217,7 +242,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
         <button type="button" class="link center" id="backToSignin" data-modes="reset">Back to sign in</button>
       </form>
 
-      <p class="other" data-modes="signin signup">Selling on campus? <a href="vendor-auth.html">Become a vendor</a></p>
+      <p class="other" data-modes="signin signup">Just here to shop? <a href="shopper-auth.html">Start shopping</a></p>
 
     </div>
     <p class="credit">Developed by PRIME</p>
@@ -235,7 +260,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
   var ROUTES={customer:'index.html',vendor:'index.html'};
   /* ================================================ */
 
-  var ROLE='customer';
+  var ROLE='vendor';
   var configured=SUPABASE_URL.indexOf('YOUR_')!==0 && SUPABASE_ANON_KEY.indexOf('YOUR_')!==0;
   var sb=(configured&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 
@@ -244,7 +269,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
   var mode=new URLSearchParams(location.search).get('mode');
   mode=(mode==='signin'||mode==='update')?mode:'signup';
 
-  var COPY={"signin": ["Welcome back", "Sign in to keep shopping from your campus.", "Sign in"], "signup": ["Create your account", "Shop from trusted vendors in your university community.", "Create account"], "reset": ["Reset your password", "Enter your email and we will send you a reset link.", "Send reset link"], "update": ["Set a new password", "Choose a new password for your account.", "Update password"]};
+  var COPY={"signin": ["Vendor sign in", "Manage your store and orders.", "Sign in"], "signup": ["Open your store", "Apply to sell on campus. Every vendor is reviewed before going live.", "Apply as vendor"], "reset": ["Reset your password", "Enter your email and we will send you a reset link.", "Send reset link"], "update": ["Set a new password", "Choose a new password for your account.", "Update password"]};
 
   function showNote(type,text){
     note.className='note '+(type==='error'?'error':'ok');
@@ -335,6 +360,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
       }
       if(mode==='signup'){
         var meta={full_name:$('fullName').value.trim(),phone:$('phone').value.trim(),role:ROLE};
+        meta.store_name=$('storeName').value.trim();
+        meta.store_category=$('storeCategory').value;
         var r2=await sb.auth.signUp({email:email,password:pw.value,options:{data:meta,emailRedirectTo:selfUrl('signin')}});
         if(r2.error)throw r2.error;
         if(r2.data.user&&r2.data.user.identities&&r2.data.user.identities.length===0){
