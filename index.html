@@ -15,10 +15,10 @@
   html { scroll-behavior: smooth; }
   body { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; color: #022c22; background: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-  /* ---------- Design tokens: green + white only ---------- */
-  .bg-brand { background-image: linear-gradient(135deg, #10b981, #047857); }
+  /* ---------- Design tokens: deep green + white only ---------- */
+  .bg-brand { background-image: linear-gradient(135deg, #059669, #064e3b); }
   .bg-brand-soft { background-image: linear-gradient(180deg, #ffffff 0%, #ecfdf5 100%); }
-  .text-brand { background-image: linear-gradient(90deg, #059669, #22c55e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .text-brand { color: #047857; }
   .card { background: #fff; border: 1px solid #d1fae5; border-radius: 1.25rem; box-shadow: 0 1px 2px rgba(6,95,70,.04), 0 12px 30px -14px rgba(6,95,70,.22); }
   .glass { background: rgba(255,255,255,.58); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.7); box-shadow: 0 10px 30px -10px rgba(6,95,70,.3); }
   .btn-primary { display: inline-flex; align-items: center; gap: .5rem; border-radius: 9999px; background: #059669; color: #fff; font-weight: 600; padding: .9rem 1.5rem; box-shadow: 0 10px 24px -8px rgba(5,150,105,.45); transition: transform .15s, background .2s; }
@@ -34,7 +34,7 @@
   /* ---------- Splash ---------- */
   #splash { position: fixed; inset: 0; z-index: 100; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity .5s ease, transform .5s ease; }
   #splash.hide { opacity: 0; transform: scale(1.04); pointer-events: none; }
-  .ripple { position: absolute; width: 7rem; height: 7rem; border-radius: 9999px; border: 2px solid #34d399; animation: ripple 1.5s ease-out infinite; opacity: 0; }
+  .ripple { position: absolute; width: 7rem; height: 7rem; border-radius: 9999px; border: 2px solid #047857; animation: ripple 1.5s ease-out infinite; opacity: 0; }
   @keyframes ripple { 0% { transform: scale(.6); opacity: .6; } 100% { transform: scale(2.6); opacity: 0; } }
   .logo-pop { animation: logoPop .7s cubic-bezier(.2,1.4,.4,1) both; }
   @keyframes logoPop { from { transform: scale(.4) rotate(-12deg); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -108,7 +108,7 @@
     <span class="ripple" style="animation-delay:.2s"></span>
     <span class="ripple" style="animation-delay:.55s"></span>
     <span class="ripple" style="animation-delay:.9s"></span>
-    <div class="bg-brand logo-pop relative flex h-24 w-24 items-center justify-center rounded-3xl shadow-xl shadow-emerald-600/30">
+    <div class="bg-brand logo-pop relative flex h-24 w-24 items-center justify-center rounded-3xl shadow-xl shadow-emerald-900/30">
       <i data-lucide="shopping-bag" class="h-11 w-11 text-white"></i>
     </div>
   </div>
@@ -120,12 +120,12 @@
 <!-- ============ HERO ============ -->
 <section class="bg-brand-soft relative isolate flex min-h-screen items-center overflow-hidden">
   <div class="absolute -left-24 -top-24 -z-10 h-72 w-72 rounded-full bg-emerald-200/50 blur-3xl"></div>
-  <div class="absolute -bottom-24 -right-24 -z-10 h-80 w-80 rounded-full bg-green-300/30 blur-3xl"></div>
+  <div class="absolute -bottom-24 -right-24 -z-10 h-80 w-80 rounded-full bg-emerald-300/30 blur-3xl"></div>
 
   <div class="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-16 lg:grid-cols-2">
     <div>
       <span class="hero-fade inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-semibold text-emerald-700" style="--d:1.7s">
-        <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span></span>
+        <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-700 opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-800"></span></span>
         Now live at FUNAAB
       </span>
 
@@ -135,30 +135,40 @@
 
       <p class="hero-fade mt-5 max-w-md text-base text-emerald-900/75 sm:text-lg" style="--d:2.3s">Discover products, connect with trusted vendors, and shop from your university community.</p>
 
-      <div class="hero-fade mt-8 flex flex-wrap gap-3" style="--d:2.5s">
-        <a href="#categories" class="btn-primary">Start Shopping <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
-        <a href="#how-it-works" class="btn-ghost"><i data-lucide="store" class="h-4 w-4"></i> Become a Vendor</a>
+      <div class="hero-fade mt-8 grid gap-3 sm:grid-cols-3" style="--d:2.5s">
+        <div class="card flex items-center gap-3 p-4">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-800"><i data-lucide="shield-check" class="h-5 w-5"></i></span>
+          <span class="text-sm font-semibold text-emerald-950">Verified vendors</span>
+        </div>
+        <div class="card flex items-center gap-3 p-4">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-800"><i data-lucide="lock" class="h-5 w-5"></i></span>
+          <span class="text-sm font-semibold text-emerald-950">Secure payments</span>
+        </div>
+        <div class="card flex items-center gap-3 p-4">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-800"><i data-lucide="bike" class="h-5 w-5"></i></span>
+          <span class="text-sm font-semibold text-emerald-950">Delivered on campus</span>
+        </div>
       </div>
     </div>
 
     <!-- Rider scene -->
     <div class="hero-fade" style="--d:2s">
       <div class="relative mx-auto w-full max-w-xl" style="aspect-ratio:10/7">
-        <div class="glass floaty absolute z-10 flex h-11 w-11 items-center justify-center rounded-2xl" style="left:3%;top:10%;--t:4.2s"><i data-lucide="shopping-bag" class="h-5 w-5 text-emerald-700"></i></div>
-        <div class="glass floaty absolute z-10 flex h-11 w-11 items-center justify-center rounded-2xl" style="left:38%;top:0;--t:5.1s"><i data-lucide="smartphone" class="h-5 w-5 text-emerald-700"></i></div>
-        <div class="glass floaty absolute z-10 flex h-11 w-11 items-center justify-center rounded-2xl" style="left:5%;top:44%;--t:4.7s"><i data-lucide="book-open" class="h-5 w-5 text-emerald-700"></i></div>
-        <div class="glass floaty absolute z-10 flex h-11 w-11 items-center justify-center rounded-2xl" style="right:1%;top:46%;--t:5.5s"><i data-lucide="package" class="h-5 w-5 text-emerald-700"></i></div>
+        <div class="glass floaty absolute z-10 flex h-11 w-11 items-center justify-center rounded-2xl" style="left:3%;top:10%;--t:4.2s"><i data-lucide="shopping-bag" class="h-5 w-5 text-emerald-800"></i></div>
+        <div class="glass floaty absolute z-10 flex h-11 w-11 items-center justify-center rounded-2xl" style="left:38%;top:0;--t:5.1s"><i data-lucide="smartphone" class="h-5 w-5 text-emerald-800"></i></div>
+        <div class="glass floaty absolute z-10 flex h-11 w-11 items-center justify-center rounded-2xl" style="left:5%;top:44%;--t:4.7s"><i data-lucide="book-open" class="h-5 w-5 text-emerald-800"></i></div>
+        <div class="glass floaty absolute z-10 flex h-11 w-11 items-center justify-center rounded-2xl" style="right:1%;top:46%;--t:5.5s"><i data-lucide="package" class="h-5 w-5 text-emerald-800"></i></div>
 
         <div class="glass delivered absolute z-20 flex items-center gap-2 rounded-2xl px-3 py-2" style="right:3%;top:8%">
-          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600"><i data-lucide="check" class="h-4 w-4 text-white" stroke-width="3"></i></span>
+          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-800"><i data-lucide="check" class="h-4 w-4 text-white" stroke-width="3"></i></span>
           <span class="text-sm font-bold text-emerald-900">Order delivered</span>
         </div>
 
         <svg viewBox="0 0 400 280" class="h-full w-full" role="img" aria-label="A delivery rider on a scooter delivering a package">
           <defs>
             <linearGradient id="bgA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d1fae5"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
-            <linearGradient id="bldA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#10b981"/></linearGradient>
-            <linearGradient id="bldB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a7f3d0"/><stop offset="1" stop-color="#34d399"/></linearGradient>
+            <linearGradient id="bldA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#064e3b"/></linearGradient>
+            <linearGradient id="bldB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#065f46"/><stop offset="1" stop-color="#022c22"/></linearGradient>
           </defs>
           <rect width="400" height="280" rx="28" fill="url(#bgA)"/>
           <circle cx="330" cy="60" r="34" fill="#bbf7d0" opacity=".7"/>
@@ -168,7 +178,7 @@
           <rect x="130" y="144" width="40" height="88" rx="6" fill="url(#bldB)"/>
           <rect x="176" y="116" width="50" height="116" rx="6" fill="url(#bldA)"/>
           <rect x="232" y="150" width="36" height="82" rx="6" fill="url(#bldB)"/>
-          <g fill="#ecfdf5" opacity=".9">
+          <g fill="#d1fae5" opacity=".85">
             <rect x="80" y="114" width="10" height="12" rx="2"/><rect x="100" y="114" width="10" height="12" rx="2"/>
             <rect x="80" y="138" width="10" height="12" rx="2"/><rect x="100" y="138" width="10" height="12" rx="2"/>
             <rect x="80" y="162" width="10" height="12" rx="2"/><rect x="100" y="162" width="10" height="12" rx="2"/>
@@ -178,20 +188,20 @@
           </g>
 
           <!-- destination house -->
-          <rect x="278" y="170" width="86" height="62" rx="6" fill="#fff" stroke="#6ee7b7" stroke-width="2"/>
-          <path d="M270 172 L321 136 L372 172 Z" fill="#059669"/>
-          <rect x="310" y="196" width="22" height="36" rx="4" fill="#10b981"/>
+          <rect x="278" y="170" width="86" height="62" rx="6" fill="#fff" stroke="#047857" stroke-width="2"/>
+          <path d="M270 172 L321 136 L372 172 Z" fill="#065f46"/>
+          <rect x="310" y="196" width="22" height="36" rx="4" fill="#047857"/>
           <rect x="288" y="184" width="14" height="14" rx="3" fill="#d1fae5"/>
 
           <!-- road -->
           <rect x="0" y="232" width="400" height="48" fill="#064e3b"/>
-          <rect x="0" y="232" width="400" height="5" fill="#34d399"/>
+          <rect x="0" y="232" width="400" height="5" fill="#047857"/>
           <line class="lane" x1="0" y1="258" x2="400" y2="258" stroke="#a7f3d0" stroke-width="3" stroke-dasharray="14 12"/>
 
           <!-- package -->
           <g transform="translate(300 222)">
             <g class="pkg">
-              <rect x="-11" y="-20" width="22" height="20" rx="3" fill="#22c55e"/>
+              <rect x="-11" y="-20" width="22" height="20" rx="3" fill="#065f46"/>
               <rect x="-2" y="-20" width="4" height="20" fill="#ecfdf5"/>
             </g>
           </g>
@@ -204,27 +214,27 @@
               <circle class="dust" cx="-25" cy="4" r="4" fill="#d1fae5" style="animation-delay:.25s"/>
               <circle class="dust" cx="-34" cy="4" r="4" fill="#d1fae5" style="animation-delay:.5s"/>
 
-              <rect x="-18" y="-74" width="32" height="30" rx="6" fill="#22c55e"/>
+              <rect x="-18" y="-74" width="32" height="30" rx="6" fill="#065f46"/>
               <rect x="-18" y="-62" width="32" height="5" fill="#ecfdf5" opacity=".9"/>
 
-              <rect x="-4" y="-24" width="28" height="15" rx="7" fill="#059669"/>
-              <rect x="8" y="-11" width="42" height="6" rx="3" fill="#047857"/>
-              <line x1="50" y1="-8" x2="46" y2="-48" stroke="#065f46" stroke-width="5" stroke-linecap="round"/>
-              <line x1="40" y1="-50" x2="55" y2="-50" stroke="#065f46" stroke-width="5" stroke-linecap="round"/>
+              <rect x="-4" y="-24" width="28" height="15" rx="7" fill="#047857"/>
+              <rect x="8" y="-11" width="42" height="6" rx="3" fill="#064e3b"/>
+              <line x1="50" y1="-8" x2="46" y2="-48" stroke="#022c22" stroke-width="5" stroke-linecap="round"/>
+              <line x1="40" y1="-50" x2="55" y2="-50" stroke="#022c22" stroke-width="5" stroke-linecap="round"/>
 
-              <path d="M20 -26 L38 -28 L42 -10" fill="none" stroke="#064e3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M18 -28 L22 -58" stroke="#10b981" stroke-width="13" stroke-linecap="round"/>
-              <path d="M25 -54 L47 -49" stroke="#10b981" stroke-width="5" stroke-linecap="round"/>
+              <path d="M20 -26 L38 -28 L42 -10" fill="none" stroke="#022c22" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18 -28 L22 -58" stroke="#047857" stroke-width="13" stroke-linecap="round"/>
+              <path d="M25 -54 L47 -49" stroke="#047857" stroke-width="5" stroke-linecap="round"/>
               <circle cx="27" cy="-71" r="9" fill="#fcd9b6"/>
-              <path d="M17 -72 A10 10 0 0 1 37 -72 Z" fill="#065f46"/>
+              <path d="M17 -72 A10 10 0 0 1 37 -72 Z" fill="#022c22"/>
 
               <g>
-                <circle r="13" fill="#052e22"/>
+                <circle r="13" fill="#022c22"/>
                 <g class="wheel-spin"><circle r="8" fill="none" stroke="#a7f3d0" stroke-width="2" stroke-dasharray="4 5"/><line x1="-8" y1="0" x2="8" y2="0" stroke="#a7f3d0" stroke-width="2"/></g>
                 <circle r="3" fill="#d1fae5"/>
               </g>
               <g transform="translate(58 0)">
-                <circle r="13" fill="#052e22"/>
+                <circle r="13" fill="#022c22"/>
                 <g class="wheel-spin"><circle r="8" fill="none" stroke="#a7f3d0" stroke-width="2" stroke-dasharray="4 5"/><line x1="-8" y1="0" x2="8" y2="0" stroke="#a7f3d0" stroke-width="2"/></g>
                 <circle r="3" fill="#d1fae5"/>
               </g>
@@ -267,8 +277,8 @@
     </div>
     <div id="hiw" class="relative pb-6 pl-16">
       <div class="absolute bottom-0 left-5 top-0 w-1 rounded bg-emerald-100"></div>
-      <div id="hiwLine" class="absolute left-5 top-0 w-1 rounded" style="height:0;background:linear-gradient(180deg,#4ade80,#047857)"></div>
-      <div id="hiwRider" class="absolute left-0 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-600/30" style="top:0;transform:translateY(-50%)"><i data-lucide="bike" class="h-5 w-5"></i></div>
+      <div id="hiwLine" class="absolute left-5 top-0 w-1 rounded" style="height:0;background:linear-gradient(180deg,#059669,#064e3b)"></div>
+      <div id="hiwRider" class="absolute left-0 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-800 text-white shadow-lg shadow-emerald-900/30" style="top:0;transform:translateY(-50%)"><i data-lucide="bike" class="h-5 w-5"></i></div>
       <ol class="space-y-8" id="steps"></ol>
     </div>
   </div>
@@ -283,8 +293,8 @@
   </div>
   <div class="grid gap-4 md:grid-cols-3">
     <div class="card reveal relative p-6 md:row-span-2">
-      <span class="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-1 text-xs font-bold text-green-700">
-        <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span></span>
+      <span class="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">
+        <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-700 opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-800"></span></span>
         Live
       </span>
       <span class="bg-brand flex h-14 w-14 items-center justify-center rounded-2xl text-white"><i data-lucide="graduation-cap" class="h-7 w-7"></i></span>
@@ -307,15 +317,15 @@
 
     <div class="mx-auto mb-10 h-28 w-28" id="shield">
       <svg viewBox="0 0 100 110" class="h-full w-full" aria-hidden="true">
-        <path class="draw" pathLength="1" d="M50 8 L88 22 V50 C88 74 72 90 50 98 C28 90 12 74 12 50 V22 Z" fill="#ecfdf5" stroke="#059669" stroke-width="5" stroke-linejoin="round"/>
-        <path class="draw check" pathLength="1" d="M32 56 L45 69 L70 40" fill="none" stroke="#22c55e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="draw" pathLength="1" d="M50 8 L88 22 V50 C88 74 72 90 50 98 C28 90 12 74 12 50 V22 Z" fill="#ecfdf5" stroke="#047857" stroke-width="5" stroke-linejoin="round"/>
+        <path class="draw check" pathLength="1" d="M32 56 L45 69 L70 40" fill="none" stroke="#065f46" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
 
     <div class="grid gap-4 md:grid-cols-3">
-      <div class="card reveal p-6 text-center"><i data-lucide="shield-check" class="mx-auto h-6 w-6 text-emerald-600"></i><p class="text-brand mt-3 text-4xl font-extrabold"><span data-count="100">0</span>%</p><p class="mt-2 text-sm text-emerald-900/70">of vendors are reviewed and approved before they sell</p></div>
-      <div class="card reveal p-6 text-center" style="--d:.1s"><i data-lucide="star" class="mx-auto h-6 w-6 text-emerald-600"></i><p class="text-brand mt-3 text-4xl font-extrabold"><span data-count="100">0</span>%</p><p class="mt-2 text-sm text-emerald-900/70">of reviews come from verified purchases</p></div>
-      <div class="card reveal p-6 text-center" style="--d:.2s"><i data-lucide="flag" class="mx-auto h-6 w-6 text-emerald-600"></i><p class="text-brand mt-3 text-4xl font-extrabold">1 tap</p><p class="mt-2 text-sm text-emerald-900/70">to report a listing, vendor or order problem</p></div>
+      <div class="card reveal p-6 text-center"><i data-lucide="shield-check" class="mx-auto h-6 w-6 text-emerald-800"></i><p class="text-brand mt-3 text-4xl font-extrabold"><span data-count="100">0</span>%</p><p class="mt-2 text-sm text-emerald-900/70">of vendors are reviewed and approved before they sell</p></div>
+      <div class="card reveal p-6 text-center" style="--d:.1s"><i data-lucide="star" class="mx-auto h-6 w-6 text-emerald-800"></i><p class="text-brand mt-3 text-4xl font-extrabold"><span data-count="100">0</span>%</p><p class="mt-2 text-sm text-emerald-900/70">of reviews come from verified purchases</p></div>
+      <div class="card reveal p-6 text-center" style="--d:.2s"><i data-lucide="flag" class="mx-auto h-6 w-6 text-emerald-800"></i><p class="text-brand mt-3 text-4xl font-extrabold">1 tap</p><p class="mt-2 text-sm text-emerald-900/70">to report a listing, vendor or order problem</p></div>
     </div>
   </div>
 </section>
@@ -324,9 +334,9 @@
 <section class="px-5 py-20">
   <div class="bg-brand relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] px-6 py-16 text-center">
     <div class="absolute -left-10 -top-10 h-48 w-48 rounded-full bg-white/10 blur-2xl"></div>
-    <div class="absolute -bottom-12 -right-12 h-56 w-56 rounded-full bg-green-300/20 blur-2xl"></div>
+    <div class="absolute -bottom-12 -right-12 h-56 w-56 rounded-full bg-emerald-300/20 blur-2xl"></div>
     <div class="glass reveal relative mx-auto max-w-xl rounded-3xl px-6 py-10">
-      <span class="bob absolute -top-6 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-2xl bg-white text-emerald-700 shadow-lg"><i data-lucide="shopping-cart" class="h-6 w-6"></i></span>
+      <span class="bob absolute -top-6 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-2xl bg-white text-emerald-800 shadow-lg"><i data-lucide="shopping-cart" class="h-6 w-6"></i></span>
       <h2 class="text-3xl font-extrabold tracking-tight text-emerald-950">Ready to get started?</h2>
       <p class="mt-3 text-emerald-900/75">Shop from your campus community or start selling today.</p>
       <div class="mt-6 flex flex-wrap justify-center gap-3">
@@ -336,7 +346,7 @@
     </div>
     <div class="relative mt-10 h-10 overflow-hidden">
       <div class="absolute inset-x-0 bottom-0 h-px bg-white/30"></div>
-      <div class="cta-rider absolute bottom-1 flex h-9 w-9 items-center justify-center rounded-full bg-white text-emerald-700"><i data-lucide="bike" class="h-5 w-5"></i></div>
+      <div class="cta-rider absolute bottom-1 flex h-9 w-9 items-center justify-center rounded-full bg-white text-emerald-800"><i data-lucide="bike" class="h-5 w-5"></i></div>
     </div>
   </div>
 </section>
@@ -357,9 +367,9 @@
         <a href="#" class="rounded-full border border-emerald-700 px-4 py-1.5 text-sm text-emerald-100 hover:bg-emerald-800">WhatsApp</a>
       </div>
     </div>
-    <div><p class="text-sm font-bold uppercase tracking-wider text-green-400">Company</p><ul class="mt-3 space-y-2 text-sm text-emerald-100/80"><li><a href="#" class="hover:text-white">About Us</a></li><li><a href="#" class="hover:text-white">Contact</a></li><li><a href="#" class="hover:text-white">Help Centre</a></li></ul></div>
-    <div><p class="text-sm font-bold uppercase tracking-wider text-green-400">Legal</p><ul class="mt-3 space-y-2 text-sm text-emerald-100/80"><li><a href="#" class="hover:text-white">Terms and Conditions</a></li><li><a href="#" class="hover:text-white">Privacy Policy</a></li></ul></div>
-    <div><p class="text-sm font-bold uppercase tracking-wider text-green-400">Community</p><ul class="mt-3 space-y-2 text-sm text-emerald-100/80"><li><a href="#" class="hover:text-white">Vendor Guidelines</a></li><li><a href="#" class="hover:text-white">Community Guidelines</a></li></ul></div>
+    <div><p class="text-sm font-bold uppercase tracking-wider text-emerald-400">Company</p><ul class="mt-3 space-y-2 text-sm text-emerald-100/80"><li><a href="#" class="hover:text-white">About Us</a></li><li><a href="#" class="hover:text-white">Contact</a></li><li><a href="#" class="hover:text-white">Help Centre</a></li></ul></div>
+    <div><p class="text-sm font-bold uppercase tracking-wider text-emerald-400">Legal</p><ul class="mt-3 space-y-2 text-sm text-emerald-100/80"><li><a href="#" class="hover:text-white">Terms and Conditions</a></li><li><a href="#" class="hover:text-white">Privacy Policy</a></li></ul></div>
+    <div><p class="text-sm font-bold uppercase tracking-wider text-emerald-400">Community</p><ul class="mt-3 space-y-2 text-sm text-emerald-100/80"><li><a href="#" class="hover:text-white">Vendor Guidelines</a></li><li><a href="#" class="hover:text-white">Community Guidelines</a></li></ul></div>
   </div>
   <div class="border-t border-emerald-900 py-5 text-center text-xs text-emerald-100/60">© <span id="yr"></span> FUNAAB Marketplace. All rights reserved.</div>
 </footer>
@@ -388,7 +398,7 @@
   // ---------- Render ----------
   document.getElementById('catGrid').innerHTML = CATEGORIES.map(([name, icon], i) => `
     <a href="#" class="tilt card reveal flex h-full flex-col items-center gap-3 p-5 text-center" style="--d:${(i % 5) * 0.06}s">
-      <span class="idle flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700" style="--t:${2.6 + (i % 3) * 0.4}s"><i data-lucide="${icon}" class="h-7 w-7"></i></span>
+      <span class="idle flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-800" style="--t:${2.6 + (i % 3) * 0.4}s"><i data-lucide="${icon}" class="h-7 w-7"></i></span>
       <span class="text-sm font-semibold text-emerald-950">${name}</span>
     </a>`).join('');
 
@@ -398,21 +408,21 @@
       <div class="min-w-0">
         <p class="truncate font-bold text-emerald-950">${name}</p>
         <p class="text-xs text-emerald-800/70">${type}</p>
-        <span class="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-emerald-700"><span class="pulse-badge inline-flex"><i data-lucide="badge-check" class="h-4 w-4 text-green-500"></i></span>Verified</span>
+        <span class="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-emerald-800"><span class="pulse-badge inline-flex"><i data-lucide="badge-check" class="h-4 w-4 text-emerald-700"></i></span>Verified</span>
       </div>
     </div>`;
   document.getElementById('storeTrack').innerHTML = [...STORES, ...STORES].map(storeCard).join('');
 
   document.getElementById('steps').innerHTML = STEPS.map(([title, text, icon], i) => `
     <li class="card reveal flex items-start gap-4 p-5">
-      <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700"><i data-lucide="${icon}" class="h-6 w-6"></i></span>
-      <div><p class="text-xs font-bold uppercase tracking-wider text-emerald-600">Step ${i + 1}</p><h3 class="text-lg font-bold text-emerald-950">${title}</h3><p class="mt-1 text-sm text-emerald-900/70">${text}</p></div>
+      <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-800"><i data-lucide="${icon}" class="h-6 w-6"></i></span>
+      <div><p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Step ${i + 1}</p><h3 class="text-lg font-bold text-emerald-950">${title}</h3><p class="mt-1 text-sm text-emerald-900/70">${text}</p></div>
     </li>`).join('');
 
   document.getElementById('uniOthers').innerHTML = OTHER_UNIS.map((u, i) => `
     <div class="card reveal flex items-center justify-between gap-3 p-5" style="--d:${0.1 + i * 0.08}s;opacity:.6;filter:grayscale(1)">
       <span class="font-semibold text-emerald-950">${u}</span>
-      <span class="shrink-0 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Coming soon</span>
+      <span class="shrink-0 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">Coming soon</span>
     </div>`).join('');
 
   document.getElementById('yr').textContent = new Date().getFullYear();
