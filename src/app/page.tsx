@@ -1,7 +1,6 @@
 import Splash from "@/components/landing/Splash";
 import Hero from "@/components/landing/Hero";
 import Categories from "@/components/landing/Categories";
-import FeaturedProducts from "@/components/landing/FeaturedProducts";
 import FeaturedStores from "@/components/landing/FeaturedStores";
 import HowItWorks from "@/components/landing/HowItWorks";
 import Universities from "@/components/landing/Universities";
@@ -16,7 +15,6 @@ export default function Home() {
       <main className="overflow-x-hidden">
         <Hero />
         <Categories />
-        <FeaturedProducts />
         <FeaturedStores />
         <HowItWorks />
         <Universities />
