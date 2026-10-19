@@ -338,10 +338,7 @@ main{padding:calc(var(--header-h) + 22px) 0 calc(var(--nav-h) + 40px);min-height
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .hero-video{display:none}
-  .mq{overflow-x:auto;-webkit-mask-image:none;mask-image:none;scrollbar-width:none}
-  .mq::-webkit-scrollbar{display:none}
-  .mq-track{width:auto}
-  .mq-dup{display:none}
+  .mq-track{animation:mqslide 42s linear infinite!important}
 }
 </style>
 </head>
