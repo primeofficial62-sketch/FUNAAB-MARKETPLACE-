@@ -462,17 +462,45 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
   // Already signed in, coming back from the confirmation email, or coming back from Google
   (async function(){
     if(!sb||mode==='update')return;
+    // Work out BEFORE any await whether we are returning from an email link or Google
+    var pending=null;
+    try{pending=localStorage.getItem('fm_role')}catch(_){}
+    var returning=/access_token=|error_description=/.test(location.hash)||!!pending;
+
     var s=await sb.auth.getSession();
     var session=s.data&&s.data.session;
     if(!session)return;
-    var user=session.user,pending=null;
-    try{pending=localStorage.getItem('fm_role')}catch(_){}
-    if(pending&&!(user.user_metadata&&user.user_metadata.role)){
-      var u=await sb.auth.updateUser({data:{role:pending}});
-      if(u.data&&u.data.user)user=u.data.user;
+
+    // Verify the session with the server; a stale/deleted-user session must not trap the page
+    var chk=await sb.auth.getUser();
+    if(chk.error||!chk.data||!chk.data.user){
+      await sb.auth.signOut();
+      return;
     }
-    try{localStorage.removeItem('fm_role')}catch(_){}
-    goHome(user);
+    var user=chk.data.user;
+
+    if(returning){
+      if(pending&&!(user.user_metadata&&user.user_metadata.role)){
+        var u=await sb.auth.updateUser({data:{role:pending}});
+        if(u.data&&u.data.user)user=u.data.user;
+      }
+      try{localStorage.removeItem('fm_role')}catch(_){}
+      goHome(user);
+      return;
+    }
+
+    // Opened normally while already signed in: do NOT bounce away, let the person choose
+    showNote('ok','You are already signed in as '+(user.email||'your account')+'.');
+    var wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;gap:16px;justify-content:center;margin:-4px 0 14px';
+    var go=document.createElement('button');
+    go.type='button';go.className='link';go.textContent='Continue to the site';
+    go.addEventListener('click',function(){goHome(user)});
+    var out=document.createElement('button');
+    out.type='button';out.className='link';out.textContent='Sign out';
+    out.addEventListener('click',async function(){await sb.auth.signOut();clearNote();wrap.remove()});
+    wrap.appendChild(go);wrap.appendChild(out);
+    note.parentNode.insertBefore(wrap,note.nextSibling);
   })();
 
   render();
