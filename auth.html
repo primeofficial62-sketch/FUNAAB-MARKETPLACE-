@@ -86,6 +86,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
 
 .row{display:flex;justify-content:flex-end;margin:-4px 0 12px}
 .link{background:none;border:0;padding:4px 0;font:inherit;font-weight:600;font-size:.85rem;color:var(--emerald);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.link:disabled{opacity:.6;cursor:not-allowed;text-decoration:none}
 .link.center{display:block;margin:16px auto 0}
 
 .check{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;font-weight:600;color:var(--muted);margin:2px 0 14px;line-height:1.5}
@@ -235,6 +236,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
 
         <button class="submit" id="submit" type="submit"><span id="submitLabel">Create account</span></button>
 
+        <button type="button" class="link center" id="resend" hidden>Resend confirmation email</button>
         <button type="button" class="link center" id="backToSignin" data-modes="reset">Back to sign in</button>
       </form>
 
@@ -252,6 +254,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
   /* ============ CONFIG ============ */
   var SUPABASE_URL='https://ikyqahzhtckpelzkmgyh.supabase.co';
   var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlreXFhaHpodGNrcGVsemttZ3loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjI1MzUsImV4cCI6MjEwNDUzODUzNX0.keL7ynC_-ViGceD1tMvBsDMd9ejg5IzIPydyWiNZZvk';
+  // Full URL of THIS page on your live site, e.g. 'https://funaabmarketplace.com/auth.html'
+  // Leave '' to auto-detect (works on http(s) hosts and localhost, NOT when opened as a file).
+  var AUTH_PAGE_URL='';
   // Where this account type lands after signing in (change when that page exists)
   var ROUTES={customer:'index.html',vendor:'index.html'};
   /* ================================== */
@@ -262,9 +267,10 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
   var sb=(configured&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 
   var $=function(id){return document.getElementById(id)};
-  var form=$('form'),note=$('note'),pw=$('password'),submitBtn=$('submit'),googleBtn=$('googleBtn');
+  var form=$('form'),note=$('note'),pw=$('password'),submitBtn=$('submit'),googleBtn=$('googleBtn'),resendBtn=$('resend');
   var mode=params.get('mode');
   mode=(mode==='signin'||mode==='update')?mode:'signup';
+  var pendingEmail='';
 
   var COPY={"customer": {"signin": ["Welcome back", "Sign in to keep shopping from your campus.", "Sign in"], "signup": ["Create your account", "Shop from trusted vendors in your university community.", "Create account"], "reset": ["Reset your password", "Enter your email and we will send you a reset link.", "Send reset link"], "update": ["Set a new password", "Choose a new password for your account.", "Update password"]}, "vendor": {"signin": ["Vendor sign in", "Manage your store and orders.", "Sign in"], "signup": ["Open your store", "Apply to sell on campus. Every vendor is reviewed before going live.", "Apply as vendor"], "reset": ["Reset your password", "Enter your email and we will send you a reset link.", "Send reset link"], "update": ["Set a new password", "Choose a new password for your account.", "Update password"]}};
   var ASIDE={"customer": {"title": "Everything you need, delivered to you.", "lead": "Sign up to order from trusted vendors in your university community.", "points": ["Food, fashion, gadgets, books and more", "Every vendor is reviewed before they sell", "Get your order by delivery or pickup"], "other": "Selling on campus? <a href=\"auth.html?role=vendor\">Become a vendor</a>"}, "vendor": {"title": "Sell to your whole campus.", "lead": "Open a store and reach shoppers already on FUNAAB Marketplace.", "points": ["Apply once, get reviewed, then go live", "Ratings come from customers who actually bought", "Reach shoppers across your university community"], "other": "Just here to shop? <a href=\"auth.html?role=customer\">Start shopping</a>"}};
@@ -274,7 +280,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
     note.textContent=text;
     note.hidden=false;
   }
-  function clearNote(){note.hidden=true;note.textContent=''}
+  function clearNote(){note.hidden=true;note.textContent='';resendBtn.hidden=true}
 
   function render(){
     var c=COPY[ROLE][mode];
@@ -307,8 +313,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
     pw.placeholder=(mode==='signin')?'Enter your password':'Create a password';
     if(mode==='signin')pw.removeAttribute('minlength');else pw.setAttribute('minlength','8');
 
-    // FIX: keep location.hash so Supabase can still read the OAuth / recovery tokens
-    if(authMode&&window.history&&history.replaceState){
+    // keep location.hash so Supabase can still read the OAuth / recovery tokens
+    if(authMode&&window.history&&history.replaceState&&location.protocol!=='file:'){
       history.replaceState(null,'','?role='+ROLE+'&mode='+mode+location.hash);
     }
   }
@@ -334,12 +340,20 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
     submitBtn.disabled=on;googleBtn.disabled=on;
     if(on){$('submitLabel').textContent='Please wait...'}else{render()}
   }
+
+  // Turn Supabase errors into plain messages (real error is logged to the console for debugging)
   function friendly(err){
     var m=(err&&err.message)||'Something went wrong. Please try again.';
+    var code=(err&&err.code)||'';
     if(/invalid login/i.test(m))return 'Email or password is incorrect.';
-    if(/not confirmed/i.test(m))return 'Confirm your email first. Check your inbox for the link.';
-    if(/already registered/i.test(m))return 'An account with this email already exists. Sign in instead.';
-    if(/rate limit/i.test(m))return 'Too many attempts. Please wait a bit and try again.';
+    if(/not confirmed/i.test(m)||code==='email_not_confirmed')return 'Confirm your email first. Check your inbox (and spam) for the link.';
+    if(/already registered/i.test(m)||code==='user_already_exists')return 'An account with this email already exists. Sign in instead.';
+    if(/rate limit/i.test(m)||/security purposes/i.test(m)||code==='over_email_send_rate_limit'||code==='over_request_rate_limit')return 'Too many attempts. Please wait a minute and try again.';
+    if(/sending confirmation email/i.test(m)||/sending.*email/i.test(m))return 'We could not send your confirmation email right now. Please try again in a few minutes.';
+    if(/database error/i.test(m))return 'We could not create your account right now. Please try again shortly.';
+    if(/password/i.test(m)&&/(least|weak|short|characters)/i.test(m))return 'Choose a stronger password of at least 8 characters.';
+    if(/valid email|invalid.*email|email.*invalid/i.test(m))return 'Enter a valid email address.';
+    if(/failed to fetch|networkerror|network request/i.test(m))return 'Network problem. Check your connection and try again.';
     return m;
   }
   function notConnected(){
@@ -349,13 +363,43 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
     var r=(user&&user.user_metadata&&user.user_metadata.role==='vendor')?'vendor':'customer';
     location.href=ROUTES[r];
   }
-  function selfUrl(m){return location.origin+location.pathname+'?role='+ROLE+'&mode='+m}
+  // Absolute URL of this page. Used for email links, so it must never be a file:// path.
+  function selfUrl(m){
+    var base=AUTH_PAGE_URL||(location.origin+location.pathname);
+    return base+'?role='+ROLE+'&mode='+m;
+  }
+  function hostedOk(){
+    if(AUTH_PAGE_URL)return true;
+    if(location.protocol==='http:'||location.protocol==='https:')return true;
+    showNote('error','Open this page from your live site or localhost, not as a local file, so the confirmation link can return here.');
+    return false;
+  }
+
+  // Resend confirmation (60s cooldown to avoid email rate limits)
+  function startCooldown(){
+    var left=60;
+    resendBtn.disabled=true;
+    var t=setInterval(function(){
+      left--;
+      if(left<=0){clearInterval(t);resendBtn.disabled=false;resendBtn.textContent='Resend confirmation email'}
+      else resendBtn.textContent='Resend in '+left+'s';
+    },1000);
+    resendBtn.textContent='Resend in '+left+'s';
+  }
+  resendBtn.addEventListener('click',async function(){
+    if(!sb||!pendingEmail||resendBtn.disabled)return;
+    startCooldown();
+    var r=await sb.auth.resend({type:'signup',email:pendingEmail,options:{emailRedirectTo:selfUrl('signin')}});
+    if(r.error){console.error('Resend error:',r.error);showNote('error',friendly(r.error));resendBtn.hidden=false}
+    else{showNote('ok','Confirmation email sent again. Check your inbox and spam folder.');resendBtn.hidden=false}
+  });
 
   // Email + password
   form.addEventListener('submit',async function(e){
     e.preventDefault();clearNote();
     if(!form.reportValidity())return;
     if(!sb){notConnected();return}
+    if((mode==='signup'||mode==='reset')&&!hostedOk())return;
     setLoading(true);
     var keepLocked=false;
     try{
@@ -370,11 +414,14 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
         if(ROLE==='vendor'){meta.store_name=$('storeName').value.trim();meta.store_category=$('storeCategory').value}
         var r2=await sb.auth.signUp({email:email,password:pw.value,options:{data:meta,emailRedirectTo:selfUrl('signin')}});
         if(r2.error)throw r2.error;
+        // Supabase returns a fake user with no identities when the email is already registered
         if(r2.data.user&&r2.data.user.identities&&r2.data.user.identities.length===0){
           showNote('error','An account with this email already exists. Sign in instead.');return;
         }
         if(r2.data.session){goHome(r2.data.user);keepLocked=true;return}
-        showNote('ok','Check your email. We sent a link to confirm your account.');
+        pendingEmail=email;
+        showNote('ok','Check your email. We sent a confirmation link to '+email+'. It may take a minute, and check your spam folder too.');
+        resendBtn.hidden=false;
         form.reset();return;
       }
       if(mode==='reset'){
@@ -390,7 +437,13 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
         setTimeout(function(){goHome(r4.data.user)},1200);return;
       }
     }catch(err){
+      console.error('Auth error:',err);
       showNote('error',friendly(err));
+      // Unconfirmed account trying to sign in: offer to resend the link
+      if(mode==='signin'&&(/not confirmed/i.test((err&&err.message)||'')||(err&&err.code)==='email_not_confirmed')){
+        pendingEmail=$('email').value.trim();
+        resendBtn.hidden=false;
+      }
     }finally{
       if(!keepLocked)setLoading(false);
     }
@@ -400,12 +453,13 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;backgrou
   googleBtn.addEventListener('click',async function(){
     clearNote();
     if(!sb){notConnected();return}
+    if(!hostedOk())return;
     try{localStorage.setItem('fm_role',ROLE)}catch(_){}
-    var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});
-    if(r.error)showNote('error',friendly(r.error));
+    var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:AUTH_PAGE_URL||(location.origin+location.pathname)}});
+    if(r.error){console.error('Google error:',r.error);showNote('error',friendly(r.error))}
   });
 
-  // Already signed in, or coming back from Google
+  // Already signed in, coming back from the confirmation email, or coming back from Google
   (async function(){
     if(!sb||mode==='update')return;
     var s=await sb.auth.getSession();
