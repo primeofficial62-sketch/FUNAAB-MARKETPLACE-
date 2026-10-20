@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Store · FUNAAB Marketplace</title>
+<meta name="description" content="Shop from local vendors on FUNAAB Marketplace.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --emerald-950:#032b20;--emerald-900:#064e3b;--emerald-700:#047857;--emerald-600:#059669;
+  --fresh-500:#22c55e;--fresh-400:#4ade80;--fresh-200:#bbf7d0;--mint-100:#e6f7ec;--mint-50:#f3fbf6;
+  --border:#d3eadc;--ink:#06281e;--ink-soft:#4b6b5d;
+  --shadow:0 1px 2px rgba(6,78,59,.06),0 8px 24px -12px rgba(6,78,59,.18);
+  --display:'Bricolage Grotesque',system-ui,sans-serif;--body:'Figtree',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:var(--body);color:var(--ink);background:#fff;line-height:1.5;min-height:100vh}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--fresh-400);outline-offset:2px}
+[hidden]{display:none!important}
+.nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:12px clamp(16px,4vw,48px);
+  background:rgba(255,255,255,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav a.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;color:var(--emerald-900)}
+.mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--fresh-400),var(--emerald-600));display:grid;place-items:center}
+.mark svg{width:17px;height:17px}
+.nav a.link{color:var(--emerald-900);font-weight:600;text-decoration:none;font-size:.92rem}
+
+.cover{height:clamp(150px,26vw,280px);background:linear-gradient(135deg,var(--emerald-700),var(--emerald-950));background-size:cover;background-position:center;position:relative}
+.cover::after{content:"";position:absolute;inset:0;background:radial-gradient(500px 220px at 85% 0%,rgba(74,222,128,.35),transparent 70%)}
+.cover.img::after{background:linear-gradient(180deg,transparent 50%,rgba(3,43,32,.35))}
+.head{max-width:1100px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+.id{display:flex;gap:18px;align-items:flex-end;margin-top:-48px;position:relative;z-index:1;flex-wrap:wrap}
+.logo{width:104px;height:104px;border-radius:26px;border:5px solid #fff;background:var(--fresh-200);color:var(--emerald-900);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:2.2rem;overflow:hidden;box-shadow:var(--shadow);flex:none}
+.logo img{width:100%;height:100%;object-fit:cover}
+.id h1{font-family:var(--display);font-size:clamp(1.7rem,4vw,2.5rem);letter-spacing:-.02em;line-height:1.1}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0}
+.tag{border-radius:99px;padding:4px 12px;font-size:.82rem;font-weight:600;background:var(--mint-100);color:var(--emerald-900);border:1px solid var(--fresh-200)}
+.tag.open{background:var(--emerald-700);color:#fff;border-color:var(--emerald-700)}
+.tag.closed{background:#eef2ef;color:#5d6f66;border-color:#dde5e0}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px;margin:28px 0 80px;align-items:start}
+.card{background:#fff;border:1px solid var(--border);border-radius:22px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px}
+.card h2{font-family:var(--display);font-size:1.15rem;letter-spacing:-.01em;margin-bottom:10px}
+.about{white-space:pre-line;color:#1c3e31;max-width:68ch}
+.info-row{margin-bottom:12px;font-size:.93rem}
+.info-row b{display:block;font-size:.84rem;color:var(--ink-soft);font-weight:500}
+.hours{width:100%;border-collapse:collapse;font-size:.92rem}
+.hours td{padding:7px 0;border-top:1px solid var(--mint-100)}
+.hours tr:first-child td{border-top:0}
+.hours td:last-child{text-align:right;color:var(--ink-soft)}
+.hours tr.today td{font-weight:600;color:var(--emerald-900)}
+
+.products h2{font-family:var(--display);font-size:1.3rem;margin-bottom:14px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.p{display:block;text-decoration:none;border:1px solid var(--border);border-radius:20px;overflow:hidden;background:#fff;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s}
+.p:hover{transform:translateY(-3px);box-shadow:0 14px 28px -14px rgba(6,78,59,.35)}
+.p .ph{aspect-ratio:1;background:linear-gradient(135deg,var(--mint-100),var(--fresh-200));display:grid;place-items:center;font-family:var(--display);font-size:2.4rem;font-weight:700;color:var(--emerald-700);overflow:hidden}
+.p .ph img{width:100%;height:100%;object-fit:cover}
+.p .pb{padding:12px 14px 14px}
+.p b{display:block;font-size:.97rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p .price{font-weight:600;color:var(--emerald-700);margin-top:2px}
+.empty{text-align:center;padding:36px 12px;color:var(--ink-soft);border:1px dashed var(--border);border-radius:20px;background:var(--mint-50)}
+.empty b{display:block;color:var(--ink);font-size:1.05rem}
+.gate{max-width:520px;margin:16vh auto;text-align:center;padding:0 20px}
+.gate h1{font-family:var(--display);margin-bottom:8px}.gate p{color:var(--ink-soft);margin-bottom:20px}
+.btn{border:1px solid var(--emerald-700);background:var(--emerald-700);color:#fff;padding:10px 18px;border-radius:12px;font-weight:600;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--emerald-900)}
+.preview-bar{background:var(--emerald-900);color:#fff;text-align:center;padding:8px 12px;font-size:.88rem;font-weight:500}
+.skeleton{border-radius:16px;background:linear-gradient(90deg,var(--mint-100),var(--mint-50),var(--mint-100));background-size:200% 100%;animation:sh 1.3s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media (max-width:860px){.layout{grid-template-columns:1fr}.logo{width:84px;height:84px;border-radius:22px}.id{margin-top:-38px}}
+@media (prefers-reduced-motion:reduce){.skeleton{animation:none}.p{transition:none}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="/"><img src="1001047956-removebg-preview.png" alt="" width="34" height="34" style="width:34px;height:34px;object-fit:contain">FUNAAB Market</a>
+  <a class="link" href="/">Browse all stores</a>
+</nav>
+<div id="app"><div class="head" style="padding-top:24px"><div class="skeleton" style="height:220px"></div><div class="skeleton" style="height:120px;margin-top:20px"></div></div></div>
+
+<script>
+/* =========================================================
+   FUNAAB Marketplace · Public storefront
+   ---------------------------------------------------------
+   Address:  storefront.html?store=<slug>
+   Connect your backend by defining, BEFORE this script:
+
+   window.FUNAAB_API = {
+     loadPublicStore: async (slug) => ({ store, products }) | null
+   }
+
+   Return null when the slug does not exist. Your backend
+   must return ONLY published stores and ONLY published,
+   in-stock products, so hidden stores and drafts can never
+   be loaded by guessing a link. (The store owner may also
+   be allowed to preview their own unpublished store.)
+
+   store    = same shape as the store editor
+   products = [{ id, name, price, imageUrl, stock, status }]
+
+   Preview with no backend:  storefront.html?store=x&demo=1
+   (shows the store you saved in the editor's demo mode)
+   ========================================================= */
+const DAYS=[['mon','Monday'],['tue','Tuesday'],['wed','Wednesday'],['thu','Thursday'],['fri','Friday'],['sat','Saturday'],['sun','Sunday']];
+const NGN=new Intl.NumberFormat('en-NG',{style:'currency',currency:'NGN',maximumFractionDigits:0});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const params=new URLSearchParams(location.search);
+const DEMO=params.has('demo');
+const app=document.getElementById('app');
+
+/* ---------- Demo data ---------- */
+const mem={};
+const get=k=>{try{return localStorage.getItem(k)}catch(e){return mem[k]??null}};
+const demoApi={async loadPublicStore(){
+  const raw=get('funaab_demo_store');
+  const store=raw?JSON.parse(raw):{name:"Mama Tolu's Kitchen",slug:'mama-tolus-kitchen',description:'Fresh home-style meals, snacks and drinks made daily and sold around campus.\nOrder before 11am for lunch delivery.',logoUrl:'',coverUrl:'',published:true,
+    fulfilment:{pickup:true,delivery:true},pickupLocation:'Shop 4, behind the Senate building',deliveryNote:'Hostels and lecture halls',
+    hours:Object.fromEntries(DAYS.map(([k])=>[k,{open:k!=='sun',from:'08:00',to:'18:00'}]))};
+  if(!store.published)return null;
+  return {store,products:[
+    {id:'p1',name:'Jollof rice pack',price:1800,stock:24,status:'published'},
+    {id:'p2',name:'Fried rice pack',price:2000,stock:6,status:'published'},
+    {id:'p3',name:'Meat pie',price:700,stock:3,status:'published'},
+    {id:'p4',name:'Chilled zobo',price:500,stock:40,status:'published'}]};
+}};
+const api=window.FUNAAB_API?.loadPublicStore?window.FUNAAB_API:(DEMO?demoApi:null);
+
+/* ---------- Opening hours (Nigeria time) ---------- */
+function lagosNow(){
+  const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Lagos',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+  const g=t=>parts.find(p=>p.type===t).value;
+  return {day:g('weekday').slice(0,3).toLowerCase(),min:(+g('hour'))*60+(+g('minute'))};
+}
+const toMin=t=>{const [h,m]=t.split(':').map(Number);return h*60+m};
+const fmt=t=>{let [h,m]=t.split(':').map(Number);const ap=h>=12?'pm':'am';h=h%12||12;return h+(m?':'+String(m).padStart(2,'0'):'')+ap};
+function openStatus(hours){
+  const {day,min}=lagosNow();const h=hours?.[day];
+  if(h&&h.open&&min>=toMin(h.from)&&min<toMin(h.to))return {open:true,text:'Open now · until '+fmt(h.to)};
+  const idx=DAYS.findIndex(d=>d[0]===day);
+  if(h&&h.open&&min<toMin(h.from))return {open:false,text:'Closed · opens today at '+fmt(h.from)};
+  for(let i=1;i<=7;i++){const [k,l]=DAYS[(idx+i)%7];const n=hours?.[k];
+    if(n&&n.open)return {open:false,text:'Closed · opens '+(i===1?'tomorrow':l)+' at '+fmt(n.from)}}
+  return {open:false,text:'Closed'};
+}
+
+/* ---------- Render ---------- */
+function gate(t,x){document.title=t+' · FUNAAB Marketplace';app.innerHTML=`<div class="gate"><h1>${t}</h1><p>${x}</p><a class="btn" href="/">Back to the marketplace</a></div>`}
+
+function render({store:s,products}){
+  const st=openStatus(s.hours),today=lagosNow().day;
+  const list=(products||[]).filter(p=>p.status==='published'&&p.stock>0);
+  document.title=s.name+' · FUNAAB Marketplace';
+  const md=document.querySelector('meta[name="description"]');
+  if(md)md.content=(s.description||'').replace(/\s+/g,' ').slice(0,155);
+
+  app.innerHTML=`
+  ${DEMO?'<div class="preview-bar">Preview mode with sample data</div>':''}
+  <div class="cover ${s.coverUrl?'img':''}" ${s.coverUrl?`style="background-image:url('${esc(s.coverUrl)}')"`:''} role="img" aria-label="${s.coverUrl?esc(s.name)+' cover image':''}"></div>
+  <div class="head">
+    <div class="id">
+      <div class="logo">${s.logoUrl?`<img src="${esc(s.logoUrl)}" alt="${esc(s.name)} logo">`:esc((s.name[0]||'S').toUpperCase())}</div>
+      <div><h1>${esc(s.name)}</h1>
+        <div class="tags"><span class="tag ${st.open?'open':'closed'}">${esc(st.text)}</span>
+        ${s.fulfilment?.pickup?'<span class="tag">Pickup</span>':''}${s.fulfilment?.delivery?'<span class="tag">Delivery</span>':''}</div></div>
+    </div>
+    <div class="layout">
+      <section class="products"><h2>Products</h2>
+        ${list.length?`<div class="pgrid">${list.map(p=>`<a class="p" href="product.html?id=${encodeURIComponent(p.id)}">
+          <div class="ph">${p.imageUrl?`<img src="${esc(p.imageUrl)}" alt="" loading="lazy">`:esc((p.name[0]||'?').toUpperCase())}</div>
+          <div class="pb"><b>${esc(p.name)}</b><div class="price">${NGN.format(p.price)}</div></div></a>`).join('')}</div>`
+        :`<div class="empty"><b>No products yet</b>This store has not listed anything yet. Check back soon.</div>`}
+      </section>
+      <aside>
+        <div class="card"><h2>About</h2><p class="about">${esc(s.description)}</p></div>
+        <div class="card"><h2>Getting your order</h2>
+          ${s.fulfilment?.pickup?`<div class="info-row"><b>Pickup</b>${esc(s.pickupLocation)}</div>`:''}
+          ${s.fulfilment?.delivery?`<div class="info-row"><b>Delivery</b>${esc(s.deliveryNote||'Available')}</div>`:''}</div>
+        <div class="card"><h2>Opening hours</h2><table class="hours">${DAYS.map(([k,l])=>{const h=s.hours?.[k];
+          return `<tr class="${k===today?'today':''}"><td>${l}</td><td>${h&&h.open?fmt(h.from)+' – '+fmt(h.to):'Closed'}</td></tr>`}).join('')}</table></div>
+      </aside>
+    </div>
+  </div>`;
+}
+
+(async()=>{
+  const slug=params.get('store');
+  if(!slug&&!DEMO){gate('Store not found','Check the link and try again.');return}
+  if(!api){gate('Store not available','This store could not be loaded.');return}
+  try{
+    const data=await api.loadPublicStore(slug);
+    if(!data||!data.store){gate('Store not available','This store does not exist or is not open to customers yet.');return}
+    render(data);
+  }catch(e){gate('We could not load this store','Check your connection and try again.')}
+})();
+</script>
+</body>
+</html>
