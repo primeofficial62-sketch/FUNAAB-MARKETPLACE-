@@ -399,7 +399,7 @@ function productsView(d){
   return `<div class="card">${list.length?`<div class="table-wrap"><table><thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Status</th></tr></thead><tbody>
   ${list.map(p=>{const l=lbl[p.status]||[p.status,'b-progress'];return `<tr><td><b>${esc(p.name)}</b></td><td>${NGN.format(p.price)}</td><td>${p.stock}${p.stock>0&&p.stock<=p.lowStockAt?' <span class="badge b-low">Low</span>':''}</td><td><span class="badge ${l[1]}">${l[0]}</span></td></tr>`}).join('')}</tbody></table></div>`
   : empty('box','No products yet','Add your first product to start selling.')}
-  <p class="sub" style="margin-top:14px">Adding, editing, images and variations come with product management in the next step.</p></div>`;
+  <p style="margin-top:14px"><a class="btn" href="vendor-products.html${new URLSearchParams(location.search).has('demo')?'?demo=1':''}">Manage products</a></p></div>`;
 }
 const soon=(icon,t,x)=>`<div class="card">${empty(icon,t,x)}</div>`;
 
