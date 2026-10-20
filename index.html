@@ -260,6 +260,96 @@ footer{background:#02281d;color:rgba(255,255,255,.78);padding:64px 0 28px;border
 .foot-bottom{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;width:100%;gap:4px}
 .foot-bottom span{display:block;max-width:100%}
 @media(max-width:600px){.nav-inner{width:calc(100% - 20px);padding:10px 14px;min-height:76px}.nav-inner .logo{gap:10px;font-size:clamp(1.02rem,4.5vw,1.25rem)}.nav-inner .logo-mark{width:44px;height:44px;flex-basis:44px}}
+
+  /* FIX HEADER BOX SIZE AND CENTER IT */
+header,
+.navbar,
+.site-header {
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+/* CENTER THE HEADER CONTENT */
+.navbar,
+.navbar-container,
+.header-container {
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* REDUCE THE HEADER BOX SIZE */
+.navbar,
+.site-header {
+    padding: 12px 18px;
+    border-radius: 40px;
+}
+
+/* PREVENT RIGHT-SIDE OVERFLOW */
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* MAKE THE MAIN CONTENT FIT THE SCREEN */
+.container,
+.hero,
+.hero-container {
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* INCREASE GET STARTED BUTTON SLIGHTLY */
+.cta-row .btn,
+.btn-primary,
+.get-started {
+    padding: 16px 34px;
+    font-size: 17px;
+    min-height: 54px;
+    width: auto;
+    max-width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* MOBILE ADJUSTMENTS */
+@media (max-width: 768px) {
+    .navbar,
+    .site-header {
+        width: calc(100% - 32px);
+        margin: 12px auto;
+        padding: 12px 16px;
+    }
+
+    .container,
+    .hero,
+    .hero-container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .cta-row .btn,
+    .btn-primary,
+    .get-started {
+        padding: 16px 32px;
+        font-size: 17px;
+        width: auto;
+    }
+}
 </style>
 </head>
 <body>
