@@ -121,11 +121,14 @@ const demoApi={async loadPublicStore(){
     fulfilment:{pickup:true,delivery:true},pickupLocation:'Shop 4, behind the Senate building',deliveryNote:'Hostels and lecture halls',
     hours:Object.fromEntries(DAYS.map(([k])=>[k,{open:k!=='sun',from:'08:00',to:'18:00'}]))};
   if(!store.published)return null;
-  return {store,products:[
-    {id:'p1',name:'Jollof rice pack',price:1800,stock:24,status:'published'},
-    {id:'p2',name:'Fried rice pack',price:2000,stock:6,status:'published'},
-    {id:'p3',name:'Meat pie',price:700,stock:3,status:'published'},
-    {id:'p4',name:'Chilled zobo',price:500,stock:40,status:'published'}]};
+  const saved=get('funaab_demo_products');
+  const products=saved?JSON.parse(saved).map(p=>({id:p.id,name:p.name,status:p.status,stock:p.stock,imageUrl:(p.images||[])[0],
+      price:p.variations&&p.variations.length?Math.min(...p.variations.map(v=>v.price)):p.price}))
+    :[{id:'p1',name:'Jollof rice pack',price:1800,stock:24,status:'published'},
+      {id:'p2',name:'Fried rice pack',price:2000,stock:6,status:'published'},
+      {id:'p3',name:'Meat pie',price:700,stock:3,status:'published'},
+      {id:'p4',name:'Chilled zobo',price:500,stock:40,status:'published'}];
+  return {store,products};
 }};
 const api=window.FUNAAB_API?.loadPublicStore?window.FUNAAB_API:(DEMO?demoApi:null);
 
