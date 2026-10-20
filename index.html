@@ -329,6 +329,51 @@ body {
   gap: 8px 16px;
   width: 100%;
   }
+
+  /* Resize the FUNAAB Marketplace header box */
+.nav-wrap {
+  width: calc(100% - 24px);
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 16px 20px;
+  box-sizing: border-box;
+  min-height: 82px;
+  border-radius: 50px;
+}
+
+/* Increase the logo size slightly */
+.nav-wrap .logo img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Make the brand text slightly bigger */
+.nav-wrap .logo {
+  gap: 12px;
+  font-size: 1.35rem;
+}
+@media (max-width: 600px) {
+  .nav-wrap {
+    width: calc(100% - 20px);
+    padding: 14px 16px;
+    min-height: 78px;
+  }
+
+  .nav-wrap .logo img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .nav-wrap .logo {
+    gap: 10px;
+    font-size: clamp(1.05rem, 4.5vw, 1.3rem);
+    min-width: 0;
+  }
+}
+  
   
 </style>
 </head>
