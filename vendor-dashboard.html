@@ -46,6 +46,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   display:flex;flex-direction:column;gap:22px;overflow:hidden;
 }
 .brand{display:flex;align-items:center;gap:10px;padding:0 8px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-logo{width:36px;height:36px;object-fit:contain;background:#fff;border-radius:10px;padding:3px;box-shadow:0 6px 14px -4px rgba(0,0,0,.4)}
 .brand-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--fresh-400),var(--emerald-600));display:grid;place-items:center;box-shadow:0 6px 14px -4px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.5)}
 .brand-mark svg{width:18px;height:18px}
 .store-chip{
@@ -407,7 +408,10 @@ const VIEWS={
   overview:{title:'Overview',sub:d=>`Here is how ${esc(d.vendor.storeName)} is doing.`,icon:'home',render:(d,c)=>overview(d,c)},
   orders:{title:'Orders',sub:()=>'Every order placed with your store.',icon:'orders',render:d=>ordersView(d)},
   products:{title:'Products',sub:()=>'What you sell and how much is left.',icon:'box',render:d=>productsView(d)},
-  store:{title:'My store',sub:()=>'How customers see your storefront.',icon:'store',render:()=>soon('store','Storefront editor is next','You will edit your logo, cover image, hours and fulfilment options here.')},
+  store:{title:'My store',sub:()=>'How customers see your storefront.',icon:'store',render:d=>{const demo=new URLSearchParams(location.search).has('demo')?'?demo=1':'';
+    const sf=d.vendor.storeUrl&&d.vendor.storeUrl!=='#'?esc(d.vendor.storeUrl):'storefront.html'+(demo?'?demo=1':'');
+    return `<div class="card"><h2>${esc(d.vendor.storeName)}</h2><div class="sub">Update your logo, cover image, description, opening hours and how customers get their orders.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="vendor-store.html${demo}">Edit my store</a><a class="btn secondary" href="${sf}">View public storefront</a></div></div>`}},
   reports:{title:'Reports',sub:()=>'Sales and stock over time.',icon:'chart',render:()=>soon('chart','Reports come after orders','Best sellers, cancellations and sales value will be built from your order history.')}
 };
 
@@ -429,7 +433,7 @@ function render(){
   app.innerHTML=`
   <div class="shell">
     <aside class="side">
-      <div class="brand"><span class="brand-mark">${ICON.logo}</span>FUNAAB Market</div>
+      <div class="brand"><img class="brand-logo" src="1001047956-removebg-preview.png" alt="" width="34" height="34">FUNAAB Market</div>
       <div class="store-chip"><div class="avatar">${d.vendor.logoUrl?`<img src="${esc(d.vendor.logoUrl)}" alt="">`:esc(initials)}</div>
         <div><b>${esc(d.vendor.storeName)}</b><small>Approved vendor</small></div></div>
       <nav class="nav" aria-label="Vendor navigation">
