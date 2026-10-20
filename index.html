@@ -248,6 +248,88 @@ footer{background:#02281d;color:rgba(255,255,255,.78);padding:64px 0 28px;border
   .products{gap:14px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{transition:none;opacity:1;transform:none}}
+  /* Slightly larger content with responsive sizing */
+body {
+  font-size: 17px;
+}
+
+.block {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+.head h2 {
+  font-size: clamp(2.1rem, 4.2vw, 3.3rem);
+}
+
+.head p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.step h3,
+.tcard h3 {
+  font-size: 1.25rem;
+}
+
+.step p,
+.tcard p,
+.uni p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.foot-grid h4 {
+  font-size: 1.1rem;
+}
+
+.foot-grid ul,
+.foot-brand p {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/* Keep the content within the phone screen */
+@media (max-width: 560px) {
+  body {
+    font-size: 16px;
+  }
+
+  .block {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .head h2 {
+    font-size: clamp(1.8rem, 7vw, 2.5rem);
+  }
+
+  .head p {
+    font-size: 1rem;
+  }
+
+  .step h3,
+  .tcard h3 {
+    font-size: 1.15rem;
+  }
+
+  .step p,
+  .tcard p,
+  .uni p {
+    font-size: 1rem;
+  }
+}
+ /* Center only the footer bottom text */
+.foot-bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  width: 100%;
+  }
+  
 </style>
 </head>
 <body>
@@ -290,7 +372,6 @@ footer{background:#02281d;color:rgba(255,255,255,.78);padding:64px 0 28px;border
         <li><a href="#top">Home</a></li>
         <li><a href="#explore">Explore</a></li>
         <li><a href="#categories">Categories</a></li>
-        <li><a href="#stores">Stores</a></li>
         <li><a href="#universities">Universities</a></li>
       </ul>
     </nav>
@@ -504,7 +585,6 @@ footer{background:#02281d;color:rgba(255,255,255,.78);padding:64px 0 28px;border
       <div><h4>Follow us</h4><ul><li><a href="#top">Instagram</a></li><li><a href="#top">X (Twitter)</a></li><li><a href="#top">TikTok</a></li></ul></div>
     </div>
     <div class="foot-bottom"><span>© 2026 FUNAAB Marketplace. All rights reserved.</span><span>Made for university communities in Nigeria.</span></div>
-  </div>
 </footer>
 
 <script>
