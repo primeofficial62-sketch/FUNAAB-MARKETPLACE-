@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vendor Orders | FUNAAB Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --em-950:#022c22; --em-900:#064e3b; --em-800:#065f46; --em-700:#047857;
+  --em-600:#059669; --em-500:#10b981; --fresh:#4ade80; --mint:#d1fae5; --mist:#ecfdf5;
+  --ink:#0b2a21; --muted:#4b6b5f; --line:#cfeadd; --white:#fff;
+  --slate:#3f4f49; --slate-bg:#eef1ef;
+  --radius:16px; --shadow:0 10px 30px -12px rgba(6,78,59,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Figtree',system-ui,sans-serif;color:var(--ink);min-height:100vh;
+  background:
+    radial-gradient(900px 400px at 85% -10%,rgba(74,222,128,.22),transparent 60%),
+    radial-gradient(700px 380px at -10% 10%,rgba(16,185,129,.16),transparent 60%),
+    #fff;
+}
+h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.01em}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:3px solid var(--fresh);outline-offset:2px}
+
+/* Header (glass) */
+.top{
+  position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;
+  padding:12px 16px;background:rgba(255,255,255,.72);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,var(--em-500),var(--em-900));
+  display:grid;place-items:center;color:#fff;font-family:'Bricolage Grotesque';font-weight:800;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 6px 14px -6px var(--em-900)}
+.brand h1{font-size:1.05rem;line-height:1.1}
+.brand small{display:block;color:var(--muted);font-size:.74rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.store-select{max-width:150px;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff;color:var(--ink);font:inherit;font-size:.85rem}
+.icon-btn{position:relative;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+  background:#fff;border:1px solid var(--line)}
+.icon-btn svg{width:20px;height:20px;stroke:var(--em-800);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dot{position:absolute;top:-5px;right:-5px;min-width:19px;height:19px;border-radius:99px;padding:0 5px;
+  background:var(--em-700);color:#fff;font-size:.7rem;font-weight:700;display:grid;place-items:center;border:2px solid #fff}
+
+main{max-width:980px;margin:0 auto;padding:16px 16px 90px}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+@media(min-width:700px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+.stat.hero{background:linear-gradient(150deg,var(--em-700),var(--em-950));color:#fff;border:0}
+.stat b{display:block;font-family:'Bricolage Grotesque';font-size:1.6rem;line-height:1.1}
+.stat span{font-size:.8rem;color:var(--muted)}
+.stat.hero span{color:#bbf7d0}
+
+/* Controls */
+.controls{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.search{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font:inherit}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;padding:9px 14px;border-radius:99px;border:1px solid var(--line);background:#fff;
+  font-weight:600;font-size:.88rem;color:var(--em-800);display:flex;gap:8px;align-items:center}
+.tab .n{background:var(--mint);color:var(--em-900);border-radius:99px;padding:1px 8px;font-size:.76rem}
+.tab[aria-selected="true"]{background:var(--em-800);color:#fff;border-color:var(--em-800)}
+.tab[aria-selected="true"] .n{background:var(--fresh);color:var(--em-950)}
+
+/* Order cards */
+.list{display:grid;gap:12px}
+@media(min-width:760px){.list{grid-template-columns:1fr 1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;
+  text-align:left;width:100%;box-shadow:var(--shadow);display:grid;gap:8px;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--em-500);transform:translateY(-2px)}
+.card.fresh{border-left:5px solid var(--fresh)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ref{font-family:'Bricolage Grotesque';font-weight:700;font-size:1.02rem}
+.who{font-weight:600}
+.items{color:var(--muted);font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.8rem}
+.total{font-family:'Bricolage Grotesque';font-weight:700;font-size:1.1rem;color:var(--em-800)}
+
+.badge{display:inline-block;padding:4px 10px;border-radius:99px;font-size:.76rem;font-weight:700;white-space:nowrap}
+.s-wait{background:var(--slate-bg);color:var(--slate)}
+.s-new{background:var(--fresh);color:var(--em-950)}
+.s-accepted,.s-preparing{background:var(--mint);color:var(--em-900)}
+.s-ready_for_pickup,.s-handed_to_delivery{background:var(--em-600);color:#fff}
+.s-completed{background:var(--em-900);color:#fff}
+.s-rejected,.s-cancelled,.s-cancellation_requested{background:var(--slate-bg);color:var(--slate);border:1px solid #cfd8d4}
+
+.empty{text-align:center;padding:46px 20px;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:var(--radius)}
+.empty h3{color:var(--em-900);margin-bottom:6px}
+.skel{height:116px;border-radius:var(--radius);background:linear-gradient(90deg,#eef8f2 25%,#f8fdfa 50%,#eef8f2 75%);background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.skel{animation:none}.card{transition:none}}
+
+/* Sheet */
+.overlay{position:fixed;inset:0;background:rgba(2,44,34,.5);backdrop-filter:blur(3px);z-index:50;
+  display:none;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+@media(min-width:760px){.overlay{align-items:center}}
+.sheet{background:rgba(255,255,255,.96);width:100%;max-width:620px;max-height:92vh;overflow:auto;
+  border-radius:24px 24px 0 0;padding:20px 18px 24px;box-shadow:0 -20px 60px -20px rgba(2,44,34,.5)}
+@media(min-width:760px){.sheet{border-radius:24px}}
+.sheet-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
+.sheet h2{font-size:1.3rem}
+.close{width:38px;height:38px;border-radius:10px;background:var(--mist);font-size:1.3rem;color:var(--em-900)}
+.block{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:12px;background:#fff}
+.block h3{font-size:.95rem;margin-bottom:8px;color:var(--em-900)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+td,th{padding:7px 0;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem}
+td.r,th.r{text-align:right}
+tr+tr td{border-top:1px solid #eaf6ef}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:6px 10px;font-size:.92rem}
+.kv dt{color:var(--muted)}
+.kv a{color:var(--em-700);font-weight:600}
+.timeline{list-style:none;display:grid;gap:10px}
+.timeline li{display:grid;grid-template-columns:14px 1fr;gap:10px;font-size:.88rem}
+.timeline i{width:10px;height:10px;border-radius:50%;background:var(--em-500);margin-top:5px;box-shadow:0 0 0 3px var(--mint)}
+.timeline small{color:var(--muted);display:block}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.btn{padding:12px 18px;border-radius:12px;font-weight:700;flex:1 1 140px;text-align:center}
+.btn.primary{background:linear-gradient(180deg,var(--em-600),var(--em-800));color:#fff;box-shadow:0 8px 16px -8px var(--em-900)}
+.btn.ghost{background:#fff;border:1.5px solid var(--slate);color:var(--slate)}
+.btn[disabled]{opacity:.55;cursor:wait}
+.hint{margin-top:14px;font-size:.88rem;color:var(--muted);background:var(--mist);padding:10px 12px;border-radius:12px}
+
+/* Dialog */
+.dlg{background:#fff;border-radius:20px;padding:20px;width:calc(100% - 32px);max-width:420px;margin:auto}
+.dlg h3{margin-bottom:6px;color:var(--em-900)}
+.dlg p{color:var(--muted);font-size:.92rem;margin-bottom:12px}
+.dlg textarea{width:100%;min-height:80px;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit;margin-bottom:12px;resize:vertical}
+#dlgOverlay{align-items:center}
+
+/* Notifications panel */
+.panel{position:absolute;right:12px;top:62px;width:min(360px,calc(100vw - 24px));max-height:70vh;overflow:auto;
+  background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);display:none;z-index:40}
+.panel.open{display:block}
+.panel header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.panel header button{color:var(--em-700);font-weight:700;font-size:.82rem}
+.nitem{padding:12px 14px;border-bottom:1px solid #eaf6ef;display:block;font-size:.9rem}
+.nitem.unread{background:var(--mist)}
+.nitem b{display:block}.nitem small{color:var(--muted)}
+
+#toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:80;display:grid;gap:8px;width:min(420px,calc(100vw - 24px))}
+.toast{background:var(--em-950);color:#fff;padding:12px 16px;border-radius:12px;font-size:.92rem;box-shadow:var(--shadow)}
+.toast.err{background:var(--slate)}
+.center-msg{max-width:440px;margin:18vh auto;text-align:center;padding:0 20px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <div class="logo">F</div>
+    <div>
+      <h1>Order Centre</h1>
+      <small id="storeName">Loading store…</small>
+    </div>
+  </div>
+  <select id="storeSelect" class="store-select" hidden aria-label="Choose store"></select>
+  <button class="icon-btn" id="bellBtn" aria-label="Notifications">
+    <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+    <span class="dot" id="bellDot" hidden>0</span>
+  </button>
+</header>
+
+<section class="panel" id="panel" aria-label="Notifications">
+  <header><b>Notifications</b><button id="markRead">Mark all as read</button></header>
+  <div id="nlist"></div>
+</section>
+
+<main id="app">
+  <div class="stats" id="stats"></div>
+  <div class="controls">
+    <input class="search" id="search" type="search" placeholder="Search by order number, customer or product" aria-label="Search orders">
+    <div class="tabs" id="tabs" role="tablist"></div>
+  </div>
+  <div class="list" id="list"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+</main>
+
+<div class="overlay" id="overlay"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+
+<div class="overlay" id="dlgOverlay">
+  <div class="dlg" role="alertdialog" aria-modal="true">
+    <h3 id="dlgTitle"></h3><p id="dlgMsg"></p>
+    <textarea id="dlgReason" placeholder="Reason (the customer will see this)"></textarea>
+    <div class="actions" style="margin-top:0">
+      <button class="btn ghost" id="dlgCancel">Go back</button>
+      <button class="btn primary" id="dlgOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============ CONFIG ============ */
+const SUPABASE_URL = 'PASTE_YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_ANON_KEY';
+const LOGIN_PAGE = 'login.html'; // change to your login page path
+/* ================================== */
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const STATUS = {
+  pending_payment:{label:'Awaiting payment'},
+  paid:{label:'New order'},
+  accepted:{label:'Accepted'},
+  preparing:{label:'Preparing'},
+  ready_for_pickup:{label:'Ready for pickup'},
+  handed_to_delivery:{label:'With delivery'},
+  completed:{label:'Completed'},
+  rejected:{label:'Rejected'},
+  cancellation_requested:{label:'Cancellation requested'},
+  cancelled:{label:'Cancelled'}
+};
+
+const TABS = [
+  {id:'new',   label:'New',         statuses:['paid']},
+  {id:'active',label:'In progress', statuses:['accepted','preparing','ready_for_pickup','handed_to_delivery','cancellation_requested']},
+  {id:'done',  label:'Completed',   statuses:['completed']},
+  {id:'closed',label:'Cancelled',   statuses:['rejected','cancelled']},
+  {id:'all',   label:'All',         statuses:null}
+];
+
+const state = {user:null, stores:[], store:null, orders:[], tab:'new', q:'', openId:null, notes:[], channel:null, nchannel:null};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const naira = n => '₦' + Number(n||0).toLocaleString('en-NG');
+const refOf = o => o.order_ref || ('#' + String(o.id).slice(0,8).toUpperCase());
+
+function ago(d){
+  const s = (Date.now() - new Date(d)) / 1000;
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s/60) + ' min ago';
+  if (s < 86400) return Math.floor(s/3600) + ' hr ago';
+  return new Date(d).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'});
+}
+const fullDate = d => new Date(d).toLocaleString('en-NG',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});
+
+function toast(msg, isErr){
+  const t = document.createElement('div');
+  t.className = 'toast' + (isErr ? ' err' : '');
+  t.textContent = msg;
+  $('#toasts').appendChild(t);
+  setTimeout(()=>t.remove(), 4200);
+}
+
+function waLink(phone){
+  let d = String(phone||'').replace(/\D/g,'');
+  if (!d) return null;
+  if (d.startsWith('0')) d = '234' + d.slice(1);
+  return 'https://wa.me/' + d;
+}
+
+/* ---------- Which buttons each status shows ---------- */
+function actionsFor(o){
+  switch (o.status){
+    case 'paid': return [
+      {to:'accepted', label:'Accept order', kind:'primary'},
+      {to:'rejected', label:'Reject order', kind:'ghost', reason:true,
+       confirm:'Reject this order?', msg:'The customer will be told and a refund will be flagged.'}
+    ];
+    case 'accepted': return [
+      {to:'preparing', label:'Start preparing', kind:'primary'},
+      {to:'cancellation_requested', label:'Request cancellation', kind:'ghost', reason:true,
+       confirm:'Request cancellation?', msg:'Explain why you cannot fulfil this order.'}
+    ];
+    case 'preparing': return [
+      o.fulfilment_method === 'delivery'
+        ? {to:'handed_to_delivery', label:'Hand to delivery', kind:'primary'}
+        : {to:'ready_for_pickup', label:'Mark ready for pickup', kind:'primary'},
+      {to:'cancellation_requested', label:'Request cancellation', kind:'ghost', reason:true,
+       confirm:'Request cancellation?', msg:'Explain why you cannot fulfil this order.'}
+    ];
+    case 'ready_for_pickup':
+    case 'handed_to_delivery': return [{to:'completed', label:'Mark as completed', kind:'primary'}];
+    default: return [];
+  }
+}
+const HINTS = {
+  pending_payment:'Waiting for the customer to pay. You can accept the order once payment is confirmed.',
+  cancellation_requested:'Your cancellation request is with the marketplace team. You will be notified of the outcome.',
+  rejected:'This order was rejected.',
+  cancelled:'This order was cancelled.',
+  completed:'This order is complete.'
+};
+
+/* ---------- Boot ---------- */
+(async function init(){
+  const {data:{session}} = await sb.auth.getSession();
+  if (!session){
+    location.href = LOGIN_PAGE + '?redirect=' + encodeURIComponent(location.pathname + location.search);
+    return;
+  }
+  state.user = session.user;
+
+  const {data:stores, error} = await sb.from('stores').select('id,name,owner_id').eq('owner_id', state.user.id);
+  if (error){ return fatal('Could not load your store', error.message); }
+  if (!stores || !stores.length){
+    return fatal('No store yet', 'Create your store in the Vendor Centre before managing orders.');
+  }
+  state.stores = stores;
+  const saved = localStorage.getItem('fm_store');
+  state.store = stores.find(s => s.id === saved) || stores[0];
+
+  if (stores.length > 1){
+    const sel = $('#storeSelect');
+    sel.hidden = false;
+    sel.innerHTML = stores.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+    sel.value = state.store.id;
+    sel.onchange = () => {
+      state.store = stores.find(s => s.id === sel.value);
+      localStorage.setItem('fm_store', state.store.id);
+      startStore();
+    };
+  }
+  bindUI();
+  await startStore();
+  await loadNotifications();
+  subscribeNotifications();
+
+  const id = new URLSearchParams(location.search).get('id');
+  if (id) openOrder(id);
+})();
+
+function fatal(title, msg){
+  $('#app').innerHTML = `<div class="center-msg"><h2>${esc(title)}</h2><p style="margin-top:8px;color:var(--muted)">${esc(msg)}</p></div>`;
+  $('#storeName').textContent = '';
+}
+
+async function startStore(){
+  $('#storeName').textContent = state.store.name;
+  state.tab = 'new';
+  await loadOrders();
+  subscribeOrders();
+}
+
+/* ---------- Data ---------- */
+async function loadOrders(){
+  const {data, error} = await sb.from('orders')
+    .select('*, order_items(*)')
+    .eq('store_id', state.store.id)
+    .order('created_at', {ascending:false})
+    .limit(300);
+  if (error){ toast('Could not load orders: ' + error.message, true); return; }
+  state.orders = data || [];
+  // If no new orders, open the most useful tab
+  if (state.tab === 'new' && !state.orders.some(o => o.status === 'paid')){
+    state.tab = state.orders.some(o => TABS[1].statuses.includes(o.status)) ? 'active' : 'all';
+  }
+  render();
+  if (state.openId) renderSheet();
+}
+
+function subscribeOrders(){
+  if (state.channel) sb.removeChannel(state.channel);
+  state.channel = sb.channel('orders-' + state.store.id)
+    .on('postgres_changes', {event:'*', schema:'public', table:'orders', filter:'store_id=eq.' + state.store.id}, p => {
+      const n = p.new || {};
+      const o = p.old || {};
+      if (n.status === 'paid' && (p.eventType === 'INSERT' || o.status !== 'paid')){
+        toast('New order received: ' + (n.order_ref || ''));
+      }
+      loadOrders();
+    })
+    .subscribe();
+}
+
+/* ---------- Render list ---------- */
+function bindUI(){
+  $('#search').addEventListener('input', e => { state.q = e.target.value.trim().toLowerCase(); renderList(); });
+  $('#overlay').addEventListener('click', e => { if (e.target.id === 'overlay') closeSheet(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape'){ closeSheet(); $('#panel').classList.remove('open'); } });
+  $('#bellBtn').onclick = () => $('#panel').classList.toggle('open');
+  $('#markRead').onclick = markAllRead;
+}
+
+function render(){ renderStats(); renderTabs(); renderList(); }
+
+function renderStats(){
+  const c = ids => state.orders.filter(o => ids.includes(o.status)).length;
+  const sales = state.orders.filter(o => o.status === 'completed').reduce((a,o) => a + Number(o.total_amount||0), 0);
+  $('#stats').innerHTML = `
+    <div class="stat hero"><b>${naira(sales)}</b><span>Completed sales</span></div>
+    <div class="stat"><b>${c(['paid'])}</b><span>New orders</span></div>
+    <div class="stat"><b>${c(TABS[1].statuses)}</b><span>In progress</span></div>
+    <div class="stat"><b>${c(['completed'])}</b><span>Completed</span></div>`;
+}
+
+function renderTabs(){
+  $('#tabs').innerHTML = TABS.map(t => {
+    const n = t.statuses ? state.orders.filter(o => t.statuses.includes(o.status)).length : state.orders.length;
+    return `<button class="tab" role="tab" aria-selected="${t.id === state.tab}" data-t="${t.id}">${t.label}<span class="n">${n}</span></button>`;
+  }).join('');
+  document.querySelectorAll('.tab').forEach(b => b.onclick = () => { state.tab = b.dataset.t; renderTabs(); renderList(); });
+}
+
+function renderList(){
+  const tab = TABS.find(t => t.id === state.tab);
+  let rows = state.orders.filter(o => !tab.statuses || tab.statuses.includes(o.status));
+  if (state.q){
+    rows = rows.filter(o =>
+      refOf(o).toLowerCase().includes(state.q) ||
+      String(o.customer_name||'').toLowerCase().includes(state.q) ||
+      (o.order_items||[]).some(i => String(i.product_name||'').toLowerCase().includes(state.q)));
+  }
+  if (!rows.length){
+    $('#list').innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <h3>${state.q ? 'No matching orders' : 'Nothing here yet'}</h3>
+      <p>${state.q ? 'Try a different order number, name or product.' : 'New orders will appear here the moment a customer pays.'}</p></div>`;
+    return;
+  }
+  $('#list').innerHTML = rows.map(o => {
+    const items = o.order_items || [];
+    const names = items.slice(0,2).map(i => `${i.quantity}× ${esc(i.product_name)}`).join(', ') + (items.length > 2 ? ` +${items.length-2} more` : '');
+    return `<button class="card ${o.status === 'paid' ? 'fresh' : ''}" data-id="${esc(o.id)}">
+      <div class="row"><span class="ref">${esc(refOf(o))}</span><span class="badge s-${o.status === 'paid' ? 'new' : o.status}">${STATUS[o.status]?.label || esc(o.status)}</span></div>
+      <div class="who">${esc(o.customer_name || 'Customer')}</div>
+      <div class="items">${names || 'No items'}</div>
+      <div class="row"><span class="meta"><span>${o.fulfilment_method === 'delivery' ? 'Delivery' : 'Pickup'}</span><span>${ago(o.created_at)}</span></span><span class="total">${naira(o.total_amount)}</span></div>
+    </button>`;
+  }).join('');
+  document.querySelectorAll('.card').forEach(c => c.onclick = () => openOrder(c.dataset.id));
+}
+
+/* ---------- Order sheet ---------- */
+let historyCache = [];
+async function openOrder(id){
+  state.openId = id;
+  historyCache = [];
+  $('#overlay').classList.add('open');
+  renderSheet();
+  const {data} = await sb.from('order_status_history').select('*').eq('order_id', id).order('created_at');
+  historyCache = data || [];
+  if (state.openId === id) renderSheet();
+}
+function closeSheet(){
+  state.openId = null;
+  $('#overlay').classList.remove('open');
+  history.replaceState(null,'',location.pathname);
+}
+
+function renderSheet(){
+  const o = state.orders.find(x => x.id === state.openId);
+  if (!o){ $('#sheet').innerHTML = `<p>Loading order…</p>`; return; }
+  const items = o.order_items || [];
+  const sub = items.reduce((a,i) => a + Number(i.unit_price) * i.quantity, 0);
+  const wa = waLink(o.customer_phone);
+  const acts = actionsFor(o);
+
+  $('#sheet').innerHTML = `
+    <div class="sheet-head">
+      <div><h2>${esc(refOf(o))}</h2><span class="badge s-${o.status === 'paid' ? 'new' : o.status}">${STATUS[o.status]?.label || esc(o.status)}</span></div>
+      <button class="close" id="closeSheet" aria-label="Close">&times;</button>
+    </div>
+
+    <div class="block"><h3>Items</h3>
+      <table><thead><tr><th>Product</th><th class="r">Qty</th><th class="r">Price</th></tr></thead><tbody>
+      ${items.map(i => `<tr><td>${esc(i.product_name)}${i.variation ? `<br><small style="color:var(--muted)">${esc(i.variation)}</small>` : ''}</td>
+        <td class="r">${i.quantity}</td><td class="r">${naira(i.unit_price * i.quantity)}</td></tr>`).join('')}
+      </tbody></table>
+      <table style="margin-top:8px;border-top:1px solid var(--line)"><tbody>
+        <tr><td>Items subtotal</td><td class="r">${naira(sub)}</td></tr>
+        ${Number(o.total_amount) !== sub ? `<tr><td>Fees and adjustments</td><td class="r">${naira(Number(o.total_amount) - sub)}</td></tr>` : ''}
+        <tr><td><b>Total</b></td><td class="r"><b>${naira(o.total_amount)}</b></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="block"><h3>Customer and fulfilment</h3>
+      <dl class="kv">
+        <dt>Name</dt><dd>${esc(o.customer_name || 'Not provided')}</dd>
+        <dt>Phone</dt><dd>${o.customer_phone ? `<a href="tel:${esc(o.customer_phone)}">${esc(o.customer_phone)}</a>${wa ? ` &nbsp;<a href="${wa}" target="_blank" rel="noopener">WhatsApp</a>` : ''}` : 'Not provided'}</dd>
+        <dt>Method</dt><dd>${o.fulfilment_method === 'delivery' ? 'Delivery' : 'Pickup'}</dd>
+        ${o.fulfilment_method === 'delivery' ? `<dt>Address</dt><dd>${esc(o.delivery_address || 'Not provided')}</dd>` : ''}
+        <dt>Payment</dt><dd>${esc(String(o.payment_status||'').replace('_',' '))}</dd>
+        <dt>Placed</dt><dd>${fullDate(o.created_at)}</dd>
+        ${o.note ? `<dt>Customer note</dt><dd>${esc(o.note)}</dd>` : ''}
+        ${o.status_note ? `<dt>Last reason</dt><dd>${esc(o.status_note)}</dd>` : ''}
+      </dl>
+    </div>
+
+    ${historyCache.length ? `<div class="block"><h3>Order history</h3><ul class="timeline">
+      ${historyCache.map(h => `<li><i></i><div>${STATUS[h.to_status]?.label || esc(h.to_status)}
+        <small>${fullDate(h.created_at)}${h.note ? ' · ' + esc(h.note) : ''}</small></div></li>`).join('')}
+    </ul></div>` : ''}
+
+    ${acts.length
+      ? `<div class="actions">${acts.map((a,i) => `<button class="btn ${a.kind}" data-a="${i}">${a.label}</button>`).join('')}</div>`
+      : (HINTS[o.status] ? `<div class="hint">${HINTS[o.status]}</div>` : '')}
+  `;
+  $('#closeSheet').onclick = closeSheet;
+  document.querySelectorAll('[data-a]').forEach(b => b.onclick = () => runAction(o, acts[b.dataset.a], b));
+}
+
+/* ---------- Actions ---------- */
+function ask({title, msg, reason, okLabel}){
+  return new Promise(resolve => {
+    $('#dlgTitle').textContent = title;
+    $('#dlgMsg').textContent = msg || '';
+    const ta = $('#dlgReason');
+    ta.style.display = reason ? 'block' : 'none';
+    ta.value = '';
+    $('#dlgOk').textContent = okLabel || 'Confirm';
+    $('#dlgOverlay').classList.add('open');
+    const done = v => { $('#dlgOverlay').classList.remove('open'); resolve(v); };
+    $('#dlgCancel').onclick = () => done(null);
+    $('#dlgOk').onclick = () => {
+      if (reason && !ta.value.trim()){ ta.focus(); toast('Please give a reason', true); return; }
+      done({note: ta.value.trim()});
+    };
+  });
+}
+
+async function runAction(order, action, btn){
+  let note = null;
+  if (action.reason){
+    const r = await ask({title:action.confirm, msg:action.msg, reason:true, okLabel:action.label});
+    if (!r) return;
+    note = r.note;
+  } else if (action.to === 'completed'){
+    const r = await ask({title:'Mark as completed?', msg:'Confirm the customer has received this order.', okLabel:'Yes, completed'});
+    if (!r) return;
+  }
+
+  document.querySelectorAll('.actions .btn').forEach(b => b.disabled = true);
+  const {error} = await sb.rpc('vendor_update_order_status', {
+    p_order_id: order.id, p_new_status: action.to, p_note: note
+  });
+  if (error){
+    toast(error.message, true);
+    document.querySelectorAll('.actions .btn').forEach(b => b.disabled = false);
+    return;
+  }
+  toast(STATUS[action.to].label + ': order ' + refOf(order) + ' updated');
+  await loadOrders();
+  const {data} = await sb.from('order_status_history').select('*').eq('order_id', order.id).order('created_at');
+  historyCache = data || [];
+  renderSheet();
+}
+
+/* ---------- Notifications ---------- */
+async function loadNotifications(){
+  const {data} = await sb.from('notifications').select('*').eq('user_id', state.user.id)
+    .order('created_at', {ascending:false}).limit(30);
+  state.notes = data || [];
+  renderNotifications();
+}
+function renderNotifications(){
+  const unread = state.notes.filter(n => !n.is_read).length;
+  const dot = $('#bellDot');
+  dot.hidden = !unread;
+  dot.textContent = unread > 9 ? '9+' : unread;
+  $('#nlist').innerHTML = state.notes.length
+    ? state.notes.map(n => `<a class="nitem ${n.is_read ? '' : 'unread'}" href="${esc(n.link || '#')}">
+        <b>${esc(n.title)}</b>${esc(n.body || '')}<br><small>${ago(n.created_at)}</small></a>`).join('')
+    : `<div class="nitem" style="color:var(--muted)">No notifications yet.</div>`;
+}
+async function markAllRead(){
+  const ids = state.notes.filter(n => !n.is_read).map(n => n.id);
+  if (!ids.length) return;
+  await sb.from('notifications').update({is_read:true}).in('id', ids);
+  state.notes.forEach(n => n.is_read = true);
+  renderNotifications();
+}
+function subscribeNotifications(){
+  if (state.nchannel) sb.removeChannel(state.nchannel);
+  state.nchannel = sb.channel('notes-' + state.user.id)
+    .on('postgres_changes', {event:'INSERT', schema:'public', table:'notifications', filter:'user_id=eq.' + state.user.id}, p => {
+      state.notes.unshift(p.new);
+      renderNotifications();
+    })
+    .subscribe();
+}
+</script>
+</body>
+</html>
