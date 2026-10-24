@@ -1733,8 +1733,8 @@ function chrome(cur){
   }).join('');
   const item = ([ic,label,href]) => `<a class="menu-item ${('#/'+cur)===href?'cur':''}" href="${href}" data-go="${href}">${ico(ic)}${lbl(ic,label,href)}${ic==='orders'&&unfinished?'<span class="dot"></span>':''}</a>`;
   const out = SESSION ? `<button class="menu-item" data-logout>${ico('logout')}Log out</button>` : `<a class="menu-item" href="${AUTH.SIGNIN_URL}">${ico('logout')}Sign in</a>`;
-  $('#drawerItems').innerHTML = [DRAWER].map(item).join('') + out;
-  $('#moreItems').innerHTML = [MORE].map(item).join('') + out;
+    $('#drawerItems').innerHTML = DRAWER.map(item).join('') + out;
+  $('#moreItems').innerHTML = MORE.map(item).join('') + out;
   $('#profileItems').innerHTML = [['star','Review','#/reviews'],['help','Help Centre','#/help'],['settings','Settings','#/settings']]
     .map(([ic,label,href]) => `<a class="menu-item ${('#/'+cur)===href?'cur':''}" role="menuitem" href="${href}" data-go="${href}">${ico(ic)}${label}</a>`).join('')
     + (SESSION ? `<button class="menu-item" role="menuitem" data-logout>${ico('logout')}Log out</button>` : `<a class="menu-item" role="menuitem" href="${AUTH.SIGNIN_URL}">${ico('logout')}Sign in</a>`);
