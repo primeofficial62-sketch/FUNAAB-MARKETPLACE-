@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#064e3b">
+<meta name="color-scheme" content="light dark">
+<script>(function(){var t=null;try{t=localStorage.getItem('fm_admin_theme')}catch(e){}if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)})()</script>
 <title>Admin · FUNAAB Marketplace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--emerald:#0a5c3e;--deep:#064e3b;--forest:#03281b;--fresh:#34d399;--mist:#f1f8f4;--mint:#dcefe5;--line:rgba(6,78,59,.16);--ink:#03281b;--soft:#4a6b5c;--red:#dc2626;--amber:#d97706;--blue:#2563eb;--shadow:0 8px 24px -14px rgba(3,40,27,.35),0 2px 5px rgba(3,40,27,.06)}
+:root{--card:#fff;--emerald:#0a5c3e;--deep:#064e3b;--forest:#03281b;--fresh:#34d399;--mist:#f1f8f4;--mint:#dcefe5;--line:rgba(6,78,59,.16);--ink:#03281b;--soft:#4a6b5c;--red:#dc2626;--amber:#d97706;--blue:#2563eb;--shadow:0 8px 24px -14px rgba(3,40,27,.35),0 2px 5px rgba(3,40,27,.06)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Figtree',system-ui,sans-serif;color:var(--ink);background:var(--mist);line-height:1.45;min-height:100vh}
 body.lock{overflow:hidden}
@@ -38,7 +40,7 @@ input,select,textarea{font:inherit;color:inherit}
 .pad .ghost{background:none;border-color:transparent;font-size:1.2rem}
 
 /* app shell */
-.top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line);box-shadow:var(--shadow);padding:max(10px,env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px}
+.top{position:sticky;top:0;z-index:30;background:var(--card);border-bottom:1px solid var(--line);box-shadow:var(--shadow);padding:max(10px,env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px}
 .top img{height:34px;width:auto}
 .top .t{font-family:'Bricolage Grotesque';font-weight:800;color:var(--deep);font-size:1.05rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .live{display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--emerald);background:var(--mint);border-radius:99px;padding:5px 10px}
@@ -49,7 +51,7 @@ input,select,textarea{font:inherit;color:inherit}
 .ib svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .drawer{position:fixed;inset:0;z-index:90}
 .dr-bg{position:absolute;inset:0;background:rgba(3,40,27,.55)}
-.dr-card{position:absolute;top:0;bottom:0;left:0;width:min(310px,86vw);background:#fff;padding:max(16px,env(safe-area-inset-top)) 14px 16px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;animation:slideIn .22s ease-out;box-shadow:12px 0 40px -10px rgba(3,40,27,.4)}
+.dr-card{position:absolute;top:0;bottom:0;left:0;width:min(310px,86vw);background:var(--card);padding:max(16px,env(safe-area-inset-top)) 14px 16px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;animation:slideIn .22s ease-out;box-shadow:12px 0 40px -10px rgba(3,40,27,.4)}
 @keyframes slideIn{from{transform:translateX(-100%)}}
 .dr-top{display:flex;align-items:center;gap:10px;padding:4px 6px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
 .dr-top img{height:38px;width:auto}
@@ -72,20 +74,20 @@ main{max-width:1100px;margin:0 auto;padding:16px 14px 90px}
 .btn.ghost{background:var(--mint);color:var(--deep)}
 .btn.danger{background:var(--red)}
 .btn.warn{background:var(--amber)}
-.search{width:100%;padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:#fff;margin-bottom:10px}
+.search{width:100%;padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:var(--card);margin-bottom:10px}
 .chips{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:none;padding:7px 13px;border-radius:99px;background:#fff;border:1px solid var(--line);font-weight:600;font-size:.84rem;color:var(--soft)}
+.chip{flex:none;padding:7px 13px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-weight:600;font-size:.84rem;color:var(--soft)}
 .chip.on{background:var(--deep);color:#fff;border-color:var(--deep)}
 .grid{display:grid;gap:12px}
 @media(min-width:760px){.grid.g2{grid-template-columns:1fr 1fr}.grid.g3{grid-template-columns:repeat(3,1fr)}}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
 @media(min-width:760px){.stats{grid-template-columns:repeat(3,1fr)}}
-.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
 .stat span{font-size:.8rem;color:var(--soft);font-weight:600}
 .stat b{display:block;font-family:'Bricolage Grotesque';font-size:1.55rem;color:var(--deep)}
 .stat small{color:var(--soft);font-size:.78rem}
-.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
 .card h3{font-size:1rem}
 .row{display:flex;gap:10px;align-items:flex-start}
 .grow{flex:1;min-width:0}
@@ -108,12 +110,12 @@ main{max-width:1100px;margin:0 auto;padding:16px 14px 90px}
 /* forms + sheet */
 .field{margin-bottom:12px}
 .field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:5px;color:var(--deep)}
-.field input,.field select,.field textarea{width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:#fff}
+.field input,.field select,.field textarea{width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card)}
 .field textarea{min-height:90px;resize:vertical}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .sheet{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center}
 .sh-bg{position:absolute;inset:0;background:rgba(3,40,27,.55)}
-.sh-card{position:relative;background:#fff;width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));animation:up .22s ease-out}
+.sh-card{position:relative;background:var(--card);width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));animation:up .22s ease-out}
 @media(min-width:600px){.sheet{align-items:center}.sh-card{border-radius:24px}}
 @keyframes up{from{transform:translateY(30px);opacity:0}}
 .sh-card h3{font-size:1.2rem;margin-bottom:6px}
@@ -126,7 +128,24 @@ main{max-width:1100px;margin:0 auto;padding:16px 14px 90px}
 .sw input:checked::after{transform:translateX(20px)}
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);background:var(--forest);color:#fff;padding:12px 18px;border-radius:14px;font-weight:600;font-size:.9rem;opacity:0;pointer-events:none;transition:.25s;z-index:200;max-width:90vw;text-align:center}
 #toast.on{opacity:1;transform:translate(-50%,0)}
-.setup{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin:20px auto;max-width:560px}
+.setup{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:20px auto;max-width:560px}
+
+/* dark mode */
+:root[data-theme="dark"]{color-scheme:dark;--card:#12261d;--mist:#0a1812;--mint:#173a2c;--line:rgba(110,231,183,.2);--ink:#e6f4ec;--soft:#9dbbab;--deep:#6ee7b7;--shadow:0 8px 24px -14px rgba(0,0,0,.7),0 2px 5px rgba(0,0,0,.3)}
+[data-theme="dark"] .chip.on{background:var(--emerald);border-color:var(--emerald)}
+[data-theme="dark"] .live{color:var(--fresh)}
+[data-theme="dark"] .bars i{background:var(--fresh)}
+[data-theme="dark"] .pill.red{background:#4c1d1d;color:#fecaca}
+[data-theme="dark"] .pill.amber{background:#4a3410;color:#fde68a}
+[data-theme="dark"] .pill.green{background:#0f3d2c;color:#a7f3d0}
+[data-theme="dark"] .pill.blue{background:#1e3a5f;color:#bfdbfe}
+[data-theme="dark"] .alert{background:#3b2e0c;border-color:#7c5e10;color:#fde68a}
+[data-theme="dark"] .note[style*="fef3c7"]{background:#3b2e0c!important;color:#fde68a}
+[data-theme="dark"] .field input,[data-theme="dark"] .field select,[data-theme="dark"] .field textarea,[data-theme="dark"] .search{color:var(--ink)}
+[data-theme="dark"] .dr-item.on{background:var(--emerald);color:#fff}
+[data-theme="dark"] .sw input{background:#3a4f45}
+[data-theme="dark"] .sw input:checked{background:var(--emerald)}
+[data-theme="dark"] .btn.ghost{background:var(--mint);color:var(--deep)}
 </style>
 </head>
 <body>
@@ -315,7 +334,7 @@ function drawTabs(){
   if ($('#ttl') && cur) $('#ttl').textContent = cur[1];
   $('#tabs').innerHTML = `<div class="dr-top"><img src="1001047956-removebg-preview.png" alt="" onerror="this.style.display='none'"><b>Admin panel</b><button class="ib" data-act="menu" aria-label="Close menu"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>`
     + TABS.map(([k, n]) => `<button class="dr-item ${ST.tab === k ? 'on' : ''}" data-tab="${k}"><span>${TAB_ICO[k]}</span>${n}${badge[k] ? `<em>${badge[k]}</em>` : ''}</button>`).join('')
-    + `<div class="dr-sep"></div><button class="dr-item" data-act="refresh"><span>🔄</span>Refresh now</button><button class="dr-item" data-act="lock"><span>🔒</span>Lock panel</button>`;
+    + `<div class="dr-sep"></div><button class="dr-item" data-act="theme"><span>${document.documentElement.dataset.theme === 'dark' ? '☀️' : '🌙'}</span>${document.documentElement.dataset.theme === 'dark' ? 'Light mode' : 'Dark mode'}</button><button class="dr-item" data-act="refresh"><span>🔄</span>Refresh now</button><button class="dr-item" data-act="lock"><span>🔒</span>Lock panel</button>`;
 }
 const toggleMenu = on => { const d = $('#drawer'); d.hidden = on === undefined ? !d.hidden : !on; document.body.classList.toggle('lock', !d.hidden || !$('#sheet').hidden); };
 function setTab(k){ toggleMenu(false); ST.tab = k; ST.q = ''; ST.f = 'all'; location.hash = k; drawTabs(); render(); window.scrollTo(0, 0); loadTab(true); }
@@ -574,6 +593,7 @@ document.addEventListener('click', async e => {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const a = b.dataset.act, id = b.dataset.id, to = b.dataset.to;
 
+  if (a === 'theme'){ const d = document.documentElement, n = d.dataset.theme === 'dark' ? 'light' : 'dark'; d.dataset.theme = n; try{ localStorage.setItem('fm_admin_theme', n); }catch(e){} drawTabs(); return; }
   if (a === 'menu'){ toggleMenu(); return; }
   if (a === 'close'){ closeSheet(); return; }
   if (a === 'refresh'){ toggleMenu(false); toast('Refreshing…'); loadTab(true); return; }
