@@ -47,11 +47,18 @@ input,select,textarea{font:inherit;color:inherit}
 .ib{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--deep)}
 .ib:hover{background:var(--mint)}
 .ib svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.tabs{position:sticky;top:58px;z-index:20;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;padding:8px 12px;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:none;padding:9px 14px;border-radius:99px;font-weight:700;font-size:.9rem;color:var(--soft);display:flex;gap:6px;align-items:center}
-.tab.on{background:var(--emerald);color:#fff}
-.tab em{font-style:normal;background:var(--red);color:#fff;border-radius:99px;font-size:.7rem;padding:1px 7px}
+.drawer{position:fixed;inset:0;z-index:90}
+.dr-bg{position:absolute;inset:0;background:rgba(3,40,27,.55)}
+.dr-card{position:absolute;top:0;bottom:0;left:0;width:min(310px,86vw);background:#fff;padding:max(16px,env(safe-area-inset-top)) 14px 16px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;animation:slideIn .22s ease-out;box-shadow:12px 0 40px -10px rgba(3,40,27,.4)}
+@keyframes slideIn{from{transform:translateX(-100%)}}
+.dr-top{display:flex;align-items:center;gap:10px;padding:4px 6px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.dr-top img{height:38px;width:auto}
+.dr-top b{font-family:'Bricolage Grotesque';font-size:1.05rem;color:var(--deep);flex:1}
+.dr-item{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;font-weight:700;color:var(--soft);text-align:left;width:100%}
+.dr-item span{font-size:1.15rem;width:24px;text-align:center}
+.dr-item.on{background:var(--emerald);color:#fff}
+.dr-item em{font-style:normal;margin-left:auto;background:var(--red);color:#fff;border-radius:99px;font-size:.72rem;padding:1px 8px}
+.dr-sep{height:1px;background:var(--line);margin:8px 0}
 main{max-width:1100px;margin:0 auto;padding:16px 14px 90px}
 .head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .head h2{font-size:1.35rem}
@@ -144,13 +151,15 @@ main{max-width:1100px;margin:0 auto;padding:16px 14px 90px}
 <!-- ============ APP ============ -->
 <div id="app" hidden>
   <header class="top">
+    <button class="ib" data-act="menu" aria-label="Open menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <img src="1001047956-removebg-preview.png" alt="" onerror="this.style.display='none'">
-    <div class="t">Admin · FUNAAB Marketplace</div>
+    <div class="t" id="ttl">Dashboard</div>
     <div class="live"><b></b>Live</div>
-    <button class="ib" data-act="refresh" aria-label="Refresh"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
-    <button class="ib" data-act="lock" aria-label="Lock"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></button>
   </header>
-  <nav class="tabs" id="tabs"></nav>
+  <aside class="drawer" id="drawer" hidden>
+    <div class="dr-bg" data-act="menu"></div>
+    <nav class="dr-card" id="tabs" aria-label="Admin menu"></nav>
+  </aside>
   <main id="main"></main>
 </div>
 <div class="sheet" id="sheet" hidden></div>
@@ -250,7 +259,7 @@ addEventListener('keydown', e => {
 function lock(){
   PIN = ''; sessionStorage.removeItem('fm_admin_pin');
   clearInterval(pollT); clearTimeout(idleT);
-  closeSheet(true);
+  closeSheet(true); $('#drawer').hidden = true;
   $('#app').hidden = true; $('#gate').hidden = false;
   entry = ''; drawDots();
 }
@@ -288,7 +297,7 @@ async function loadTab(showErr){
   if (PIN){ drawTabs(); render(); }
 }
 function poll(){
-  if (document.hidden || !PIN || !$('#sheet').hidden) return;
+  if (document.hidden || !PIN || !$('#sheet').hidden || !$('#drawer').hidden) return;
   const a = document.activeElement;
   if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
   loadTab(false);
@@ -298,12 +307,18 @@ const act = async (fn, okMsg) => { try{ await fn(); if (okMsg) toast(okMsg); }ca
 /* ============================================================
    TABS + RENDER
    ============================================================ */
+const TAB_ICO = { dash:'📊', stores:'🏪', products:'📦', orders:'🧾', reviews:'⭐', users:'👥', notify:'📣', settings:'⚙️' };
 function drawTabs(){
   const s = ST.stats || {};
   const badge = { stores:(s.stores || {}).pending, orders:(s.orders || {}).pending };
-  $('#tabs').innerHTML = TABS.map(([k, n]) => `<button class="tab ${ST.tab === k ? 'on' : ''}" data-tab="${k}">${n}${badge[k] ? `<em>${badge[k]}</em>` : ''}</button>`).join('');
+  const cur = TABS.find(t => t[0] === ST.tab);
+  if ($('#ttl') && cur) $('#ttl').textContent = cur[1];
+  $('#tabs').innerHTML = `<div class="dr-top"><img src="1001047956-removebg-preview.png" alt="" onerror="this.style.display='none'"><b>Admin panel</b><button class="ib" data-act="menu" aria-label="Close menu"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>`
+    + TABS.map(([k, n]) => `<button class="dr-item ${ST.tab === k ? 'on' : ''}" data-tab="${k}"><span>${TAB_ICO[k]}</span>${n}${badge[k] ? `<em>${badge[k]}</em>` : ''}</button>`).join('')
+    + `<div class="dr-sep"></div><button class="dr-item" data-act="refresh"><span>🔄</span>Refresh now</button><button class="dr-item" data-act="lock"><span>🔒</span>Lock panel</button>`;
 }
-function setTab(k){ ST.tab = k; ST.q = ''; ST.f = 'all'; location.hash = k; drawTabs(); render(); window.scrollTo(0, 0); loadTab(true); }
+const toggleMenu = on => { const d = $('#drawer'); d.hidden = on === undefined ? !d.hidden : !on; document.body.classList.toggle('lock', !d.hidden || !$('#sheet').hidden); };
+function setTab(k){ toggleMenu(false); ST.tab = k; ST.q = ''; ST.f = 'all'; location.hash = k; drawTabs(); render(); window.scrollTo(0, 0); loadTab(true); }
 function render(){
   const m = $('#main');
   const keepQ = $('#q') && document.activeElement === $('#q');
@@ -552,9 +567,10 @@ document.addEventListener('click', async e => {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const a = b.dataset.act, id = b.dataset.id, to = b.dataset.to;
 
+  if (a === 'menu'){ toggleMenu(); return; }
   if (a === 'close'){ closeSheet(); return; }
-  if (a === 'refresh'){ toast('Refreshing…'); loadTab(true); return; }
-  if (a === 'lock'){ lock(); return; }
+  if (a === 'refresh'){ toggleMenu(false); toast('Refreshing…'); loadTab(true); return; }
+  if (a === 'lock'){ toggleMenu(false); lock(); return; }
 
   /* stores */
   if (a === 'store-approve') return act(() => api('update_store', { id, status:'approved', note:'' }), 'Store approved');
