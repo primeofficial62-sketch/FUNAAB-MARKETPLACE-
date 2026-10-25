@@ -290,7 +290,7 @@ async function loadTab(showErr){
     if (t === 'orders' || t === 'dash') jobs.push(api('list_orders').then(d => ST.orders = d));
     if (t === 'reviews')  jobs.push(api('list_reviews').then(d => ST.reviews = d), api('list_reports').then(d => ST.reports = d).catch(() => ST.reports = []));
     if (t === 'users' || t === 'notify') jobs.push(api('list_users').then(d => ST.users = d));
-    if (t === 'settings') jobs.push(api('get_settings').then(d => ST.settings = d));
+    if (t === 'settings') jobs.push(api('get_settings').then(d => ST.settings = d), api('email_get').then(d => ST.email = d).catch(() => ST.email = { missing:true }));
     await Promise.all(jobs);
     ST.err = '';
   }catch(e){ if (PIN){ ST.err = errMsg(e); if (showErr) toast(ST.err); } }
@@ -478,7 +478,7 @@ function vNotify(){
 /* ---------- Site settings ---------- */
 function vSettings(){
   const S = ST.settings; if (!S) return loading();
-  const an = S.announcement || { on:false, text:'', tone:'info' }, mt = S.maintenance || { on:false, message:'' }, va = S.vendor_applications || { open:true };
+  const em = ST.email || { missing:true }, an = S.announcement || { on:false, text:'', tone:'info' }, mt = S.maintenance || { on:false, message:'' }, va = S.vendor_applications || { open:true };
   return `<div class="head"><div><h2>Site settings</h2><div class="sub">Changes go live on the marketplace within seconds.</div></div></div>
   <div class="grid g2">
   <div class="card"><h3>Announcement banner</h3><p class="sub" style="margin:4px 0 10px">Shown to every visitor on the marketplace.</p>
@@ -493,6 +493,13 @@ function vSettings(){
   <div class="card"><h3>Vendor applications</h3><p class="sub" style="margin:4px 0 10px">Turn off to stop new stores from applying.</p>
     <label class="sw"><span><b>Accepting applications</b></span><input type="checkbox" id="vaOn" ${va.open !== false ? 'checked' : ''}></label>
     <button class="btn" data-act="set-vendor">Save</button></div>
+  <div class="card"><h3>Email</h3><p class="sub" style="margin:4px 0 10px">Order updates, welcome emails, vendor alerts and the Monday report.</p>
+    ${em.missing ? '<div class="note">Run the latest <b>admin-setup.sql</b> first.</div>' : `
+    <div class="field"><label>Super admin email (alerts and weekly report go here)</label><input id="emAdmin" type="email" value="${esc(em.admin_email)}"></div>
+    <div class="field"><label>Site address (no slash at the end)</label><input id="emUrl" placeholder="https://your-site.vercel.app" value="${esc(em.site_url)}"></div>
+    <div class="field"><label>Email secret ${em.secret_set ? '(saved, leave blank to keep)' : '(not set yet)'}</label><input id="emSecret" type="password" autocomplete="new-password" placeholder="Same value as EMAIL_SECRET in Supabase"></div>
+    <div class="acts" style="margin-top:0"><button class="btn" data-act="email-save">Save</button><button class="btn ghost" data-act="email-test">Send test email</button><button class="btn ghost" data-act="email-report">Send weekly report now</button></div>`}
+  </div>
   </div>`;
 }
 
@@ -620,6 +627,17 @@ document.addEventListener('click', async e => {
   /* settings */
   if (a === 'set-announce'){ const v = { on:$('#anOn').checked, text:val('anText').trim(), tone:val('anTone'), id:Date.now() }; if (v.on && !v.text){ toast('Type the banner message first.'); return; } return act(() => api('set_setting', { key:'announcement', value:v }), v.on ? 'Banner is live' : 'Banner is off'); }
   if (a === 'set-maint'){ const v = { on:$('#mtOn').checked, message:val('mtText').trim() || 'We will be right back.' }; if (v.on && !(await ask({ title:'Turn on maintenance mode?', text:'Visitors will see your message and new orders will be blocked until you turn it off.', ok:'Turn on', danger:true }))) { $('#mtOn').checked = false; return; } return act(() => api('set_setting', { key:'maintenance', value:v }), v.on ? 'Maintenance mode ON' : 'Site is open'); }
+  if (a === 'email-save') return act(() => api('email_set', { admin_email:val('emAdmin'), site_url:val('emUrl'), secret:val('emSecret') }), 'Email settings saved');
+  if (a === 'email-test' || a === 'email-report'){
+    b.disabled = true;
+    try{
+      await api(a === 'email-test' ? 'email_test' : 'send_report'); toast('Sending…');
+      await new Promise(r => setTimeout(r, 4000));
+      const log = await api('email_log'), l = log[0];
+      toast(!l ? 'Queued. Check your inbox in a minute.' : (l.status >= 200 && l.status < 300) ? 'Sent ✅ Check your inbox' : 'Failed (' + (l.status || l.error) + '): ' + String(l.body || '').slice(0, 120));
+    }catch(err){ toast(errMsg(err)); }
+    b.disabled = false; return;
+  }
   if (a === 'set-vendor'){ const v = { open:$('#vaOn').checked }; return act(() => api('set_setting', { key:'vendor_applications', value:v }), v.open ? 'Applications open' : 'Applications closed'); }
 });
 document.addEventListener('input', e => { if (e.target.id === 'q'){ ST.q = e.target.value; render(); } });
