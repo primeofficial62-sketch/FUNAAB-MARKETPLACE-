@@ -221,7 +221,7 @@ const stars = n => { const r = Math.max(0, Math.min(5, Math.round(Number(n) || 0
 const tone = s => ({ approved:'green', active:'green', completed:'green', visible:'green', paid:'green', pending:'amber', accepted:'blue', preparing:'blue', ready:'blue', rejected:'red', suspended:'red', cancelled:'red', paused:'amber', hidden:'red', reported:'amber' }[String(s).toLowerCase()] || '');
 const pill = s => `<span class="pill ${tone(s)}">${esc(s || '—')}</span>`;
 let toastT;
-function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 3000); }
+function toast(m, ms){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), ms || 3000); }
 const errMsg = e => (e && (e.message || e.error_description)) || 'Something went wrong.';
 
 /* ============================================================
@@ -321,7 +321,7 @@ function poll(){
   if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
   loadTab(false);
 }
-const act = async (fn, okMsg) => { try{ await fn(); if (okMsg) toast(okMsg); }catch(e){ toast(errMsg(e)); } await loadTab(false); };
+const act = async (fn, okMsg) => { try{ await fn(); if (okMsg) toast(okMsg); }catch(e){ toast(errMsg(e), 8000); } await loadTab(false); };
 
 /* ============================================================
    TABS + RENDER
