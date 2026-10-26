@@ -112,6 +112,34 @@ const PX = (() => {
     gateway: `Pay securely with card, bank transfer or USSD through ${GW_NAME()}.`
   })[state.method];
 
+   const bank = { cache:{}, pending:{} };
+function bankCheck(sids){
+  const need = sids.filter(id => !(id in bank.cache) && !bank.pending[id]);
+  if (!need.length) return;
+  need.forEach(id => { bank.pending[id] = true; });
+  sb.rpc('stores_with_bank', { p_ids: need }).then(r => {
+    if (r.error) throw r.error;
+    const ok = new Set((r.data || []).map(x => (x && typeof x === 'object') ? Object.values(x)[0] : x));
+    need.forEach(id => { bank.cache[id] = ok.has(id); delete bank.pending[id]; });
+    if ($('.px-opts')) keepInputs(() => rerender());
+  }).catch(e => { need.forEach(id => { delete bank.pending[id]; }); console.error('Bank check error:', e); });
+}
+
+function panel(){
+  let sids = [];
+  try { sids = Object.keys(groupByStore(cartTotals().lines)); } catch (e) {}
+  bankCheck(sids);
+  const noBank = sids.filter(id => bank.cache[id] === false);
+  const opts = CFG.ENABLED.filter(id => id !== 'transfer' || !noBank.length);
+  if (!opts.includes(state.method)) state.method = opts[0];
+  return `<div class="panel glass" style="margin-bottom:16px"><h3 style="margin-bottom:10px">Payment method</h3>
+      <div class="px-opts">${opts.map(id => { const m = METHODS[id]; return `
+        <button type="button" class="px-opt ${state.method === id ? 'on' : ''}" data-px="method" data-id="${id}" aria-pressed="${state.method === id}">
+          <span class="px-ico">${m.icon}</span><span><b>${id === 'gateway' ? 'Pay online (' + GW_NAME() + ')' : m.title}</b><small>${m.sub}</small></span><span class="px-dot"></span></button>`; }).join('')}
+      </div><p class="px-note">${note()}</p>
+      ${noBank.length ? `<p class="px-note">Bank transfer is hidden because ${noBank.length > 1 ? 'some stores in your cart have' : 'this store has'} not added bank details yet.</p>` : ''}</div>`;
+}
+   
   function panel(){
     if (!CFG.ENABLED.includes(state.method)) state.method = CFG.ENABLED[0];
     return `<div class="panel glass" style="margin-bottom:16px"><h3 style="margin-bottom:10px">Payment method</h3>
