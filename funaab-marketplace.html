@@ -559,12 +559,13 @@ const ico = (n, cls='') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidde
    STATE. Cart, wishlist and recently viewed live on this device only.
    Orders, stores, products and notifications come from the database.
    ============================================================ */
+const SKEY = (SESSION && SESSION.id) ? SESSION.id : 'guest';
 const store = {
-  get(k, d){ try{ const v = localStorage.getItem('fm_'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
-  set(k, v){ try{ localStorage.setItem('fm_'+k, JSON.stringify(v)); }catch(e){} }
+  get(k, d){ try{ const v = localStorage.getItem('fm_'+SKEY+'_'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('fm_'+SKEY+'_'+k, JSON.stringify(v)); }catch(e){} }
 };
 /* remove demo data saved in this browser by earlier builds */
-try{ ['orders','notifs','vapp','vstore','vprods'].forEach(k => localStorage.removeItem('fm_' + k)); }catch(e){}
+try{ ['orders','notifs','vapp','vstore','vprods','cart','wish','recent','seen'].forEach(k => localStorage.removeItem('fm_' + k)); }catch(e){}
 
 const S = {
   cart:   store.get('cart', {}),
