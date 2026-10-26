@@ -113,6 +113,7 @@ const PX = (() => {
   })[state.method];
 
    const bank = { cache:{}, pending:{} };
+funconst bank = { cache:{}, pending:{} };
 function bankCheck(sids){
   const need = sids.filter(id => !(id in bank.cache) && !bank.pending[id]);
   if (!need.length) return;
@@ -139,17 +140,7 @@ function panel(){
       </div><p class="px-note">${note()}</p>
       ${noBank.length ? `<p class="px-note">Bank transfer is hidden because ${noBank.length > 1 ? 'some stores in your cart have' : 'this store has'} not added bank details yet.</p>` : ''}</div>`;
 }
-   
-  function panel(){
-    if (!CFG.ENABLED.includes(state.method)) state.method = CFG.ENABLED[0];
-    return `<div class="panel glass" style="margin-bottom:16px"><h3 style="margin-bottom:10px">Payment method</h3>
-      <div class="px-opts">${CFG.ENABLED.map(id => { const m = METHODS[id]; return `
-        <button type="button" class="px-opt ${state.method === id ? 'on' : ''}" data-px="method" data-id="${id}" aria-pressed="${state.method === id}">
-          <span class="px-ico">${m.icon}</span><span><b>${id === 'gateway' ? 'Pay online (' + GW_NAME() + ')' : m.title}</b><small>${m.sub}</small></span><span class="px-dot"></span></button>`; }).join('')}
-      </div><p class="px-note">${note()}</p></div>`;
-  }
-  const btnLabel = () => state.method === 'gateway' ? 'Pay & place order' : state.method === 'transfer' ? 'Place order & pay by transfer' : 'Place order';
-
+const btnLabel = () => state.method === 'gateway' ? 'Pay & place order' : state.method === 'transfer' ? 'Place order & pay by transfer' : 'Place order';
   /* ============================================================
      AFTER THE ORDER IS CREATED
      ============================================================ */
