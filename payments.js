@@ -23,6 +23,10 @@ const PX = (() => {
     FLW_KEY: 'FLWPUBK_TEST-REPLACE_ME',        // PUBLIC key only
     VERIFY_FN: 'verify-payment'                // name of your Supabase Edge Function
   };
+  /* hide online payment until a real gateway key is set */
+  const gwKey = CFG.GATEWAY === 'flutterwave' ? CFG.FLW_KEY : CFG.PAYSTACK_KEY;
+  if (/REPLACE_ME/.test(gwKey)) CFG.ENABLED = CFG.ENABLED.filter(m => m !== 'gateway');
+
   const BANKS = ['Access Bank','Citibank','Ecobank','Fidelity Bank','First Bank','FCMB','GTBank','Keystone Bank','Kuda','Moniepoint','Opay','Palmpay','Polaris Bank','Stanbic IBTC','Sterling Bank','UBA','Union Bank','Wema Bank','Zenith Bank'];
   const GW_NAME = () => CFG.GATEWAY === 'flutterwave' ? 'Flutterwave' : 'Paystack';
   const METHODS = {
@@ -104,7 +108,7 @@ const PX = (() => {
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#pxModal')) closeModal(); });
 
   /* ============================================================
-     CHECKOUT: the three-option panel
+     CHECKOUT: the payment-method panel
      ============================================================ */
   const note = () => ({
     cod: 'You pay the vendor directly when you collect or receive your order.',
@@ -112,35 +116,35 @@ const PX = (() => {
     gateway: `Pay securely with card, bank transfer or USSD through ${GW_NAME()}.`
   })[state.method];
 
-   const bank = { cache:{}, pending:{} };
-funconst bank = { cache:{}, pending:{} };
-function bankCheck(sids){
-  const need = sids.filter(id => !(id in bank.cache) && !bank.pending[id]);
-  if (!need.length) return;
-  need.forEach(id => { bank.pending[id] = true; });
-  sb.rpc('stores_with_bank', { p_ids: need }).then(r => {
-    if (r.error) throw r.error;
-    const ok = new Set((r.data || []).map(x => (x && typeof x === 'object') ? Object.values(x)[0] : x));
-    need.forEach(id => { bank.cache[id] = ok.has(id); delete bank.pending[id]; });
-    if ($('.px-opts')) keepInputs(() => rerender());
-  }).catch(e => { need.forEach(id => { delete bank.pending[id]; }); console.error('Bank check error:', e); });
-}
+  /* which stores in the cart have saved bank details (needs bank-check.sql; if it is missing, checkout still works) */
+  const bank = { cache:{}, pending:{} };
+  function bankCheck(sids){
+    const need = sids.filter(id => !(id in bank.cache) && !bank.pending[id]);
+    if (!need.length) return;
+    need.forEach(id => { bank.pending[id] = true; });
+    sb.rpc('stores_with_bank', { p_ids: need }).then(r => {
+      if (r.error) throw r.error;
+      const ok = new Set((r.data || []).map(x => (x && typeof x === 'object') ? Object.values(x)[0] : x));
+      need.forEach(id => { bank.cache[id] = ok.has(id); delete bank.pending[id]; });
+      if ($('.px-opts')) keepInputs(() => rerender());
+    }).catch(e => { need.forEach(id => { bank.cache[id] = true; delete bank.pending[id]; }); console.error('Bank check error:', errText(e)); });
+  }
 
-function panel(){
-  let sids = [];
-  try { sids = Object.keys(groupByStore(cartTotals().lines)); } catch (e) {}
-  bankCheck(sids);
-  const noBank = sids.filter(id => bank.cache[id] === false);
-  const opts = CFG.ENABLED.filter(id => id !== 'transfer' || !noBank.length);
-  if (!opts.includes(state.method)) state.method = opts[0];
-  return `<div class="panel glass" style="margin-bottom:16px"><h3 style="margin-bottom:10px">Payment method</h3>
+  function panel(){
+    let sids = [];
+    try { sids = Object.keys(groupByStore(cartTotals().lines)); bankCheck(sids); } catch (e) { console.error('Payment panel:', e); }
+    const noBank = sids.filter(id => bank.cache[id] === false);
+    const opts = CFG.ENABLED.filter(id => id !== 'transfer' || !noBank.length);
+    if (!opts.includes(state.method)) state.method = opts[0];
+    return `<div class="panel glass" style="margin-bottom:16px"><h3 style="margin-bottom:10px">Payment method</h3>
       <div class="px-opts">${opts.map(id => { const m = METHODS[id]; return `
         <button type="button" class="px-opt ${state.method === id ? 'on' : ''}" data-px="method" data-id="${id}" aria-pressed="${state.method === id}">
           <span class="px-ico">${m.icon}</span><span><b>${id === 'gateway' ? 'Pay online (' + GW_NAME() + ')' : m.title}</b><small>${m.sub}</small></span><span class="px-dot"></span></button>`; }).join('')}
       </div><p class="px-note">${note()}</p>
       ${noBank.length ? `<p class="px-note">Bank transfer is hidden because ${noBank.length > 1 ? 'some stores in your cart have' : 'this store has'} not added bank details yet.</p>` : ''}</div>`;
-}
-const btnLabel = () => state.method === 'gateway' ? 'Pay & place order' : state.method === 'transfer' ? 'Place order & pay by transfer' : 'Place order';
+  }
+  const btnLabel = () => state.method === 'gateway' ? 'Pay & place order' : state.method === 'transfer' ? 'Place order & pay by transfer' : 'Place order';
+
   /* ============================================================
      AFTER THE ORDER IS CREATED
      ============================================================ */
@@ -351,17 +355,17 @@ const btnLabel = () => state.method === 'gateway' ? 'Pay & place order' : state.
   }
 
   async function saveBank(btn){
-    const bank = $('#pxBankName').value.trim(), name = $('#pxAcctName').value.trim(), no = $('#pxAcctNo').value.replace(/\s/g, '');
+    const bankName = $('#pxBankName').value.trim(), name = $('#pxAcctName').value.trim(), no = $('#pxAcctNo').value.replace(/\s/g, '');
     let bad = false;
-    $('#ePxBank').textContent = bank.length >= 2 ? '' : (bad = true, 'Enter your bank.');
+    $('#ePxBank').textContent = bankName.length >= 2 ? '' : (bad = true, 'Enter your bank.');
     $('#ePxName').textContent = name.length >= 3 ? '' : (bad = true, 'Enter the account name.');
     $('#ePxNo').textContent = /^\d{10}$/.test(no) ? '' : (bad = true, 'Account number must be 10 digits.');
     if (bad) return;
     btn.disabled = true; btn.textContent = 'Saving…';
     try {
-      const r = await sb.rpc('save_store_bank', { p_bank: bank, p_name: name, p_number: no });
+      const r = await sb.rpc('save_store_bank', { p_bank: bankName, p_name: name, p_number: no });
       if (r.error) throw r.error;
-      S.vstore = Object.assign({}, S.vstore, { bank_name: bank, account_name: name, account_number: no });
+      S.vstore = Object.assign({}, S.vstore, { bank_name: bankName, account_name: name, account_number: no });
       toast('Bank details saved');
     } catch (e) { fail(e); }
     btn.disabled = false; btn.textContent = 'Save bank details';
