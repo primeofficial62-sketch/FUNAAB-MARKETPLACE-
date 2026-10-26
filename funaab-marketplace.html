@@ -1909,6 +1909,23 @@ if (!REDIRECTING){
   route();
   boot();
 }
+
+    /* ===== COPY CHOSEN PHOTOS INTO MEMORY ===== */
+document.addEventListener('change', async e => {
+  const inp = e.target;
+  if (!inp || inp.type !== 'file' || !inp.files || !inp.files[0]) return;
+  const f = inp.files[0];
+  try{
+    const buf = await f.arrayBuffer();
+    const copy = new File([buf], f.name, { type:f.type, lastModified:Date.now() });
+    const dt = new DataTransfer(); dt.items.add(copy);
+    inp.files = dt.files;
+  }catch(err){
+    inp.value = '';
+    toast('That photo could not be read. Please choose it again, or pick a different photo.');
+  }
+});
+  
 </script>
 </body>
 </html>
