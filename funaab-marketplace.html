@@ -1177,6 +1177,7 @@ const vVal = id => ($('#' + id) || { value:'' }).value.trim();
 const errText = e => { if (!e) return ''; if (typeof e === 'string') return e; const o = [e.code, e.message || e.error_description, e.details, e.hint].filter(Boolean).join(' · '); return o || JSON.stringify(e); };
 function vFriendly(err){
   const m = (err && (err.message || err.error_description)) || '', c = (err && err.code) || '';
+  if (/^(Photo upload failed|Could not read that photo)/.test(m)) return m;
   if (c === 'P0001') return m;                                    /* our own readable database messages */
   if (c === '23505') return 'You have already applied. Reload the page to see your application.';
   if (c === '23514' || c === '22003' || c === '22P02') return 'One of the details is not valid. Check each field and try again.';
@@ -1187,12 +1188,33 @@ function vFriendly(err){
   return m || 'Something went wrong. Please try again.';
 }
 
+async function squeezeImage(file){
+  const url = URL.createObjectURL(file);
+  try{
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('Could not read that photo. Choose it again or pick another one.')); i.src = url; });
+    const k = Math.min(1, 1280 / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(img.naturalWidth * k)); c.height = Math.max(1, Math.round(img.naturalHeight * k));
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    const type = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+    const blob = await new Promise(r => c.toBlob(r, type, .85));
+    if (!blob) throw new Error('Could not read that photo. Choose it again or pick another one.');
+    return blob;
+  } finally { URL.revokeObjectURL(url); }
+}
 async function uploadImage(file, prefix){
-  const ext = { 'image/png':'png', 'image/jpeg':'jpg', 'image/webp':'webp' }[file.type];
-  if (!ext || file.size > 2 * 1024 * 1024) throw new Error('The image must be a PNG, JPG or WebP under 2 MB.');
+  if (!{ 'image/png':1, 'image/jpeg':1, 'image/webp':1 }[file.type]) throw new Error('The image must be a PNG, JPG or WebP.');
+  if (file.size > 15 * 1024 * 1024) throw new Error('The image must be under 15 MB.');
+  const blob = await squeezeImage(file);
+  if (blob.size > 4 * 1024 * 1024) throw new Error('The image is too large. Choose a smaller one.');
+  const ext = blob.type === 'image/png' ? 'png' : 'jpg';
   const path = `${SESSION.id}/${prefix}-${Date.now()}.${ext}`;
-  const up = await sb.storage.from('store-media').upload(path, file, { contentType:file.type, upsert:false });
-  if (up.error) throw up.error;
+  let up;
+  try{ up = await sb.storage.from('store-media').upload(path, blob, { contentType:blob.type, upsert:false }); }
+  catch(e){ up = { error:e }; }
+  if (up.error){
+    console.error('Upload error:', up.error);
+    throw new Error('Photo upload failed (' + ((up.error && up.error.message) || 'unknown').replace(/fetch/gi, 'request') + '). Check that the store-media bucket exists, is public, and allows uploads.');
+  }
   return sb.storage.from('store-media').getPublicUrl(path).data.publicUrl;
 }
 
