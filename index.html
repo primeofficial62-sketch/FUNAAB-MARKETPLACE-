@@ -226,7 +226,7 @@ h1 em{font-style:normal;color:var(--or)}
     <img class="logo a pop" style="--d:100" src="kampza-logo.png" alt="KAMPZA — Find It. Get It. Love It." width="268" height="246" decoding="async">
     <h1 class="a" style="--d:450">Ready to Find Your<br><em>Next Favourite?</em></h1>
     <p class="sub a" style="--d:600">Your next great find is just a click away.</p>
-    <a class="cta a pop" style="--d:800" id="go" href="index.html">Explore KAMPZA <svg class="ic"><use href="#i-arrow"/></svg></a>
+    <a class="cta a pop" style="--d:800" id="go" href="kampza-auth.html">Explore KAMPZA <svg class="ic"><use href="#i-arrow"/></svg></a>
   </section>
 
   <nav class="dots" id="dots" aria-label="Slides"></nav>
@@ -235,10 +235,12 @@ h1 em{font-style:normal;color:var(--or)}
 <script>
 (function(){
   /* ===== CONFIG: set these to your real routes ===== */
-  var HOME_URL = 'index.html';          // your existing KAMPZA homepage (do NOT point at this splash file)
+  var HOME_URL = 'kampza-auth.html';    // where Skip / Explore KAMPZA go (the Create Account page)
   var FLAG = 'kampza_onboarded';        // reuse your own flag name if you already have one
   var DUR = [3200, 3400, 0, 3400, 4500];// ms per slide (slide 3 is timed by its animation)
 
+  /* safety: never redirect to this same page (that caused a blank screen) */
+  try{ var _t=new URL(HOME_URL,location.href).pathname.replace(/\/index\.html$/,'/'), _c=location.pathname.replace(/\/index\.html$/,'/'); if(_t===_c){ HOME_URL='kampza-auth.html'; } }catch(e){}
   var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   try{ if(localStorage.getItem(FLAG) && !/[?&]splash=1/.test(location.search)){ location.replace(HOME_URL); return; } }catch(e){}
 
