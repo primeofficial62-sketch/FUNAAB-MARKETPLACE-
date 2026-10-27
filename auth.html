@@ -3,491 +3,467 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sign up or sign in — FUNAAB Marketplace</title>
-<meta name="description" content="Create your FUNAAB Marketplace account or sign in.">
-<meta name="theme-color" content="#022c21">
+<title>Create your KAMPZA account</title>
+<meta name="theme-color" content="#F4F4F4">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --deep:#04382a;
-  --emerald:#07553e;
-  --fresh:#2fbf71;
-  --fresh-soft:#d9f7e6;
-  --mint:#f4f7f5;
-  --ink:#08261d;
-  --muted:#4a6a5d;
-  --line:#d9e5de;
-  --ease:cubic-bezier(.22,.8,.24,1);
-  --display:"Bricolage Grotesque",system-ui,sans-serif;
-  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
-}
+:root{--or:#FF7628;--wh:#FFFFFF;--ch:#252525;--gr:#F4F4F4;--ln:rgba(37,37,37,.16);--mu:rgba(37,37,37,.66);--ease:cubic-bezier(.22,.8,.24,1);--f:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif}
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;font-family:var(--body);color:var(--ink);background:#02281d;line-height:1.6;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-svg{display:block}
-.icon{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-:focus-visible{outline:3px solid var(--fresh);outline-offset:3px;border-radius:8px}
-h1,h2{font-family:var(--display);line-height:1.08;margin:0;letter-spacing:-.02em}
+body{margin:0;font-family:var(--f);color:var(--ch);background:var(--gr);min-height:100dvh;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--or);outline-offset:2px;border-radius:10px}
+.ic{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.split{min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 
-/* ---------- Full-page split layout ---------- */
-.split{min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}
+/* form side */
+.formside{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px}
+.card{width:min(460px,100%);background:var(--wh);border-radius:24px;padding:28px 32px 26px;box-shadow:0 24px 60px -34px rgba(37,37,37,.35)}
+.logo{display:block;width:92px;height:auto;margin:0 auto 6px;mix-blend-mode:multiply}
+.scr{animation:rise .55s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+h1{margin:6px 0 0;font-size:clamp(1.45rem,5.6vw,1.75rem);line-height:1.18;font-weight:700;letter-spacing:-.02em;text-align:center}
+h1:focus{outline:none}
+.sub{margin:8px auto 18px;text-align:center;color:var(--mu);font-size:.9rem;line-height:1.5;max-width:36ch}
+.sub b{color:var(--ch);word-break:break-all}
+.f{margin-bottom:12px}
+.f label{display:block;font-weight:600;font-size:.82rem;margin-bottom:5px}
+.in{width:100%;height:46px;padding:0 14px;border-radius:12px;border:1.5px solid var(--ln);background:var(--wh);font-size:.95rem;transition:border-color .2s,box-shadow .2s}
+.in:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 4px rgba(255,118,40,.16)}
+.in.bad{border-color:var(--or);background:rgba(255,118,40,.05)}
+.e{display:block;min-height:0;font-size:.78rem;font-weight:500;margin-top:4px;color:var(--ch)}
+.e:not(:empty)::before{content:"⚠ ";color:var(--or)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.phone{display:grid;grid-template-columns:104px 1fr;gap:8px}
+.pw{position:relative}.pw .in{padding-right:48px}
+.eye{position:absolute;right:4px;top:3px;width:40px;height:40px;border:0;background:none;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--mu);font-size:20px}
+.eye:hover{color:var(--ch);background:var(--gr)}
+.meter{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:7px}
+.meter i{height:4px;border-radius:2px;background:var(--ln);transition:background .25s}
+.meter.s1 i:nth-child(-n+1),.meter.s2 i:nth-child(-n+2),.meter.s3 i:nth-child(-n+3),.meter.s4 i{background:var(--or)}
+.hint{font-size:.76rem;color:var(--mu);margin-top:4px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;line-height:1.45;margin:4px 0 12px;font-weight:500}
+.chk input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--or);flex:none}
+.chk a,.lk{color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.lk{background:none;border:0;padding:4px 0;cursor:pointer;font-size:.85rem}
+.lk:disabled{color:var(--mu);text-decoration:none;cursor:not-allowed}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 0 14px}
+.row .chk{margin:0}
+.note{padding:10px 12px;border-radius:12px;font-size:.84rem;font-weight:500;margin-bottom:12px;background:var(--gr);border-left:4px solid var(--ch)}
+.note.err{border-left-color:var(--or);background:rgba(255,118,40,.1)}
+.btn{position:relative;width:100%;min-height:50px;border:0;border-radius:999px;background:var(--or);color:#fff;font-weight:600;font-size:1rem;cursor:pointer;box-shadow:0 14px 26px -14px rgba(255,118,40,.8);transition:transform .25s var(--ease),box-shadow .25s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.7;cursor:not-allowed;transform:none}
+.btn.ld{color:transparent}
+.btn.ld::after{content:"";position:absolute;inset:0;margin:auto;width:20px;height:20px;border-radius:50%;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.or{display:flex;align-items:center;gap:12px;color:var(--mu);font-size:.72rem;font-weight:600;letter-spacing:.08em;margin:16px 0 12px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--ln)}
+.soc{display:flex;justify-content:center;gap:18px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.sb{display:flex;align-items:center;justify-content:center;width:56px;height:56px;padding:0;border-radius:50%;border:1.5px solid var(--ln);background:#fff;font-weight:600;font-size:.92rem;cursor:pointer;transition:background .2s,transform .25s var(--ease)}
+.sb:hover{background:var(--gr);transform:translateY(-1px)}
+.sb:disabled{opacity:.6;cursor:not-allowed}
+.sb svg{width:26px;height:26px}
+.sw{text-align:center;font-size:.86rem;color:var(--mu);margin:16px 0 0}
+.ctr{display:block;text-align:center;margin:12px auto 0}
+.otp{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:4px 0 8px}
+.otp input{width:100%;min-width:0;height:56px;text-align:center;font-size:1.4rem;font-weight:700;border-radius:12px;border:1.5px solid var(--ln);background:#fff;padding:0}
+.otp input:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 4px rgba(255,118,40,.16)}
+.otp.bad input{border-color:var(--or)}
+.ok{width:84px;height:84px;margin:6px auto 12px;border-radius:50%;background:var(--or);display:grid;place-items:center;color:#fff;font-size:42px;animation:pop .6s var(--ease) both}
+.ok .ic{stroke-width:2.6}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+h1 em{font-style:normal;color:var(--or)}
+.tag{margin:16px 0 0;text-align:center;font-size:.8rem;color:var(--mu);font-weight:500}
+.foot{margin-top:16px;font-size:.78rem;color:var(--mu);text-align:center}
 
-/* left: brand panel */
-.aside{color:#fff;display:flex;flex-direction:column;padding:32px 56px 48px;background:
-  radial-gradient(700px 480px at 90% 10%,rgba(47,191,113,.24),transparent 65%),
-  radial-gradient(600px 460px at 0% 100%,rgba(10,107,75,.75),transparent 70%),
-  linear-gradient(160deg,var(--deep) 0%,#02281d 100%)}
-.aside-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:1.12rem;letter-spacing:-.02em}
-.logo-img{width:36px;height:36px;object-fit:contain;display:block;flex:none}
-.back{padding:8px 16px;border-radius:999px;font-weight:500;font-size:.92rem;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);transition:background .25s}
-.back:hover{background:rgba(255,255,255,.18)}
-.aside-mid{margin-block:auto;padding:48px 0}
-.aside-mid h2{font-size:clamp(2.3rem,3.8vw,3.5rem);font-weight:800;max-width:13ch}
-.aside-mid p{font-weight:600;font-size:1.1rem;max-width:40ch;margin:18px 0 30px;color:rgba(255,255,255,.84)}
-.points{list-style:none;margin:0;padding:0;display:grid;gap:14px}
-.points li{display:flex;gap:12px;align-items:flex-start;font-weight:600;color:rgba(255,255,255,.9)}
-.points .icon{width:22px;height:22px;flex:none;color:var(--fresh);stroke-width:2;margin-top:2px}
+/* brand side */
+.brand{position:relative;overflow:hidden;background:var(--ch);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:56px 48px;isolation:isolate}
+.brand svg.c{position:absolute;z-index:-1;width:62%;height:auto}
+.brand .tl{top:0;left:0}.brand .br{bottom:0;right:0}
+.brand h2{margin:0;font-size:clamp(2rem,3.4vw,3rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;max-width:12ch}
+.brand h2 em{font-style:normal;color:var(--or)}
+.brand p{margin:14px 0 0;color:rgba(255,255,255,.85);max-width:34ch}
+.brand img{width:min(100%,460px);margin:28px auto 0;display:block;-webkit-mask-image:linear-gradient(#000 85%,transparent);mask-image:linear-gradient(#000 85%,transparent)}
+.brand .tg{margin-top:18px;font-weight:600;color:var(--or);text-align:center}
 
-/* right: form panel */
-.panel{background:#fff;color:var(--ink);display:flex;flex-direction:column;padding:40px 32px 24px}
-.panel-in{width:min(420px,100%);margin:auto;animation:rise .7s var(--ease) both}
-@keyframes rise{from{opacity:0;transform:translate3d(0,18px,0)}to{opacity:1;transform:none}}
-.panel h1{font-size:clamp(1.5rem,5vw,1.95rem);font-weight:800;color:var(--deep)}
-.sub{margin:6px 0 0;color:var(--muted);font-size:.92rem;line-height:1.5;font-weight:600}
-
-.tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);margin:16px 0 16px}
-.tabs button{font:inherit;font-size:.93rem;font-weight:700;padding:9px 0;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;color:var(--muted);cursor:pointer;transition:color .25s,border-color .25s}
-.tabs button[aria-pressed="true"]{color:var(--deep);border-bottom-color:var(--deep)}
-
-.btn-google{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:#fff;font:inherit;font-weight:700;font-size:.9rem;color:var(--deep);cursor:pointer;transition:background .25s,transform .3s var(--ease)}
-.btn-google:hover{background:var(--mint);transform:translateY(-2px)}
-.btn-google svg{width:18px;height:18px;flex:none}
-.or{display:flex;align-items:center;gap:12px;font-weight:600;color:var(--muted);font-size:.8rem;margin:14px 0}
-.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
-
-.field{display:grid;gap:5px;margin-bottom:12px}
-.field label{font-weight:700;font-size:.84rem;color:var(--deep)}
-.input{width:100%;height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font:inherit;font-weight:600;font-size:.95rem;color:var(--ink);transition:border-color .2s,box-shadow .2s}
-.input::placeholder{color:#8aa397;font-weight:500}
-.input:focus{outline:none;border-color:var(--emerald);box-shadow:0 0 0 4px var(--fresh-soft)}
-.pw{position:relative}
-.pw .input{padding-right:46px}
-.eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;border-radius:50%;background:none;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
-.eye:hover{color:var(--deep);background:var(--mint)}
-.eye .icon{width:19px;height:19px}
-.hint{color:var(--muted);font-size:.78rem;font-weight:600}
-
-.row{display:flex;justify-content:flex-end;margin:-4px 0 12px}
-.link{background:none;border:0;padding:4px 0;font:inherit;font-weight:600;font-size:.85rem;color:var(--emerald);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.link:disabled{opacity:.6;cursor:not-allowed;text-decoration:none}
-.link.center{display:block;margin:16px auto 0}
-
-.check{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;font-weight:600;color:var(--muted);margin:2px 0 14px;line-height:1.5}
-.check input{width:18px;height:18px;flex:none;margin:2px 0 0;accent-color:var(--emerald)}
-.check a{color:var(--emerald);font-weight:700;text-decoration:underline;text-underline-offset:3px}
-
-.note{padding:10px 12px;border-radius:12px;font-weight:600;font-size:.84rem;margin-bottom:14px}
-.note.error{background:#fdecea;color:#8a1c14;border:1px solid #f5c2bd}
-.note.ok{background:var(--fresh-soft);color:var(--deep);border:1px solid #b6e8cc}
-
-.submit{width:100%;padding:12px 24px;border:0;border-radius:999px;background:var(--deep);color:#fff;font:inherit;font-weight:700;font-size:.93rem;cursor:pointer;box-shadow:0 14px 30px -14px rgba(4,56,42,.7);transition:transform .3s var(--ease),box-shadow .3s var(--ease),opacity .2s}
-.submit:hover{transform:translateY(-3px);box-shadow:0 20px 36px -14px rgba(4,56,42,.8)}
-.submit:active{transform:translateY(0) scale(.98)}
-.submit:disabled,.btn-google:disabled{opacity:.6;cursor:wait;transform:none}
-
-.other{margin:18px 0 0;text-align:center;color:var(--muted);font-size:.86rem;font-weight:600}
-.credit{margin:22px 0 0;text-align:center;font-size:.8rem;font-weight:600;color:var(--muted)}
-
-/* ---------- Responsive ---------- */
-@media (max-width:900px){
-  /* No more html{font-size:93.75%}: it shrank every rem value on the page. */
-  .split{display:flex;flex-direction:column}
-  .aside{padding:14px 20px 48px}
-  .aside-mid{display:none}
-  .logo{gap:10px;font-size:clamp(1.05rem,4.6vw,1.2rem)}
-  .logo-img{width:40px;height:40px}
-
-  .panel{flex:1;position:relative;margin-top:-28px;border-radius:28px 28px 0 0;padding:28px clamp(18px,5.5vw,32px) 20px}
-  /* top-aligned so the title doesn't jump when switching Sign up / Sign in */
-  .panel-in{width:min(440px,100%);margin:0 auto auto}
-  .panel h1{font-size:clamp(1.65rem,7.4vw,2rem)}
-  .sub{font-size:1rem;margin-top:8px}
-
-  .tabs{margin:18px 0}
-  .tabs button{font-size:1rem;padding:12px 0}
-
-  .btn-google{min-height:50px;padding:0 18px;gap:12px;font-size:1rem}
-  .btn-google svg{width:20px;height:20px}
-  .or{font-size:.875rem;margin:16px 0}
-
-  .field{gap:7px;margin-bottom:14px}
-  .field label{font-size:.9375rem}
-  .input{height:50px;padding:0 16px;border-radius:14px;font-size:1rem}   /* 16px = no iOS zoom-on-focus */
-  .pw .input{padding-right:54px}
-  .eye{width:44px;height:44px;right:3px}
-  .eye .icon{width:22px;height:22px}
-  .hint{font-size:.875rem}
-
-  .row{margin:-6px 0 12px}
-  .link{font-size:.9375rem;padding:8px 0}
-  .check{gap:12px;font-size:.9rem;margin:4px 0 16px}
-  .check input{width:20px;height:20px;margin:2px 0 0}
-  .note{font-size:.9rem;padding:12px 14px}
-
-  .submit{min-height:52px;padding:0 24px;font-size:1.0625rem}
-  .other{font-size:.9rem;margin-top:18px}
-  .credit{font-size:.875rem;margin-top:20px}
+@media(max-width:900px){
+  .split{display:block}.brand{display:none}
+  .formside{justify-content:flex-start;padding:calc(env(safe-area-inset-top,0px) + 14px) 14px calc(env(safe-area-inset-bottom,0px) + 18px);min-height:100dvh}
+  .card{box-shadow:none;border-radius:24px;padding:20px 18px 22px;margin-bottom:auto}
+  .logo{width:84px}
+  .in{height:50px;font-size:1rem}
+  .btn{min-height:54px}
 }
-@media (prefers-reduced-motion:reduce){.panel-in{animation:none}.submit,.btn-google{transition:none}}
+@media(max-width:400px){.two{grid-template-columns:1fr}.phone{grid-template-columns:96px 1fr}.otp{gap:6px}.otp input{height:52px}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
 </style>
 </head>
 <body>
-
-<!-- Icon sprite -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
-  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.1A9.8 9.8 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6C3.7 8.4 2 12 2 12s3.5 7 10 7c1.7 0 3.2-.4 4.5-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
+  <symbol id="eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="eyeoff" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.1A9.8 9.8 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6C3.7 8.4 2 12 2 12s3.5 7 10 7c1.7 0 3.2-.4 4.5-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+  <symbol id="ck" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
+  <symbol id="cv" viewBox="0 0 100 36"><path d="M0 0H55C42 8 16 20 0 36Z" fill="#FF7628"/></symbol>
+  <symbol id="cb" viewBox="0 0 100 36"><path d="M100 0V36H30C62 32 88 20 100 0Z" fill="#FF7628"/></symbol>
+  <symbol id="gg" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.7 1.2 9.2 3.6l6.9-6.9C35.9 2.4 30.5 0 24 0 14.6 0 6.5 5.4 2.6 13.2l8 6.2C12.4 13.7 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M47 24.6c0-1.6-.1-3.1-.4-4.6H24v9h12.9c-.6 3-2.3 5.5-4.8 7.2l7.7 6c4.5-4.2 7.1-10.4 7.1-17.6z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.5-.8-3-.8-4.6s.3-3.1.8-4.6l-8-6.2C.9 16.5 0 20.1 0 24s.9 7.5 2.6 10.8l7.9-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.2 1.4-4.9 2.3-8.2 2.3-6.3 0-11.6-4.2-13.5-9.9l-8 6.2C6.5 42.6 14.6 48 24 48z"/></symbol>
+  <symbol id="fb" viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></symbol>
 </svg>
 
 <div class="split">
+<main class="formside"><div class="card">
+  <img class="logo" src="kampza-logo.png" alt="KAMPZA" width="92" height="84">
 
-  <aside class="aside">
-    <div class="aside-top">
-      <a class="logo" href="index.html" aria-label="FUNAAB Marketplace home">
-        <img class="logo-img" src="1001047956-removebg-preview.png" alt="" width="36" height="36">
-        FUNAAB Marketplace
-      </a>
-    </div>
-    <div class="aside-mid">
-      <h2 id="asideTitle"></h2>
-      <p id="asideLead"></p>
-      <ul class="points" id="points"></ul>
-    </div>
-  </aside>
-
-  <main class="panel">
-    <div class="panel-in">
-
-      <h1 id="title"></h1>
-      <p class="sub" id="sub"></p>
-
-      <div class="tabs" id="tabs" role="group" aria-label="Sign in or sign up">
-        <button type="button" data-mode="signup" aria-pressed="true">Sign up</button>
-        <button type="button" data-mode="signin" aria-pressed="false">Sign in</button>
+  <!-- 1 SIGN UP -->
+  <section class="scr" data-s="signup" aria-labelledby="h-signup">
+    <h1 id="h-signup" tabindex="-1">Create your KAMPZA account</h1>
+    <p class="sub">Discover products you love and enjoy a simpler shopping experience.</p>
+    <div class="note err" id="n-signup" role="alert" hidden></div>
+    <form id="f-signup" novalidate>
+      <div class="two">
+        <div class="f"><label for="fn">First name</label><input class="in" id="fn" autocomplete="given-name"><span class="e" id="e-fn"></span></div>
+        <div class="f"><label for="ln">Last name</label><input class="in" id="ln" autocomplete="family-name"><span class="e" id="e-ln"></span></div>
       </div>
+      <div class="f"><label for="em">Email address</label><input class="in" id="em" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com"><span class="e" id="e-em"></span></div>
+      <div class="f"><label for="ph">Phone number</label>
+        <div class="phone"><select class="in" id="cc" aria-label="Country code"><option value="+234">🇳🇬 +234</option><option value="+233">🇬🇭 +233</option><option value="+254">🇰🇪 +254</option><option value="+27">🇿🇦 +27</option><option value="+44">🇬🇧 +44</option><option value="+1">🇺🇸 +1</option><option value="+971">🇦🇪 +971</option></select>
+        <input class="in" id="ph" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="801 234 5678"></div><span class="e" id="e-ph"></span></div>
+      <div class="f"><label for="pw1">Password</label><div class="pw"><input class="in" id="pw1" type="password" autocomplete="new-password" placeholder="Create a password"><button type="button" class="eye" data-eye="pw1" aria-label="Show password"><svg class="ic"><use href="#eye"/></svg></button></div>
+        <div class="meter" id="meter" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="hint" id="pwhint">At least 8 characters, with a letter and a number.</div><span class="e" id="e-pw1"></span></div>
+      <div class="f"><label for="pw2">Confirm password</label><div class="pw"><input class="in" id="pw2" type="password" autocomplete="new-password" placeholder="Repeat your password"><button type="button" class="eye" data-eye="pw2" aria-label="Show password"><svg class="ic"><use href="#eye"/></svg></button></div><span class="e" id="e-pw2"></span></div>
+      <label class="chk"><input type="checkbox" id="agree"><span>I agree to the <a data-terms target="_blank" rel="noopener" href="#">Terms of Service</a> and <a data-privacy target="_blank" rel="noopener" href="#">Privacy Policy</a>.</span></label><span class="e" id="e-agree" style="margin:-8px 0 10px"></span>
+      <button class="btn" type="submit">Create Account</button>
+    </form>
+    <div class="or">OR CONTINUE WITH</div>
+    <div class="soc"><button class="sb" data-oauth="google" type="button" title="Continue with Google"><svg><use href="#gg"/></svg><span class="sr">Continue with Google</span></button><button class="sb" data-oauth="facebook" type="button" title="Continue with Facebook"><svg><use href="#fb"/></svg><span class="sr">Continue with Facebook</span></button></div>
+    <p class="sw">Already have an account? <button class="lk" data-go="signin" type="button">Log In</button></p>
+  </section>
 
-      <div data-modes="signin signup">
-        <button type="button" class="btn-google" id="googleBtn">
-          <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-          Continue with Google
-        </button>
-        <div class="or">or use your email</div>
-      </div>
+  <!-- 2 SIGN IN -->
+  <section class="scr" data-s="signin" hidden aria-labelledby="h-signin">
+    <h1 id="h-signin" tabindex="-1">Welcome back!</h1>
+    <p class="sub">Sign in to continue your KAMPZA experience.</p>
+    <div class="note" id="n-signin" role="alert" hidden></div>
+    <form id="f-signin" novalidate>
+      <div class="f"><label for="sem">Email address</label><input class="in" id="sem" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com"><span class="e" id="e-sem"></span></div>
+      <div class="f"><label for="spw">Password</label><div class="pw"><input class="in" id="spw" type="password" autocomplete="current-password" placeholder="Enter your password"><button type="button" class="eye" data-eye="spw" aria-label="Show password"><svg class="ic"><use href="#eye"/></svg></button></div><span class="e" id="e-spw"></span></div>
+      <div class="row"><label class="chk"><input type="checkbox" id="remember" checked><span>Remember me</span></label><button class="lk" type="button" data-go="forgot">Forgot Password?</button></div>
+      <button class="btn" type="submit">Sign In</button>
+    </form>
+    <div class="or">OR CONTINUE WITH</div>
+    <div class="soc"><button class="sb" data-oauth="google" type="button" title="Continue with Google"><svg><use href="#gg"/></svg><span class="sr">Continue with Google</span></button><button class="sb" data-oauth="facebook" type="button" title="Continue with Facebook"><svg><use href="#fb"/></svg><span class="sr">Continue with Facebook</span></button></div>
+    <p class="sw">Don't have an account? <button class="lk" data-go="signup" type="button">Create Account</button></p>
+  </section>
 
-      <form id="form" novalidate>
+  <!-- 3 VERIFY ACCOUNT -->
+  <section class="scr" data-s="verify" hidden aria-labelledby="h-verify">
+    <h1 id="h-verify" tabindex="-1">Verify Your Account</h1>
+    <p class="sub">We've sent a verification code to your registered email address (<b class="mail"></b>). Enter the code below to continue.</p>
+    <div class="note" id="n-verify" role="alert" hidden></div>
+    <form id="f-verify" novalidate><div class="otp" id="otp-verify" role="group" aria-label="Verification code"></div><span class="e" id="e-verify"></span>
+      <button class="btn" type="submit" style="margin-top:10px">Verify Account</button></form>
+    <button class="lk ctr" id="rs-verify" type="button">Resend Code</button>
+    <button class="lk ctr" data-go="signup" type="button">Wrong email? Go back and correct it</button>
+  </section>
 
-        <div class="field" data-modes="signup">
-          <label for="fullName">Full name</label>
-          <input class="input" id="fullName" name="fullName" type="text" autocomplete="name" placeholder="Your full name" required>
-        </div>
+  <!-- 4 FORGOT -->
+  <section class="scr" data-s="forgot" hidden aria-labelledby="h-forgot">
+    <h1 id="h-forgot" tabindex="-1">Forgot Your Password?</h1>
+    <p class="sub">Don't worry. We'll help you securely recover access to your account.</p>
+    <div class="note" id="n-forgot" role="alert" hidden></div>
+    <form id="f-forgot" novalidate>
+      <div class="f"><label for="fem">Email address</label><input class="in" id="fem" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com"><span class="e" id="e-fem"></span></div>
+      <button class="btn" type="submit">Send Verification Code</button>
+    </form>
+    <button class="lk ctr" data-go="signin" type="button">Back to Sign In</button>
+  </section>
 
-        <div class="field" data-modes="signin signup reset">
-          <label for="email">Email</label>
-          <input class="input" id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
-        </div>
+  <!-- 5 RECOVERY VERIFY -->
+  <section class="scr" data-s="recover" hidden aria-labelledby="h-recover">
+    <h1 id="h-recover" tabindex="-1">Verify Password Recovery</h1>
+    <p class="sub">Enter the code sent to your registered email address to securely reset your password.</p>
+    <div class="note" id="n-recover" role="alert" hidden></div>
+    <form id="f-recover" novalidate><div class="otp" id="otp-recover" role="group" aria-label="Recovery code"></div><span class="e" id="e-recover"></span>
+      <button class="btn" type="submit" style="margin-top:10px">Verify Code</button></form>
+    <button class="lk ctr" id="rs-recover" type="button">Resend Code</button>
+    <button class="lk ctr" data-go="signin" type="button">Back to Sign In</button>
+  </section>
 
-        <div class="field" data-modes="signin signup update">
-          <label for="password" id="pwLabel">Password</label>
-          <div class="pw">
-            <input class="input" id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
-            <button type="button" class="eye" id="eye" aria-label="Show password" aria-pressed="false"><svg class="icon" aria-hidden="true"><use id="eyeUse" href="#i-eye"/></svg></button>
-          </div>
-          <span class="hint" data-modes="signup update">Use at least 8 characters.</span>
-        </div>
+  <!-- 6 RESET -->
+  <section class="scr" data-s="reset" hidden aria-labelledby="h-reset">
+    <h1 id="h-reset" tabindex="-1">Create a New Password</h1>
+    <p class="sub">Choose a strong password to secure your KAMPZA account.</p>
+    <div class="note" id="n-reset" role="alert" hidden></div>
+    <form id="f-reset" novalidate>
+      <div class="f"><label for="rp1">New password</label><div class="pw"><input class="in" id="rp1" type="password" autocomplete="new-password"><button type="button" class="eye" data-eye="rp1" aria-label="Show password"><svg class="ic"><use href="#eye"/></svg></button></div><div class="meter" id="meter2" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="hint">At least 8 characters, with a letter and a number.</div><span class="e" id="e-rp1"></span></div>
+      <div class="f"><label for="rp2">Confirm new password</label><div class="pw"><input class="in" id="rp2" type="password" autocomplete="new-password"><button type="button" class="eye" data-eye="rp2" aria-label="Show password"><svg class="ic"><use href="#eye"/></svg></button></div><span class="e" id="e-rp2"></span></div>
+      <button class="btn" type="submit">Reset Password</button>
+    </form>
+  </section>
 
-        <div class="row" data-modes="signin">
-          <button type="button" class="link" id="forgot">Forgot password?</button>
-        </div>
+  <!-- 7 READY -->
+  <section class="scr" data-s="ready" hidden aria-labelledby="h-ready" style="text-align:center">
+    <div class="ok" aria-hidden="true"><svg class="ic"><use href="#ck"/></svg></div>
+    <h1 id="h-ready" tabindex="-1">You're <em>All Set!</em></h1>
+    <p class="sub">Welcome to KAMPZA. Your next great find is waiting.</p>
+    <button class="btn" id="home" type="button">Continue to KAMPZA</button>
+  </section>
 
-        <label class="check" data-modes="signup">
-          <input type="checkbox" id="terms" required>
-          <span>I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>.</span>
-        </label>
+  <p class="tag">Find It. Get It. Love It.</p>
+</div></main>
 
-        <div class="note" id="note" role="status" aria-live="polite" hidden></div>
-
-        <button class="submit" id="submit" type="submit"><span id="submitLabel">Create account</span></button>
-
-        <button type="button" class="link center" id="resend" hidden>Resend confirmation email</button>
-        <button type="button" class="link center" id="backToSignin" data-modes="reset">Back to sign in</button>
-      </form>
-
-      <p class="other" data-modes="signin signup">Want to sell on campus? Create an account, then apply to become a vendor from inside the site.</p>
-
-    </div>
-    <p class="credit">Developed by PRIME</p>
-  </main>
-
+<aside class="brand" aria-hidden="true">
+  <svg class="c tl" viewBox="0 0 100 36"><use href="#cv"/></svg>
+  <svg class="c br" viewBox="0 0 100 36"><use href="#cb"/></svg>
+  <h2>Find What <em>You Love.</em></h2>
+  <p>Discover great products and a simpler way to shop.</p>
+  <img src="kampza-products.png" alt="" decoding="async">
+  <div class="tg">Find It. Get It. Love It.</div>
+</aside>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
 <script>
 (function(){
-  /* ============ CONFIG ============ */
-  var SUPABASE_URL='https://ikyqahzhtckpelzkmgyh.supabase.co';
-  var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlreXFhaHpodGNrcGVsemttZ3loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjI1MzUsImV4cCI6MjEwNDUzODUzNX0.keL7ynC_-ViGceD1tMvBsDMd9ejg5IzIPydyWiNZZvk';
-  // Full URL of THIS page on your live site, e.g. 'https://funaabmarketplace.com/auth.html'
-  // Leave '' to auto-detect (works on http(s) hosts and localhost, NOT when opened as a file).
-  var AUTH_PAGE_URL='';
-  // Everyone lands here after signing in. Vendors apply from inside the site.
-  var HOME='funaab-marketplace.html';
-  /* ================================== */
+/* ================= CONFIG ================= */
+var CFG={
+  URL:'YOUR_SUPABASE_URL',          // Supabase project URL
+  KEY:'YOUR_SUPABASE_ANON_KEY',     // public anon key (never the service_role key)
+  HOME:'index.html',                // existing KAMPZA homepage
+  TERMS:'terms.html', PRIVACY:'privacy.html',
+  COOLDOWN:60, LEN:6
+};
+/* ========================================== */
+var $=function(i){return document.getElementById(i)};
+var sections=[].slice.call(document.querySelectorAll('[data-s]'));
+var configured=CFG.URL.indexOf('YOUR_')!==0&&CFG.KEY.indexOf('YOUR_')!==0&&!!window.supabase;
+var rem=true;try{rem=localStorage.getItem('kz_rem')!=='0'}catch(e){}
+function mk(r){return configured?window.supabase.createClient(CFG.URL,CFG.KEY,{auth:{storage:r?localStorage:sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null}
+var sb=mk(rem);
+var ctx={};try{ctx=JSON.parse(sessionStorage.getItem('kz_ctx')||'{}')}catch(e){}
+function save(){try{sessionStorage.setItem('kz_ctx',JSON.stringify({email:ctx.email,purpose:ctx.purpose}))}catch(e){}}
+document.querySelector('[data-terms]').href=CFG.TERMS;document.querySelector('[data-privacy]').href=CFG.PRIVACY;
 
-  var params=new URLSearchParams(location.search);
-  var configured=SUPABASE_URL.indexOf('YOUR_')!==0 && SUPABASE_ANON_KEY.indexOf('YOUR_')!==0;
-  var sb=(configured&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+/* ---------- helpers ---------- */
+function busy(b,on){b.disabled=on;b.classList.toggle('ld',on)}
+function note(id,t,type){var e=$('n-'+id);if(!t){e.hidden=true;return}e.className='note'+(type==='ok'?'':' err');e.textContent=t;e.hidden=false}
+function fe(id,t){var e=$('e-'+id);if(e)e.textContent=t||'';var i=$(id);if(i&&i.classList)i.classList.toggle('bad',!!t)}
+var EMAIL=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function strength(p){var s=0;if(p.length>=8)s++;if(/[a-z]/i.test(p)&&/\d/.test(p))s++;if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;if(/[^A-Za-z0-9]/.test(p)||p.length>=12)s++;return p?Math.max(1,s):0}
+function meter(el,p){el.className='meter'+(p?' s'+strength(p):'')}
+function pwOk(p){return p.length>=8&&/[a-z]/i.test(p)&&/\d/.test(p)}
+function goHome(){location.href=CFG.HOME}
+function hosted(n){if(location.protocol==='file:'){note(n,'Open this page from your website or localhost (not as a local file) so authentication can work.');return false}return true}
+function cfgMissing(n){if(!configured){note(n,'Authentication is not connected yet. Add your Supabase URL and anon key in the CONFIG block at the top of this file’s script.');return true}return false}
+function friendly(e){
+  var m=(e&&e.message)||'',c=(e&&e.code)||'';
+  if(/invalid login/i.test(m))return'Incorrect email or password.';
+  if(c==='email_not_confirmed'||/not confirmed/i.test(m))return'UNVERIFIED';
+  if(/token.*(expired|invalid)|expired|invalid.*token|otp/i.test(m))return'The verification code is invalid or expired.';
+  if(/rate limit|security purposes|too many/i.test(m)||/over_/.test(c))return'Too many attempts. Please wait a minute and try again.';
+  if(/failed to fetch|network/i.test(m))return'Network problem. Check your connection and try again.';
+  if(/provider.*(not enabled|disabled)|unsupported provider/i.test(m))return'This sign-in method is not enabled yet. Enable the provider in your Supabase dashboard.';
+  if(/same password/i.test(m))return'Choose a password different from your current one.';
+  if(/session/i.test(m)&&/missing|expired/i.test(m))return'Your recovery session expired. Please request a new code.';
+  return'Something went wrong. Please try again.';
+}
+/* password toggles */
+document.querySelectorAll('[data-eye]').forEach(function(b){
+  b.addEventListener('pointerdown',function(e){e.preventDefault()});
+  b.addEventListener('click',function(){var i=$(b.dataset.eye),s=i.type==='password';i.type=s?'text':'password';b.setAttribute('aria-label',s?'Hide password':'Show password');b.firstChild.nextSibling&&0;b.querySelector('use').setAttribute('href',s?'#eyeoff':'#eye')});
+});
+$('pw1').addEventListener('input',function(){meter($('meter'),this.value)});
+$('rp1').addEventListener('input',function(){meter($('meter2'),this.value)});
 
-  var $=function(id){return document.getElementById(id)};
-  var form=$('form'),note=$('note'),pw=$('password'),submitBtn=$('submit'),googleBtn=$('googleBtn'),resendBtn=$('resend');
-  var mode=params.get('mode');
-  mode=(mode==='signin'||mode==='update')?mode:'signup';
-  var pendingEmail='';
-
-  var COPY={
-    signin:['Welcome back','Sign in to keep shopping from your campus.','Sign in'],
-    signup:['Create your account','Shop from trusted vendors in your university community.','Create account'],
-    reset:['Reset your password','Enter your email and we will send you a reset link.','Send reset link'],
-    update:['Set a new password','Choose a new password for your account.','Update password']
-  };
-  var ASIDE={
-    title:'Everything you need, delivered to you.',
-    lead:'One account to shop from trusted vendors and, when you are ready, to open your own store.',
-    points:['Food, fashion, gadgets, books and more','Every vendor is reviewed before they sell','Get your order by delivery or pickup']
-  };
-
-  function showNote(type,text){
-    note.className='note '+(type==='error'?'error':'ok');
-    note.textContent=text;
-    note.hidden=false;
-  }
-  function clearNote(){note.hidden=true;note.textContent='';resendBtn.hidden=true}
-
-  function render(){
-    var c=COPY[mode];
-    $('title').textContent=c[0];
-    $('sub').textContent=c[1];
-    $('submitLabel').textContent=c[2];
-    $('asideTitle').textContent=ASIDE.title;
-    $('asideLead').textContent=ASIDE.lead;
-    $('points').innerHTML=ASIDE.points.map(function(t){return '<li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>'+t+'</li>'}).join('');
-    document.title=c[0]+' — FUNAAB Marketplace';
-
-    document.querySelectorAll('#tabs button').forEach(function(b){
-      b.setAttribute('aria-pressed',b.dataset.mode===mode);
-    });
-    var authMode=(mode==='signin'||mode==='signup');
-    $('tabs').hidden=!authMode;
-
-    document.querySelectorAll('[data-modes]').forEach(function(el){
-      var show=el.dataset.modes.split(' ').indexOf(mode)>-1;
-      el.hidden=!show;
-      el.querySelectorAll('input,select').forEach(function(i){i.disabled=!show});
-    });
-
-    $('pwLabel').textContent=(mode==='update')?'New password':'Password';
-    pw.autocomplete=(mode==='signin')?'current-password':'new-password';
-    pw.placeholder=(mode==='signin')?'Enter your password':'Create a password';
-    if(mode==='signin')pw.removeAttribute('minlength');else pw.setAttribute('minlength','8');
-
-    // keep location.hash so Supabase can still read the OAuth / recovery tokens
-    if(authMode&&window.history&&history.replaceState&&location.protocol!=='file:'){
-      history.replaceState(null,'','?mode='+mode+location.hash);
-    }
-  }
-
-  document.querySelectorAll('#tabs button').forEach(function(b){
-    b.addEventListener('click',function(){mode=b.dataset.mode;clearNote();render()});
+/* ---------- OTP ---------- */
+function otp(root){
+  var L=CFG.LEN,ins=[];
+  for(var i=0;i<L;i++){var x=document.createElement('input');x.type='text';x.inputMode='numeric';x.pattern='[0-9]*';x.autocomplete=i?'off':'one-time-code';x.setAttribute('aria-label','Digit '+(i+1)+' of '+L);root.appendChild(x);ins.push(x)}
+  function fill(s){s=String(s).replace(/\D/g,'').slice(0,L);ins.forEach(function(y,j){y.value=s[j]||''});ins[Math.min(s.length,L-1)].focus()}
+  ins.forEach(function(x,i){
+    x.addEventListener('input',function(){var v=x.value.replace(/\D/g,'');if(v.length>1){fill(v);return}x.value=v;if(v&&i<L-1)ins[i+1].focus()});
+    x.addEventListener('keydown',function(e){
+      if(e.key==='Backspace'&&!x.value&&i>0){ins[i-1].value='';ins[i-1].focus();e.preventDefault()}
+      else if(e.key==='ArrowLeft'&&i>0){ins[i-1].focus();e.preventDefault()}
+      else if(e.key==='ArrowRight'&&i<L-1){ins[i+1].focus();e.preventDefault()}});
+    x.addEventListener('paste',function(e){e.preventDefault();fill((e.clipboardData||window.clipboardData).getData('text'))});
+    x.addEventListener('focus',function(){x.select()});
   });
-  $('forgot').addEventListener('click',function(){mode='reset';clearNote();render()});
-  $('backToSignin').addEventListener('click',function(){mode='signin';clearNote();render()});
+  return{val:function(){return ins.map(function(y){return y.value}).join('')},clear:function(){ins.forEach(function(y){y.value=''});ins[0].focus()},bad:function(b){root.classList.toggle('bad',b)}};
+}
+var O={verify:otp($('otp-verify')),recover:otp($('otp-recover'))};
+var timers={};
+function cool(k){var b=$('rs-'+k),left=CFG.COOLDOWN;clearInterval(timers[k]);b.disabled=true;b.textContent='Resend code in '+left+'s';
+  timers[k]=setInterval(function(){left--;if(left<=0){clearInterval(timers[k]);b.disabled=false;b.textContent='Resend Code'}else b.textContent='Resend code in '+left+'s'},1000)}
 
-  // Password reveal
-  var eye=$('eye'),eyeUse=$('eyeUse');
-  eye.addEventListener('pointerdown',function(e){e.preventDefault()}); // keep keyboard open on phones
-  eye.addEventListener('click',function(){
-    var show=pw.type==='password';
-    pw.type=show?'text':'password';
-    eye.setAttribute('aria-label',show?'Hide password':'Show password');
-    eye.setAttribute('aria-pressed',show);
-    eyeUse.setAttribute('href',show?'#i-eye-off':'#i-eye');
-  });
+/* ---------- routing ---------- */
+function go(n){if(location.hash==='#'+n)route();else location.hash='#'+n}
+function route(){
+  var n=(location.hash||'#signup').slice(1);
+  if(!document.querySelector('[data-s="'+n+'"]'))n='signup';
+  if(n==='verify'&&!(ctx.email&&ctx.purpose==='signup'))n='signup';
+  if(n==='recover'&&!(ctx.email&&ctx.purpose==='recovery'))n='forgot';
+  if(n==='reset'&&!ctx.recovered)n=(ctx.email&&ctx.purpose==='recovery')?'recover':'forgot';
+  if(n==='ready'&&!ctx.ready)n='signup';
+  if(location.hash!=='#'+n)history.replaceState(null,'','#'+n);
+  sections.forEach(function(s){var on=s.dataset.s===n;s.hidden=!on;if(on){s.style.animation='none';void s.offsetWidth;s.style.animation=''}});
+  Object.keys(timers).forEach(function(k){if(k!==n){clearInterval(timers[k]);var b=$('rs-'+k);if(b){b.disabled=false;b.textContent='Resend Code'}}});
+  document.querySelectorAll('.mail').forEach(function(m){m.textContent=ctx.email||''});
+  var T={signup:'Create your KAMPZA account',signin:'Sign in',verify:'Verify your account',forgot:'Forgot password',recover:'Verify password recovery',reset:'Create a new password',ready:'You’re all set'};
+  document.title=T[n]+' — KAMPZA';
+  var h=$('h-'+n);if(h){h.focus({preventScroll:true})}window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+document.addEventListener('click',function(e){var g=e.target.closest('[data-go]');if(g){e.preventDefault();var d=g.dataset.go;['signup','signin','forgot'].forEach(function(s){note(s,'')});go(d)}});
+$('home').addEventListener('click',goHome);
 
-  function setLoading(on){
-    submitBtn.disabled=on;googleBtn.disabled=on;
-    if(on){$('submitLabel').textContent='Please wait...'}else{render()}
+/* ---------- sign up ---------- */
+$('f-signup').addEventListener('submit',async function(ev){
+  ev.preventDefault();note('signup','');
+  var fn=$('fn').value.trim(),ln=$('ln').value.trim(),em=$('em').value.trim().toLowerCase(),ph=$('ph').value.replace(/[\s\-()]/g,'').replace(/^0+/,''),p1=$('pw1').value,p2=$('pw2').value,bad=false;
+  function chk(id,c,t){fe(id,c?'':t);if(!c)bad=true}
+  chk('fn',fn,'Please enter your first name.');chk('ln',ln,'Please enter your last name.');
+  chk('em',EMAIL.test(em),'Please enter a valid email address.');
+  chk('ph',/^\d{7,12}$/.test(ph),'Please enter a valid phone number.');
+  chk('pw1',pwOk(p1),'Use at least 8 characters with a letter and a number.');
+  chk('pw2',p1===p2&&p2,'Passwords do not match.');
+  chk('agree',$('agree').checked,'Please accept the Terms of Service and Privacy Policy.');
+  if(bad)return;
+  if(cfgMissing('signup')||!hosted('signup'))return;
+  var b=ev.submitter||this.querySelector('.btn');busy(b,true);
+  try{
+    var phone=$('cc').value+ph;
+    var r=await sb.auth.signUp({email:em,password:p1,options:{data:{first_name:fn,last_name:ln,full_name:fn+' '+ln,phone:phone,role:'customer'}}});
+    if(r.error)throw r.error;
+    if(r.data.user&&r.data.user.identities&&r.data.user.identities.length===0){note('signup','An account with this email already exists. Please log in instead.');return}
+    ctx={email:em,purpose:'signup'};save();
+    if(r.data.session){ctx.ready=true;go('ready');return}   /* only when the project has email confirmation switched off */
+    O.verify.clear();go('verify');cool('verify');
+  }catch(e){console.error(e);var f=friendly(e);note('signup',f==='UNVERIFIED'?'Please verify your email first.':f)}
+  finally{busy(b,false)}
+});
+
+/* ---------- verify account ---------- */
+$('f-verify').addEventListener('submit',async function(ev){
+  ev.preventDefault();note('verify','');var c=O.verify.val();
+  if(c.length<CFG.LEN){fe('verify','Enter the full '+CFG.LEN+'-digit code.');O.verify.bad(true);return}
+  fe('verify','');O.verify.bad(false);if(cfgMissing('verify'))return;
+  var b=ev.submitter||this.querySelector('.btn');busy(b,true);
+  try{
+    var r=await sb.auth.verifyOtp({email:ctx.email,token:c,type:'signup'});
+    if(r.error)throw r.error;
+    ctx.ready=true;go('ready');
+  }catch(e){console.error(e);var m=friendly(e);fe('verify',m);O.verify.bad(true);O.verify.clear()}
+  finally{busy(b,false)}
+});
+$('rs-verify').addEventListener('click',async function(){
+  if(cfgMissing('verify'))return;note('verify','');cool('verify');
+  var r=await sb.auth.resend({type:'signup',email:ctx.email});
+  if(r.error){console.error(r.error);note('verify',friendly(r.error))}else note('verify','A new code has been sent to your email.','ok');
+});
+
+/* ---------- sign in ---------- */
+$('f-signin').addEventListener('submit',async function(ev){
+  ev.preventDefault();note('signin','');
+  var em=$('sem').value.trim().toLowerCase(),pw=$('spw').value,bad=false;
+  fe('sem',EMAIL.test(em)?'':'Please enter a valid email address.');if(!EMAIL.test(em))bad=true;
+  fe('spw',pw?'':'Please enter your password.');if(!pw)bad=true;
+  if(bad||cfgMissing('signin'))return;
+  var b=ev.submitter||this.querySelector('.btn');busy(b,true);var keep=false;
+  try{
+    var want=$('remember').checked;
+    if(want!==rem){rem=want;try{localStorage.setItem('kz_rem',want?'1':'0')}catch(e){}sb=mk(rem)}
+    var r=await sb.auth.signInWithPassword({email:em,password:pw});
+    if(r.error)throw r.error;
+    keep=true;goHome();
+  }catch(e){
+    console.error(e);var m=friendly(e);
+    if(m==='UNVERIFIED'){ctx={email:em,purpose:'signup'};save();var rr=await sb.auth.resend({type:'signup',email:em});O.verify.clear();go('verify');cool('verify');note('verify',rr.error?friendly(rr.error):'Your account isn’t verified yet. We’ve sent a new code to your email.','ok')}
+    else note('signin',m);
+  }finally{if(!keep)busy(b,false)}
+});
+
+/* ---------- forgot / recover / reset ---------- */
+$('f-forgot').addEventListener('submit',async function(ev){
+  ev.preventDefault();note('forgot','');var em=$('fem').value.trim().toLowerCase();
+  if(!EMAIL.test(em)){fe('fem','Please enter a valid email address.');return}fe('fem','');
+  if(cfgMissing('forgot')||!hosted('forgot'))return;
+  var b=ev.submitter||this.querySelector('.btn');busy(b,true);
+  try{
+    var r=await sb.auth.resetPasswordForEmail(em);
+    if(r.error&&!/not found/i.test(r.error.message||''))throw r.error;
+    ctx={email:em,purpose:'recovery'};save();O.recover.clear();go('recover');cool('recover');
+    note('recover','If an account exists for that email, a verification code has been sent.','ok');
+  }catch(e){console.error(e);note('forgot',friendly(e))}
+  finally{busy(b,false)}
+});
+$('f-recover').addEventListener('submit',async function(ev){
+  ev.preventDefault();note('recover','');var c=O.recover.val();
+  if(c.length<CFG.LEN){fe('recover','Enter the full '+CFG.LEN+'-digit code.');O.recover.bad(true);return}
+  fe('recover','');O.recover.bad(false);if(cfgMissing('recover'))return;
+  var b=ev.submitter||this.querySelector('.btn');busy(b,true);
+  try{
+    var r=await sb.auth.verifyOtp({email:ctx.email,token:c,type:'recovery'});
+    if(r.error)throw r.error;
+    ctx.recovered=true;go('reset');
+  }catch(e){console.error(e);fe('recover',friendly(e));O.recover.bad(true);O.recover.clear()}
+  finally{busy(b,false)}
+});
+$('rs-recover').addEventListener('click',async function(){
+  if(cfgMissing('recover'))return;note('recover','');cool('recover');
+  var r=await sb.auth.resetPasswordForEmail(ctx.email);
+  if(r.error){console.error(r.error);note('recover',friendly(r.error))}else note('recover','If an account exists for that email, a new code has been sent.','ok');
+});
+$('f-reset').addEventListener('submit',async function(ev){
+  ev.preventDefault();note('reset','');var p1=$('rp1').value,p2=$('rp2').value,bad=false;
+  fe('rp1',pwOk(p1)?'':'Use at least 8 characters with a letter and a number.');if(!pwOk(p1))bad=true;
+  fe('rp2',p1===p2&&p2?'':'Passwords do not match.');if(!(p1===p2&&p2))bad=true;
+  if(bad||cfgMissing('reset'))return;
+  var b=ev.submitter||this.querySelector('.btn');busy(b,true);
+  try{
+    var r=await sb.auth.updateUser({password:p1});
+    if(r.error)throw r.error;
+    await sb.auth.signOut();ctx={};save();this.reset();meter($('meter2'),'');
+    go('signin');note('signin','Password updated. Please sign in with your new password.','ok');
+  }catch(e){console.error(e);note('reset',friendly(e))}
+  finally{busy(b,false)}
+});
+
+/* ---------- social (real OAuth through Supabase) ---------- */
+document.querySelectorAll('[data-oauth]').forEach(function(b){b.addEventListener('click',async function(){
+  var cur=(location.hash||'#signup').slice(1);if(cfgMissing(cur)||!hosted(cur))return;
+  note(cur,'');try{localStorage.setItem('kz_oauth','1')}catch(e){}
+  var p=b.dataset.oauth,o={redirectTo:location.origin+location.pathname};if(p==='facebook')o.scopes='email';
+  var r=await sb.auth.signInWithOAuth({provider:p,options:o});
+  if(r.error){console.error(r.error);note(cur,friendly(r.error))}
+})});
+
+/* ---------- already signed in / returning from OAuth ---------- */
+(async function(){
+  var h=location.hash;
+  if(/error_description=/.test(h)){var d=decodeURIComponent((h.match(/error_description=([^&]+)/)||[])[1]||'').replace(/\+/g,' ');history.replaceState(null,'','#signin');route();note('signin',/cancel|denied/i.test(d)?'Sign-in was cancelled.':'Social sign-in failed. Please try again.');try{localStorage.removeItem('kz_oauth')}catch(e){}return}
+  if(!sb){return}
+  var fromOAuth=false;try{fromOAuth=localStorage.getItem('kz_oauth')==='1'}catch(e){}
+  if(/recovery|type=/.test(h)&&/access_token/.test(h))return;
+  var s=await sb.auth.getSession();if(!s.data||!s.data.session)return;
+  var u=await sb.auth.getUser();if(u.error||!u.data.user){await sb.auth.signOut();return}
+  if(fromOAuth||/access_token=/.test(h)){try{localStorage.removeItem('kz_oauth')}catch(e){}goHome();return}
+  var cur=(location.hash||'#signup').slice(1);
+  if(cur==='signup'||cur==='signin'){
+    var n=$('n-'+cur);n.className='note';n.innerHTML='';n.append('You’re signed in as '+(u.data.user.email||'your account')+'. ');
+    var a=document.createElement('button');a.type='button';a.className='lk';a.textContent='Continue to KAMPZA';a.onclick=goHome;
+    var o=document.createElement('button');o.type='button';o.className='lk';o.style.marginLeft='12px';o.textContent='Sign out';o.onclick=async function(){await sb.auth.signOut();n.hidden=true};
+    n.append(a,o);n.hidden=false;
   }
+})();
 
-  // Turn Supabase errors into plain messages (real error is logged to the console for debugging)
-  function friendly(err){
-    var m=(err&&err.message)||'Something went wrong. Please try again.';
-    var code=(err&&err.code)||'';
-    if(/invalid login/i.test(m))return 'Email or password is incorrect.';
-    if(/not confirmed/i.test(m)||code==='email_not_confirmed')return 'Confirm your email first. Check your inbox (and spam) for the link.';
-    if(/already registered/i.test(m)||code==='user_already_exists')return 'An account with this email already exists. Sign in instead.';
-    if(/rate limit/i.test(m)||/security purposes/i.test(m)||code==='over_email_send_rate_limit'||code==='over_request_rate_limit')return 'Too many attempts. Please wait a minute and try again.';
-    if(/sending confirmation email/i.test(m)||/sending.*email/i.test(m))return 'We could not send your confirmation email right now. Please try again in a few minutes.';
-    if(/database error/i.test(m))return 'We could not create your account right now. Please try again shortly.';
-    if(/password/i.test(m)&&/(least|weak|short|characters)/i.test(m))return 'Choose a stronger password of at least 8 characters.';
-    if(/valid email|invalid.*email|email.*invalid/i.test(m))return 'Enter a valid email address.';
-    if(/failed to fetch|networkerror|network request/i.test(m))return 'Network problem. Check your connection and try again.';
-    return m;
-  }
-  function notConnected(){
-    showNote('error','Auth is not connected yet. Add your Supabase URL and anon key at the top of the script.');
-  }
-  function goHome(){location.href=HOME}
-  // Absolute URL of this page. Used for email links, so it must never be a file:// path.
-  function selfUrl(m){
-    var base=AUTH_PAGE_URL||(location.origin+location.pathname);
-    return base+'?mode='+m;
-  }
-  function hostedOk(){
-    if(AUTH_PAGE_URL)return true;
-    if(location.protocol==='http:'||location.protocol==='https:')return true;
-    showNote('error','Open this page from your live site or localhost, not as a local file, so the confirmation link can return here.');
-    return false;
-  }
-
-  // Resend confirmation (60s cooldown to avoid email rate limits)
-  function startCooldown(){
-    var left=60;
-    resendBtn.disabled=true;
-    var t=setInterval(function(){
-      left--;
-      if(left<=0){clearInterval(t);resendBtn.disabled=false;resendBtn.textContent='Resend confirmation email'}
-      else resendBtn.textContent='Resend in '+left+'s';
-    },1000);
-    resendBtn.textContent='Resend in '+left+'s';
-  }
-  resendBtn.addEventListener('click',async function(){
-    if(!sb||!pendingEmail||resendBtn.disabled)return;
-    startCooldown();
-    var r=await sb.auth.resend({type:'signup',email:pendingEmail,options:{emailRedirectTo:selfUrl('signin')}});
-    if(r.error){console.error('Resend error:',r.error);showNote('error',friendly(r.error));resendBtn.hidden=false}
-    else{showNote('ok','Confirmation email sent again. Check your inbox and spam folder.');resendBtn.hidden=false}
-  });
-
-  // Email + password
-  form.addEventListener('submit',async function(e){
-    e.preventDefault();clearNote();
-    if(!form.reportValidity())return;
-    if(!sb){notConnected();return}
-    if((mode==='signup'||mode==='reset')&&!hostedOk())return;
-    setLoading(true);
-    var keepLocked=false;
-    try{
-      var email=$('email').value.trim();
-      if(mode==='signin'){
-        var r1=await sb.auth.signInWithPassword({email:email,password:pw.value});
-        if(r1.error)throw r1.error;
-        goHome();keepLocked=true;return;
-      }
-      if(mode==='signup'){
-        var meta={full_name:$('fullName').value.trim(),role:'customer'};
-        var r2=await sb.auth.signUp({email:email,password:pw.value,options:{data:meta,emailRedirectTo:selfUrl('signin')}});
-        if(r2.error)throw r2.error;
-        // Supabase returns a fake user with no identities when the email is already registered
-        if(r2.data.user&&r2.data.user.identities&&r2.data.user.identities.length===0){
-          showNote('error','An account with this email already exists. Sign in instead.');return;
-        }
-        if(r2.data.session){goHome();keepLocked=true;return}
-        pendingEmail=email;
-        showNote('ok','Check your email. We sent a confirmation link to '+email+'. It may take a minute, and check your spam folder too.');
-        resendBtn.hidden=false;
-        form.reset();return;
-      }
-      if(mode==='reset'){
-        var r3=await sb.auth.resetPasswordForEmail(email,{redirectTo:selfUrl('update')});
-        if(r3.error)throw r3.error;
-        showNote('ok','If that email has an account, a reset link is on its way.');return;
-      }
-      if(mode==='update'){
-        var r4=await sb.auth.updateUser({password:pw.value});
-        if(r4.error)throw r4.error;
-        showNote('ok','Password updated. Taking you in...');
-        keepLocked=true;
-        setTimeout(goHome,1200);return;
-      }
-    }catch(err){
-      console.error('Auth error:',err);
-      showNote('error',friendly(err));
-      // Unconfirmed account trying to sign in: offer to resend the link
-      if(mode==='signin'&&(/not confirmed/i.test((err&&err.message)||'')||(err&&err.code)==='email_not_confirmed')){
-        pendingEmail=$('email').value.trim();
-        resendBtn.hidden=false;
-      }
-    }finally{
-      if(!keepLocked)setLoading(false);
-    }
-  });
-
-  // Google
-  googleBtn.addEventListener('click',async function(){
-    clearNote();
-    if(!sb){notConnected();return}
-    if(!hostedOk())return;
-    try{localStorage.setItem('fm_oauth','1')}catch(_){}
-    var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:AUTH_PAGE_URL||(location.origin+location.pathname)}});
-    if(r.error){console.error('Google error:',r.error);showNote('error',friendly(r.error))}
-  });
-
-  // Already signed in, coming back from the confirmation email, or coming back from Google
-  (async function(){
-    if(!sb||mode==='update')return;
-    // Work out BEFORE any await whether we are returning from an email link or Google
-    var fromGoogle=false;
-    try{fromGoogle=localStorage.getItem('fm_oauth')==='1'}catch(_){}
-    var returning=/access_token=|error_description=/.test(location.hash)||fromGoogle;
-
-    var s=await sb.auth.getSession();
-    var session=s.data&&s.data.session;
-    if(!session)return;
-
-    // Verify the session with the server; a stale/deleted-user session must not trap the page
-    var chk=await sb.auth.getUser();
-    if(chk.error||!chk.data||!chk.data.user){
-      await sb.auth.signOut();
-      return;
-    }
-    var user=chk.data.user;
-
-    if(returning){
-      try{localStorage.removeItem('fm_oauth')}catch(_){}
-      goHome();
-      return;
-    }
-
-    // Opened normally while already signed in: do NOT bounce away, let the person choose
-    showNote('ok','You are already signed in as '+(user.email||'your account')+'.');
-    var wrap=document.createElement('div');
-    wrap.style.cssText='display:flex;gap:16px;justify-content:center;margin:-4px 0 14px';
-    var go=document.createElement('button');
-    go.type='button';go.className='link';go.textContent='Continue to the site';
-    go.addEventListener('click',goHome);
-    var out=document.createElement('button');
-    out.type='button';out.className='link';out.textContent='Sign out';
-    out.addEventListener('click',async function(){await sb.auth.signOut();clearNote();wrap.remove()});
-    wrap.appendChild(go);wrap.appendChild(out);
-    note.parentNode.insertBefore(wrap,note.nextSibling);
-  })();
-
-  render();
+route();
 })();
 </script>
 </body>
