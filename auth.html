@@ -448,7 +448,7 @@ $('f-reset').addEventListener('submit',async function(ev){
 /* ---------- social (real OAuth through Supabase) ---------- */
 document.querySelectorAll('[data-oauth]').forEach(function(b){b.addEventListener('click',async function(){
   var cur=(location.hash||'#signup').slice(1);if(cfgMissing(cur)||!hosted(cur))return;
-  note(cur,'');try{localStorage.setItem('kz_oauth','1')}catch(e){}
+  note(cur,'');try{localStorage.setItem('kz_oauth',cur==='signin'?'signin':'signup')}catch(e){}
   var p=b.dataset.oauth,o={redirectTo:location.origin+location.pathname};if(p==='facebook')o.scopes='email';
   var r=await sb.auth.signInWithOAuth({provider:p,options:o});
   if(r.error){console.error(r.error);note(cur,friendly(r.error));try{localStorage.removeItem('kz_oauth')}catch(e){}}
@@ -464,12 +464,26 @@ document.querySelectorAll('[data-oauth]').forEach(function(b){b.addEventListener
     try{localStorage.removeItem('kz_oauth')}catch(e){}return;
   }
   if(!sb)return;
-  var fromOAuth=!!qs.get('code');try{if(localStorage.getItem('kz_oauth')==='1')fromOAuth=true}catch(e){}
+  var intent='';try{intent=localStorage.getItem('kz_oauth')||''}catch(e){}
+  var fromOAuth=!!qs.get('code')||!!intent;
   /* getSession waits for Supabase to finish exchanging the ?code= for a session */
   var s=await sb.auth.getSession();
   if(!s.data||!s.data.session){try{localStorage.removeItem('kz_oauth')}catch(e){}return}
   var u=await sb.auth.getUser();if(u.error||!u.data.user){await sb.auth.signOut();return}
-  if(fromOAuth){try{localStorage.removeItem('kz_oauth')}catch(e){}goHome();return}
+  if(fromOAuth){
+    try{localStorage.removeItem('kz_oauth')}catch(e){}
+    if(intent==='signin'){
+      var usr=u.data.user,c0=new Date(usr.created_at).getTime(),l0=new Date(usr.last_sign_in_at||usr.created_at).getTime();
+      if(Date.now()-c0<120000&&Math.abs(l0-c0)<10000){
+        await sb.rpc('delete_new_oauth_user');
+        await sb.auth.signOut();
+        history.replaceState(null,'',location.pathname+'#signup');route();
+        note('signup','No account found for that login. Please sign up first.');
+        return;
+      }
+    }
+    goHome();return;
+  }
   var cur=(location.hash||'#signup').slice(1);
   if(cur==='signup'||cur==='signin'){
     var n=$('n-'+cur);n.className='note';n.innerHTML='';n.append('You’re signed in as '+(u.data.user.email||'your account')+'. ');
