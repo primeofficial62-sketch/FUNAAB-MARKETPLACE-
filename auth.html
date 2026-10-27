@@ -252,7 +252,9 @@ var $=function(i){return document.getElementById(i)};
 var sections=[].slice.call(document.querySelectorAll('[data-s]'));
 var configured=CFG.URL.indexOf('YOUR_')!==0&&CFG.KEY.indexOf('YOUR_')!==0&&!!window.supabase;
 var rem=true;try{rem=localStorage.getItem('kz_rem')!=='0'}catch(e){}
-function mk(r){return configured?window.supabase.createClient(CFG.URL,CFG.KEY,{auth:{storage:r?localStorage:sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null}
+/* FIX: flowType 'pkce' so Google/Facebook return a ?code= in the query string.
+   The old implicit flow returned #access_token in the hash, which route() wiped before Supabase could read it. */
+function mk(r){return configured?window.supabase.createClient(CFG.URL,CFG.KEY,{auth:{flowType:'pkce',storage:r?localStorage:sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}):null}
 var sb=mk(rem);
 var ctx={};try{ctx=JSON.parse(sessionStorage.getItem('kz_ctx')||'{}')}catch(e){}
 function save(){try{sessionStorage.setItem('kz_ctx',JSON.stringify({email:ctx.email,purpose:ctx.purpose}))}catch(e){}}
@@ -260,7 +262,7 @@ document.querySelector('[data-terms]').href=CFG.TERMS;document.querySelector('[d
 
 /* ---------- helpers ---------- */
 function busy(b,on){b.disabled=on;b.classList.toggle('ld',on)}
-function note(id,t,type){var e=$('n-'+id);if(!t){e.hidden=true;return}e.className='note'+(type==='ok'?'':' err');e.textContent=t;e.hidden=false}
+function note(id,t,type){var e=$('n-'+id);if(!e)return;if(!t){e.hidden=true;return}e.className='note'+(type==='ok'?'':' err');e.textContent=t;e.hidden=false}
 function fe(id,t){var e=$('e-'+id);if(e)e.textContent=t||'';var i=$(id);if(i&&i.classList)i.classList.toggle('bad',!!t)}
 var EMAIL=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 function strength(p){var s=0;if(p.length>=8)s++;if(/[a-z]/i.test(p)&&/\d/.test(p))s++;if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;if(/[^A-Za-z0-9]/.test(p)||p.length>=12)s++;return p?Math.max(1,s):0}
@@ -284,7 +286,7 @@ function friendly(e){
 /* password toggles */
 document.querySelectorAll('[data-eye]').forEach(function(b){
   b.addEventListener('pointerdown',function(e){e.preventDefault()});
-  b.addEventListener('click',function(){var i=$(b.dataset.eye),s=i.type==='password';i.type=s?'text':'password';b.setAttribute('aria-label',s?'Hide password':'Show password');b.firstChild.nextSibling&&0;b.querySelector('use').setAttribute('href',s?'#eyeoff':'#eye')});
+  b.addEventListener('click',function(){var i=$(b.dataset.eye),s=i.type==='password';i.type=s?'text':'password';b.setAttribute('aria-label',s?'Hide password':'Show password');b.querySelector('use').setAttribute('href',s?'#eyeoff':'#eye')});
 });
 $('pw1').addEventListener('input',function(){meter($('meter'),this.value)});
 $('rp1').addEventListener('input',function(){meter($('meter2'),this.value)});
@@ -319,7 +321,7 @@ function route(){
   if(n==='recover'&&!(ctx.email&&ctx.purpose==='recovery'))n='forgot';
   if(n==='reset'&&!ctx.recovered)n=(ctx.email&&ctx.purpose==='recovery')?'recover':'forgot';
   if(n==='ready'&&!ctx.ready)n='signup';
-  if(location.hash!=='#'+n)history.replaceState(null,'','#'+n);
+  if(location.hash!=='#'+n)history.replaceState(null,'',location.pathname+location.search+'#'+n);
   sections.forEach(function(s){var on=s.dataset.s===n;s.hidden=!on;if(on){s.style.animation='none';void s.offsetWidth;s.style.animation=''}});
   Object.keys(timers).forEach(function(k){if(k!==n){clearInterval(timers[k]);var b=$('rs-'+k);if(b){b.disabled=false;b.textContent='Resend Code'}}});
   document.querySelectorAll('.mail').forEach(function(m){m.textContent=ctx.email||''});
@@ -449,19 +451,25 @@ document.querySelectorAll('[data-oauth]').forEach(function(b){b.addEventListener
   note(cur,'');try{localStorage.setItem('kz_oauth','1')}catch(e){}
   var p=b.dataset.oauth,o={redirectTo:location.origin+location.pathname};if(p==='facebook')o.scopes='email';
   var r=await sb.auth.signInWithOAuth({provider:p,options:o});
-  if(r.error){console.error(r.error);note(cur,friendly(r.error))}
+  if(r.error){console.error(r.error);note(cur,friendly(r.error));try{localStorage.removeItem('kz_oauth')}catch(e){}}
 })});
 
 /* ---------- already signed in / returning from OAuth ---------- */
 (async function(){
-  var h=location.hash;
-  if(/error_description=/.test(h)){var d=decodeURIComponent((h.match(/error_description=([^&]+)/)||[])[1]||'').replace(/\+/g,' ');history.replaceState(null,'','#signin');route();note('signin',/cancel|denied/i.test(d)?'Sign-in was cancelled.':'Social sign-in failed. Please try again.');try{localStorage.removeItem('kz_oauth')}catch(e){}return}
-  if(!sb){return}
-  var fromOAuth=false;try{fromOAuth=localStorage.getItem('kz_oauth')==='1'}catch(e){}
-  if(/recovery|type=/.test(h)&&/access_token/.test(h))return;
-  var s=await sb.auth.getSession();if(!s.data||!s.data.session)return;
+  var qs=new URLSearchParams(location.search),hs=new URLSearchParams((location.hash||'').replace(/^#/,''));
+  var errD=qs.get('error_description')||hs.get('error_description');
+  if(errD){
+    history.replaceState(null,'',location.pathname+'#signin');route();
+    note('signin',/cancel|denied/i.test(errD)?'Sign-in was cancelled.':'Social sign-in failed. Please try again.');
+    try{localStorage.removeItem('kz_oauth')}catch(e){}return;
+  }
+  if(!sb)return;
+  var fromOAuth=!!qs.get('code');try{if(localStorage.getItem('kz_oauth')==='1')fromOAuth=true}catch(e){}
+  /* getSession waits for Supabase to finish exchanging the ?code= for a session */
+  var s=await sb.auth.getSession();
+  if(!s.data||!s.data.session){try{localStorage.removeItem('kz_oauth')}catch(e){}return}
   var u=await sb.auth.getUser();if(u.error||!u.data.user){await sb.auth.signOut();return}
-  if(fromOAuth||/access_token=/.test(h)){try{localStorage.removeItem('kz_oauth')}catch(e){}goHome();return}
+  if(fromOAuth){try{localStorage.removeItem('kz_oauth')}catch(e){}goHome();return}
   var cur=(location.hash||'#signup').slice(1);
   if(cur==='signup'||cur==='signin'){
     var n=$('n-'+cur);n.className='note';n.innerHTML='';n.append('You’re signed in as '+(u.data.user.email||'your account')+'. ');
