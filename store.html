@@ -151,6 +151,17 @@ input:disabled{background:var(--g);color:var(--m)}
 details{border-bottom:1px solid var(--b);padding:13px 0}summary{font-weight:600;cursor:pointer}details p{margin-top:8px;color:var(--m)}
 .terms h3{font-size:15px;margin:16px 0 4px}.terms p{color:var(--m)}
 .warn{background:#fde8e6;color:#9b1c14;border-radius:var(--r);padding:12px;margin-bottom:14px}
+[data-open]{cursor:pointer}
+.pd-img{position:relative;aspect-ratio:1/.8;border-radius:var(--r);background:var(--g);display:grid;place-items:center;font-size:110px;overflow:hidden}
+.pd-img img{width:100%;height:100%;object-fit:contain;padding:12px}
+.thumbs{display:flex;gap:8px;margin-top:8px;overflow-x:auto;scrollbar-width:none}.thumbs button{flex:0 0 58px;height:58px;border:1px solid var(--b);border-radius:10px;overflow:hidden;background:var(--g)}.thumbs img{width:100%;height:100%;object-fit:cover}
+.pd-n{font:600 19px/1.3 Sora;margin-top:14px;overflow-wrap:anywhere}
+.pd-p{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:8px 0}.pd-p b{font:700 25px Sora}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.tag{background:var(--g);border-radius:99px;padding:4px 11px;font-size:12px;font-weight:500}.tag.ok{background:#e6f6ec;color:#1a7f43}.tag.no{background:#fde8e6;color:#b42318}
+.pdesc{color:#444;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere}
+.spec{width:100%;border-collapse:collapse}.spec td{padding:11px 12px;border-bottom:1px solid var(--b);vertical-align:top;overflow-wrap:anywhere}.spec tr:last-child td{border:0}.spec td:first-child{color:var(--m);width:40%;background:#fafafa}
+.pbar{position:sticky;bottom:calc(88px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;background:var(--bg);border:1px solid var(--b);border-radius:var(--r);padding:10px;margin-top:18px;box-shadow:0 -4px 16px #0000000d;z-index:5}.pbar .btn{flex:1;padding:13px;text-align:center}.pbar .btn.alt{background:#252525}
+.btn[disabled]{opacity:.5;pointer-events:none}
 #toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:#252525;color:#fff;padding:9px 14px;border-radius:10px;font-size:13px;opacity:0;transition:.25s;z-index:90;pointer-events:none;max-width:90vw;text-align:center}
 #toast.s{opacity:1;transform:translate(-50%,0)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -194,13 +205,13 @@ const SLIDES=[
  ['Tech Picks','Power Up Your Study Game.','💻','#ff6a00']];
 const CATS=[['Electronics','💻','💻📱🎧'],['Fashion','👕','👕👟👜'],['Home & Living','🏠','🛋️🪴💡'],['Beauty','💄','💄🧴🪞'],['Appliances','🧺','🍳🥤🔌'],['Groceries','🛒','🥦🍅🫒'],['Sports & Outdoors','⚽','⚽👟🏋️'],['Books & Stationery','📚','📚✏️🎒']];
 let P=[
- {id:'p1',n:'Wireless Earbuds',e:'🎧',p:29990,o:37500,c:'Electronics'},
- {id:'p2',n:'Smart Watch',e:'⌚',p:49990,o:58000,c:'Electronics'},
- {id:'p3',n:'Smartphone',e:'📱',p:420000,c:'Electronics'},
- {id:'p4',n:'Canvas Sneakers',e:'👟',p:24000,c:'Fashion'},
- {id:'p5',n:'Tote Handbag',e:'👜',p:15500,c:'Fashion'},
- {id:'p6',n:'Headphones',e:'🎧',p:35000,c:'Electronics'},
- {id:'p7',n:'Power Bank',e:'🔋',p:21000,c:'Electronics'}];
+ {id:'p1',n:'Wireless Earbuds',e:'🎧',p:29990,o:37500,c:'Electronics',d:'True wireless earbuds with a charging case, made for lectures, commuting and workouts.',s:{'Connectivity':'Bluetooth','Charging':'USB-C case','Included':'Earbuds, charging case, cable'}},
+ {id:'p2',n:'Smart Watch',e:'⌚',p:49990,o:58000,c:'Electronics',d:'Smart watch with notifications, activity tracking and a bright touch display.',s:{'Connectivity':'Bluetooth','Charging':'Magnetic charger','Included':'Watch, charger, strap'}},
+ {id:'p3',n:'Smartphone',e:'📱',p:420000,c:'Electronics',d:'Smartphone with a large display and all-day battery for study, social and photos.',s:{'Warranty':'Seller warranty','Included':'Phone, charger, cable'}},
+ {id:'p4',n:'Canvas Sneakers',e:'👟',p:24000,c:'Fashion',d:'Lightweight canvas sneakers with a cushioned sole for everyday campus wear.',s:{'Material':'Canvas','Sole':'Rubber'}},
+ {id:'p5',n:'Tote Handbag',e:'👜',p:15500,c:'Fashion',d:'Roomy tote that fits books, a laptop and daily essentials.',s:{'Material':'Faux leather','Closure':'Zip'}},
+ {id:'p6',n:'Headphones',e:'🎧',p:35000,c:'Electronics',d:'Over-ear headphones with deep bass and a padded headband for long study sessions.',s:{'Type':'Over-ear','Connectivity':'Bluetooth + 3.5mm'}},
+ {id:'p7',n:'Power Bank',e:'🔋',p:21000,c:'Electronics',d:'High-capacity power bank to keep your phone charged between classes.',s:{'Ports':'USB-A, USB-C','Included':'Power bank, cable'}}];
 let FLASH=['p1','p2'];
 const byId=id=>P.find(x=>x.id===id);
 const flash=()=>FLASH.map(byId).filter(Boolean);
@@ -218,7 +229,7 @@ const ic=n=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICO[n]}</svg>`;
 const NAV=[['home','Home'],['cats','Categories'],['wish','Wishlist'],['cart','Cart'],['account','Account']];
 
 /* ================= STATE ================= */
-let U=null,TOKEN='',tab='home',sub=null,pg=null,q='';
+let U=null,TOKEN='',tab='home',sub=null,pg=null,prod=null,q='',OUT=false;
 const DEF=()=>({notifs:[],prefs:{email:true,daily:true},cart:{},wish:[],day:'',orders:[],quotes:[],wallet:{bal:0,tx:[]}});
 let S=DEF();
 const jget=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch{return d}};
@@ -230,7 +241,7 @@ const cartTotal=()=>Object.entries(S.cart).reduce((a,[id,n])=>a+(byId(id)?.p||0)
 const slide=s=>`<section class="sl" style="--a:var(--o);background:#252525"><span class="t">${s[0]}</span><h2>${s[1]}</h2><span class="em" aria-hidden="true">${s[2]}</span><button class="btn" data-list="all">Shop Now →</button></section>`;
 function card(p,showAdd=true){
  const d=p.o&&p.o>p.p?Math.round((1-p.p/p.o)*100):0;
- return `<article class="card">${d?`<span class="disc">-${d}%</span>`:''}<button class="hb ${S.wish.includes(p.id)?'on':''}" data-w="${p.id}" aria-label="Wishlist ${esc(p.n)}" aria-pressed="${S.wish.includes(p.id)}">${heart}</button><div class="pimg">${p.img?`<img src="${esc(p.img)}" data-e="${esc(p.e||'🛍️')}" alt="${esc(p.n)}" loading="lazy">`:esc(p.e||'🛍️')}</div><h3>${esc(p.n)}</h3><div class="pr">${fmt(p.p)}${d?`<span class="old">${fmt(p.o)}</span>`:''}</div>${showAdd?`<button class="btn" data-add="${p.id}">${cartI}Add to Cart</button>`:''}</article>`}
+ return `<article class="card" data-open="${p.id}">${d?`<span class="disc">-${d}%</span>`:''}<button class="hb ${S.wish.includes(p.id)?'on':''}" data-w="${p.id}" aria-label="Wishlist ${esc(p.n)}" aria-pressed="${S.wish.includes(p.id)}">${heart}</button><div class="pimg">${p.img?`<img src="${esc(p.img)}" data-e="${esc(p.e||'🛍️')}" alt="${esc(p.n)}" loading="lazy">`:esc(p.e||'🛍️')}</div><h3>${esc(p.n)}</h3><div class="pr">${fmt(p.p)}${d?`<span class="old">${fmt(p.o)}</span>`:''}</div>${showAdd?`<button class="btn" data-add="${p.id}">${cartI}Add to Cart</button>`:''}</article>`}
 const thumb=p=>p.img?`<img src="${esc(p.img)}" data-e="${esc(p.e||'🛍️')}" alt="">`:esc(p.e||'🛍️');
 const empty=(i,m,b='')=>`<div class="soon"><b>${i}</b>${m}${b}</div>`;
 const shop='<br><br><button class="btn" data-list="all">Start shopping</button>';
@@ -249,9 +260,24 @@ function wishView(){const it=S.wish.map(byId).filter(Boolean);return `<div class
 function cartView(){
  const ids=Object.keys(S.cart).filter(id=>byId(id));
  if(!ids.length)return `<div class="top"><h1>Cart</h1></div>${empty('🛒','Your cart is empty.',shop)}`;
- return `<div class="top"><h1>Cart (${cartCount()})</h1></div>${ids.map(id=>{const p=byId(id),n=S.cart[id];return `<div class="line"><div class="pimg">${thumb(p)}</div><div class="mid"><b>${esc(p.n)}</b><span>${fmt(p.p)}</span><div style="display:flex;align-items:center;gap:8px"><span class="qty"><button data-qty="${id}" data-d="-1" aria-label="Decrease">−</button><span>${n}</span><button data-qty="${id}" data-d="1" aria-label="Increase">+</button></span><button class="rm" data-rm="${id}">Remove</button></div></div></div>`}).join('')}<div class="sum"><div><span>Total</span><span>${fmt(cartTotal())}</span></div><button class="btn" data-pg="checkout">Checkout</button></div>`}
+ return `<div class="top"><h1>Cart (${cartCount()})</h1></div>${ids.map(id=>{const p=byId(id),n=S.cart[id];return `<div class="line"><div class="pimg" data-open="${id}">${thumb(p)}</div><div class="mid"><b data-open="${id}">${esc(p.n)}</b><span>${fmt(p.p)}</span><div style="display:flex;align-items:center;gap:8px"><span class="qty"><button data-qty="${id}" data-d="-1" aria-label="Decrease">−</button><span>${n}</span><button data-qty="${id}" data-d="1" aria-label="Increase">+</button></span><button class="rm" data-rm="${id}">Remove</button></div></div></div>`}).join('')}<div class="sum"><div><span>Total</span><span>${fmt(cartTotal())}</span></div><button class="btn" data-pg="checkout">Checkout</button></div>`}
 function notifsView(){return `<div class="top"><h1>Notifications</h1><button class="btn ghost" data-read>Mark all as read</button></div>${S.notifs.length?S.notifs.map(n=>`<div class="nt ${n.r?'':'un'}"><b>${esc(n.t)}</b><div>${esc(n.m)}</div><small>${new Date(n.at).toLocaleString()}</small></div>`).join(''):empty('🔔','No notifications yet.')}`}
 
+function prodView(id){
+ const p=byId(id),d=p.o&&p.o>p.p?Math.round((1-p.p/p.o)*100):0,imgs=p.imgs&&p.imgs.length?p.imgs:(p.img?[p.img]:[]),out=p.st===0;
+ const sp=Array.isArray(p.s)?p.s:Object.entries(p.s||{});
+ const rows=[...(p.b?[['Brand',p.b]]:[]),['Category',p.c||'General'],...sp,['Availability',out?'Out of stock':'In stock']];
+ const rel=P.filter(x=>x.c===p.c&&x.id!==p.id).slice(0,4);
+ return `<div class="top"><button class="btn ghost" data-hback>← Back</button></div>
+<div class="pd-img">${d?`<span class="disc">-${d}%</span>`:''}<button class="hb ${S.wish.includes(p.id)?'on':''}" data-w="${p.id}" aria-label="Wishlist ${esc(p.n)}" aria-pressed="${S.wish.includes(p.id)}">${heart}</button>${imgs[0]?`<img id="gmain" src="${esc(imgs[0])}" data-e="${esc(p.e||'🛍️')}" alt="${esc(p.n)}">`:esc(p.e||'🛍️')}</div>
+${imgs.length>1?`<div class="thumbs">${imgs.map(u=>`<button data-gi="${esc(u)}" aria-label="View image"><img src="${esc(u)}" alt=""></button>`).join('')}</div>`:''}
+<h1 class="pd-n">${esc(p.n)}</h1>
+<div class="pd-p"><b>${fmt(p.p)}</b>${d?`<span class="old" style="font-size:14px">${fmt(p.o)}</span><span class="st">Save ${fmt(p.o-p.p)}</span>`:''}</div>
+<div class="tags"><span class="tag ${out?'no':'ok'}">${out?'Out of stock':(p.st>0&&p.st<=5?'Only '+p.st+' left':'In stock')}</span>${p.r?`<span class="tag">★ ${esc(p.r)}</span>`:''}<span class="tag">${esc(p.c||'General')}</span></div>
+<h2 class="sh2">Description</h2><p class="pdesc">${esc(p.d||'No description has been added for this product yet.')}</p>
+<h2 class="sh2">Specifications</h2><div class="box"><table class="spec">${rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</table></div>
+<div class="pbar"><button class="btn alt" data-add="${p.id}" ${out?'disabled':''}>Add to cart</button><button class="btn" data-buy="${p.id}" ${out?'disabled':''}>Buy now</button></div>
+${rel.length?`<div class="sh"><h2>More in ${esc(p.c)}</h2></div><div class="grid">${rel.map(x=>card(x)).join('')}</div>`:''}`}
 /* ---- account ---- */
 function accountView(){
  const row=(p,i,t,s)=>`<button class="li" data-pg="${p}"><span class="ic">${ic(i)}</span><span><b>${t}</b><small>${s}</small></span><span class="cv">›</span></button>`;
@@ -299,13 +325,15 @@ function nav(){const n=cartCount();
 function view(){
  stop();let h;
  if(q.trim()){h=listView('Results for “'+esc(q.trim())+'”',P.filter(match))}
+ else if(prod&&byId(prod))h=prodView(prod);
  else if(pg&&PG[pg])h=PG[pg]();
  else if(sub&&tab==='home'){const[t,it]=listItems();h=listView(t,it)}
  else h=tab==='home'?home():tab==='cats'?catsView():tab==='wish'?wishView():tab==='cart'?cartView():tab==='account'?accountView():notifsView();
  $('#app').innerHTML=h;
- if(tab==='home'&&!sub&&!pg&&!q.trim())start()}
-function draw(){nav();view();scrollTo(0,0)}
-function go2(t,s=null){tab=t;sub=s;pg=null;q='';$('#q').value='';draw()}
+ if(tab==='home'&&!sub&&!pg&&!prod&&!q.trim())start()}
+const snap=()=>({tab,sub,pg,prod});
+function draw(h=true){nav();view();scrollTo(0,0);if(h){const t=snap();if(JSON.stringify(history.state)!==JSON.stringify(t))history.pushState(t,'')}}
+function go2(t,s=null){tab=t;sub=s;pg=null;prod=null;q='';$('#q').value='';draw()}
 
 /* ================= EVENTS ================= */
 $('#nav').onclick=e=>{const b=e.target.closest('[data-t]');if(b)go2(b.dataset.t)};
@@ -319,17 +347,19 @@ document.addEventListener('click',async e=>{
  if(x=g('[data-w]')){const k=x.dataset.w,on=!S.wish.includes(k);S.wish=on?[...S.wish,k]:S.wish.filter(i=>i!==k);store();
   document.querySelectorAll(`[data-w="${k}"]`).forEach(b=>{b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
   toast(on?'Saved to wishlist':'Removed from wishlist');if(tab==='wish'&&!q.trim()&&!sub)view();return}
- if(x=g('[data-add]')){const id=x.dataset.add;if(!byId(id))return;S.cart[id]=(S.cart[id]||0)+1;store();nav();toast('Added to cart ('+S.cart[id]+')');return}
+ if(x=g('[data-add]')){const id=x.dataset.add;if(!byId(id))return;if(byId(id).st===0){toast('Out of stock');return}S.cart[id]=(S.cart[id]||0)+1;store();nav();toast('Added to cart ('+S.cart[id]+')');return}
  if(x=g('[data-qty]')){const id=x.dataset.qty,n=(S.cart[id]||0)+Number(x.dataset.d);if(n<=0)delete S.cart[id];else S.cart[id]=Math.min(n,99);store();nav();view();return}
  if(x=g('[data-rm]')){delete S.cart[x.dataset.rm];store();nav();view();return}
- if(x=g('[data-cat]')){tab='home';sub={cat:x.dataset.cat};pg=null;q='';$('#q').value='';draw();return}
- if(x=g('[data-list]')){tab='home';sub=x.dataset.list;pg=null;q='';$('#q').value='';draw();return}
+ if(x=g('[data-gi]')){const m=$('#gmain');if(m)m.src=x.dataset.gi;return}
+ if(x=g('[data-buy]')){const id=x.dataset.buy;S.cart[id]=S.cart[id]||1;store();tab='cart';pg='checkout';prod=null;sub=null;draw();return}
+ if(x=g('[data-open]')){if(!byId(x.dataset.open))return;prod=x.dataset.open;q='';$('#q').value='';draw();return}
+ if(x=g('[data-cat]')){tab='home';sub={cat:x.dataset.cat};pg=null;prod=null;q='';$('#q').value='';draw();return}
+ if(x=g('[data-list]')){tab='home';sub=x.dataset.list;pg=null;prod=null;q='';$('#q').value='';draw();return}
  if(x=g('[data-go]')){go2(x.dataset.go);return}
  if(x=g('[data-pg]')){pg=x.dataset.pg;draw();return}
- if(g('[data-pgback]')){pg=null;draw();return}
- if(g('[data-back]')){sub=null;draw();return}
+ if(g('[data-pgback],[data-back],[data-hback]')){history.back();return}
  if(g('[data-read]')){S.notifs.forEach(n=>n.r=1);store();badges();view();return}
- if(g('[data-signout]')){sb?.auth.signOut();return}
+ if(g('[data-signout]')){OUT=true;sb?.auth.signOut();return}
  if(g('[data-test]')){mail('digest_test').then(ok=>ok&&toast('Digest sent to '+U.email));return}
  if(g('[data-place]')){
   const ph=v('ph'),ad=v('ad'),pay=document.querySelector('input[name=pay]:checked').value,t=cartTotal();
@@ -366,7 +396,7 @@ document.addEventListener('click',async e=>{
  if(g('[data-del]')){
   if(v('dc')!=='DELETE'){toast('Type DELETE to confirm');return}
   const{error}=await sb.rpc('delete_my_account');if(error){toast('Could not delete your account. Contact support.');return}
-  try{localStorage.removeItem('kz_n_'+U.id)}catch{}await sb.auth.signOut()}
+  try{localStorage.removeItem('kz_n_'+U.id)}catch{}OUT=true;await sb.auth.signOut()}
 });
 document.addEventListener('change',async e=>{
  const c=e.target.closest('[data-pref]');if(!c)return;
@@ -388,7 +418,7 @@ function start(){
 function stop(){clearInterval(timer)}
 
 /* ================= AUTH + NOTIFICATIONS + EMAIL ================= */
-const sb=(window.supabase&&!SUPABASE_URL.startsWith('YOUR_'))?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+const sb=(window.supabase&&!SUPABASE_URL.startsWith('YOUR_'))?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,storage:window.localStorage}}):null;
 function badges(){const n=S.notifs.filter(x=>!x.r).length,b=$('#bb');if(b){b.hidden=!n;b.textContent=n>9?'9+':n}}
 function notif(t,m){S.notifs.unshift({t,m,at:Date.now(),r:0});S.notifs=S.notifs.slice(0,50);store();badges();
  try{if('Notification' in window&&Notification.permission==='granted')new Notification(t,{body:m})}catch{}}
@@ -414,17 +444,25 @@ function welcome(){
   try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}catch{}}
  if(S.day!==today()){S.day=today();notif('Today’s deals are live','Check Flash Deals on the home page for price drops.')}
  store();badges()}
+async function session(){for(let i=0;i<3;i++){try{const{data}=await sb.auth.getSession();if(data.session)return data.session}catch{}await new Promise(r=>setTimeout(r,400))}return null}
 async function boot(){
  if(!sb){nav();$('#app').innerHTML=empty('🔑','Add your Supabase URL and anon key in the CONFIG line to enable sign-in.');return}
- let u=null;
- try{const{data}=await sb.auth.getSession();u=data.session?.user;TOKEN=data.session?.access_token||''}catch{}
- if(!u){location.replace(AUTH_URL);return}
- const md=u.user_metadata||{};
+ const ses=await session();
+ if(!ses){if(!navigator.onLine){nav();$('#app').innerHTML=empty('📡','You are offline. Reconnect and reload.');return}location.replace(AUTH_URL);return}
+ TOKEN=ses.access_token;const u=ses.user,md=u.user_metadata||{};
  U={id:u.id,email:u.email,verified:!!u.email_confirmed_at,
   name:md.full_name||md.name||(u.email||'').split('@')[0],
   phone:u.phone||md.phone||'',avatar:md.avatar_url||md.picture||'',meta:md};
- loadState();welcome();draw();loadCatalog()}
-sb?.auth.onAuthStateChange((ev,ses)=>{if(ses?.access_token)TOKEN=ses.access_token;if(ev==='SIGNED_OUT'){U=null;sessionStorage.clear();location.replace(AUTH_URL)}});
+ loadState();welcome();history.replaceState({root:1},'');draw();loadCatalog()}
+/* Only the user's own Log Out signs them out. Other SIGNED_OUT events are re-checked first. */
+sb?.auth.onAuthStateChange((ev,ses)=>{if(ses?.access_token)TOKEN=ses.access_token;
+ if(ev==='SIGNED_OUT'&&U){if(OUT){sessionStorage.clear();location.replace(AUTH_URL)}else setTimeout(async()=>{if(!await session()){sessionStorage.clear();location.replace(AUTH_URL)}},800)}});
+addEventListener('pageshow',async e=>{if(e.persisted&&sb&&U){const t=await session();if(t)TOKEN=t.access_token;else location.replace(AUTH_URL)}});
+/* Back button moves inside the app and never leaves the store or the session. */
+addEventListener('popstate',e=>{if(!U)return;const t=e.state;
+ q='';$('#q').value='';
+ if(!t||t.root){tab='home';sub=null;pg=null;prod=null;draw(true);return}
+ tab=t.tab||'home';sub=t.sub||null;pg=t.pg||null;prod=t.prod||null;draw(false)});
 boot();
 </script>
 </body>
