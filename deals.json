@@ -1,0 +1,12 @@
+{
+  "flash": ["p1", "p2"],
+  "products": [
+    { "id": "p1", "n": "Wireless Earbuds", "e": "🎧", "p": 29990, "o": 37500, "c": "Electronics" },
+    { "id": "p2", "n": "Smart Watch", "e": "⌚", "p": 49990, "o": 58000, "c": "Electronics" },
+    { "id": "p3", "n": "Smartphone", "e": "📱", "p": 420000, "c": "Electronics" },
+    { "id": "p4", "n": "Canvas Sneakers", "e": "👟", "p": 24000, "c": "Fashion" },
+    { "id": "p5", "n": "Tote Handbag", "e": "👜", "p": 15500, "c": "Fashion" },
+    { "id": "p6", "n": "Headphones", "e": "🎧", "p": 35000, "c": "Electronics" },
+    { "id": "p7", "n": "Power Bank", "e": "🔋", "p": 21000, "c": "Electronics" }
+  ]
+}
