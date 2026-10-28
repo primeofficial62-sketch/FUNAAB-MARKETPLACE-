@@ -1,12 +1,8 @@
-{
-  "flash": ["p1", "p2"],
-  "products": [
-    { "id": "p1", "n": "Wireless Earbuds", "e": "🎧", "p": 29990, "o": 37500, "c": "Electronics" },
-    { "id": "p2", "n": "Smart Watch", "e": "⌚", "p": 49990, "o": 58000, "c": "Electronics" },
-    { "id": "p3", "n": "Smartphone", "e": "📱", "p": 420000, "c": "Electronics" },
-    { "id": "p4", "n": "Canvas Sneakers", "e": "👟", "p": 24000, "c": "Fashion" },
-    { "id": "p5", "n": "Tote Handbag", "e": "👜", "p": 15500, "c": "Fashion" },
-    { "id": "p6", "n": "Headphones", "e": "🎧", "p": 35000, "c": "Electronics" },
-    { "id": "p7", "n": "Power Bank", "e": "🔋", "p": 21000, "c": "Electronics" }
-  ]
-}
+{"flash":["p1","p2"],"products":[
+{"id":"p1","n":"Wireless Earbuds","e":"🎧","p":29990,"o":37500,"c":"Electronics","d":"True wireless earbuds with a charging case, made for lectures, commuting and workouts.","s":{"Connectivity":"Bluetooth","Charging":"USB-C case","Included":"Earbuds, charging case, cable"}},
+{"id":"p2","n":"Smart Watch","e":"⌚","p":49990,"o":58000,"c":"Electronics","d":"Smart watch with notifications, activity tracking and a bright touch display.","s":{"Connectivity":"Bluetooth","Charging":"Magnetic charger","Included":"Watch, charger, strap"}},
+{"id":"p3","n":"Smartphone","e":"📱","p":420000,"c":"Electronics","d":"Smartphone with a large display and all-day battery for study, social and photos.","s":{"Warranty":"Seller warranty","Included":"Phone, charger, cable"}},
+{"id":"p4","n":"Canvas Sneakers","e":"👟","p":24000,"c":"Fashion","d":"Lightweight canvas sneakers with a cushioned sole for everyday campus wear.","s":{"Material":"Canvas","Sole":"Rubber"}},
+{"id":"p5","n":"Tote Handbag","e":"👜","p":15500,"c":"Fashion","d":"Roomy tote that fits books, a laptop and daily essentials.","s":{"Material":"Faux leather","Closure":"Zip"}},
+{"id":"p6","n":"Headphones","e":"🎧","p":35000,"c":"Electronics","d":"Over-ear headphones with deep bass and a padded headband for long study sessions.","s":{"Type":"Over-ear","Connectivity":"Bluetooth + 3.5mm"}},
+{"id":"p7","n":"Power Bank","e":"🔋","p":21000,"c":"Electronics","d":"High-capacity power bank to keep your phone charged between classes.","s":{"Ports":"USB-A, USB-C","Included":"Power bank, cable"}}]}
