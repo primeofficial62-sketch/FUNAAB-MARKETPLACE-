@@ -40,7 +40,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)hydrate()}
 /* ---- intercept the three money actions before the old local code runs ---- */
 async function place(btn){
  const ph=v('ph'),ad=v('ad'),pay=document.querySelector('input[name=pay]:checked')?.value||'cod';
- if(ph.length<7||ad.length<5){toast('Enter your phone number and delivery address');return}
+ if(ph.replace(/\D/g,'').length<7){toast('Enter a valid phone number');return}
+ if(ad.length<5){toast('Address is too short. Add hostel, room and campus, e.g. "Hall 3, Room 12, FUNAAB"');return}
  const items=Object.keys(S.cart).filter(byId).map(id=>({id,q:S.cart[id]}));
  if(!items.length){toast('Your cart is empty');return}
  btn.disabled=true;
