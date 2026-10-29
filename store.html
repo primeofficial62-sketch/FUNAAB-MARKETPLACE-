@@ -504,6 +504,30 @@ addEventListener('popstate',e=>{if(!U)return;const t=e.state;
  if(!t||t.root){tab='home';sub=null;pg=null;prod=null;draw(true);return}
  tab=t.tab||'home';sub=t.sub||null;pg=t.pg||null;prod=t.prod||null;draw(false)});
 boot();
+
+async function sendWelcome(user) {
+  const key = 'kampza_welcomed_' + user.id;
+  if (localStorage.getItem(key)) return;
+  const isNew = Date.now() - new Date(user.created_at).getTime() < 2 * 60 * 1000;
+  if (!isNew) return;
+  try {
+    await fetch('notify.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'welcome',
+        email: user.email,
+        name: user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0]
+      })
+    });
+    localStorage.setItem(key, '1');
+  } catch (e) { console.error('Welcome email failed', e); }
+}
+
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' && session?.user) sendWelcome(session.user);
+});
+
 </script>
 </body>
 </html>
